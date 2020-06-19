@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CricketCreations", "CricketCreations\CricketCreations.csproj", "{6CA02CFC-302F-452A-BD50-394B55F85C78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CricketCreations", "CricketCreations\CricketCreations.csproj", "{6CA02CFC-302F-452A-BD50-394B55F85C78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CricketCreationsDatabase", "CricketCreationsDatabase\CricketCreationsDatabase.csproj", "{51080FAA-CDC8-4CA6-AFFE-85CD19185ABF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CricketCreationsRepository", "CricketCreationsRepository\CricketCreationsRepository.csproj", "{C319CEC7-FF24-444F-B2B7-CC24E7092B0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{6CA02CFC-302F-452A-BD50-394B55F85C78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CA02CFC-302F-452A-BD50-394B55F85C78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CA02CFC-302F-452A-BD50-394B55F85C78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51080FAA-CDC8-4CA6-AFFE-85CD19185ABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51080FAA-CDC8-4CA6-AFFE-85CD19185ABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51080FAA-CDC8-4CA6-AFFE-85CD19185ABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51080FAA-CDC8-4CA6-AFFE-85CD19185ABF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C319CEC7-FF24-444F-B2B7-CC24E7092B0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C319CEC7-FF24-444F-B2B7-CC24E7092B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C319CEC7-FF24-444F-B2B7-CC24E7092B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C319CEC7-FF24-444F-B2B7-CC24E7092B0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
