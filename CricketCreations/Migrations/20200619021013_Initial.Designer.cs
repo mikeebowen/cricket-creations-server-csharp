@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CricketCreations.Migrations
 {
     [DbContext(typeof(CricketCreationsContext))]
-    [Migration("20200606223522_Initial")]
+    [Migration("20200619021013_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,7 +82,7 @@ namespace CricketCreations.Migrations
             modelBuilder.Entity("CricketCreations.Models.BlogPost", b =>
                 {
                     b.HasOne("CricketCreations.Models.User", "User")
-                        .WithMany()
+                        .WithMany("BlogPosts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

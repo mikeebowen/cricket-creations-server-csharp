@@ -9,13 +9,6 @@ namespace CricketCreations.Models
 {
     public class BlogPost
     {
-        //  id: this.attr(null),
-        //author_id: this.attr(null),
-        //created: this.attr(null),
-        //lastUpdated: this.attr(null),
-        //title: this.string (''),
-        //article: this.string (''),
-        //image: this.attr(null),
         public int Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
@@ -27,6 +20,6 @@ namespace CricketCreations.Models
         // Foreign Key
         public int UserId { get; set; }
         // Navigation Property
-        public User User { get; set; }
+        public virtual User User { get; set; }
     }
 }

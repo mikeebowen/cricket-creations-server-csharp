@@ -80,7 +80,7 @@ namespace CricketCreations.Migrations
             modelBuilder.Entity("CricketCreations.Models.BlogPost", b =>
                 {
                     b.HasOne("CricketCreations.Models.User", "User")
-                        .WithMany()
+                        .WithMany("BlogPosts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

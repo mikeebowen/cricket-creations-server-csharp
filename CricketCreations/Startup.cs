@@ -30,15 +30,12 @@ namespace CricketCreations
         public void ConfigureServices(IServiceCollection services)
         {
             string dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-            //services.AddDbContext<CricketCreationsContext>(opt => opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CricketCreations_Dev;Trusted_Connection=True;"));
+            services.AddDbContext<CricketCreationsContext>(opt => opt.UseSqlServer("Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;"));
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp";
             });
-
-            //services.AddDbContext<CricketCreationsContext>(options =>
-            //        options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CricketCreations_Dev;Trusted_Connection=True;"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
