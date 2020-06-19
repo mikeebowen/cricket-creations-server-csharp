@@ -3,17 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using CricketCreations.Models;
+using CricketCreationsDatabase.Models;
 
-namespace CricketCreations.Data
+namespace CricketCreationsDatabase
 {
     public class CricketCreationsContext : DbContext
     {
+        public CricketCreationsContext()
+        {
+
+        }
         public CricketCreationsContext(DbContextOptions<CricketCreationsContext> options)
             : base(options)
         {
         }
-
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;");
+        }
         public DbSet<User> User { get; set; }
 
         public DbSet<BlogPost> BlogPost { get; set; }

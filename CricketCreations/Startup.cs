@@ -10,10 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using VueCliMiddleware;
-using Microsoft.EntityFrameworkCore;
-using CricketCreations.Models;
 using System.Runtime.CompilerServices;
-using CricketCreations.Data;
+using CricketCreationsRepository;
 
 namespace CricketCreations
 {
@@ -29,8 +27,8 @@ namespace CricketCreations
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-            services.AddDbContext<CricketCreationsContext>(opt => opt.UseSqlServer("Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;"));
+            //string dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+            //services.AddDbContext<CricketCreationsContext>(opt => opt.UseSqlServer("Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;"));
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {

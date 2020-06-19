@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CricketCreations.Models
+namespace CricketCreationsDatabase.Models
 {
     public class BlogPost
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
@@ -17,9 +16,8 @@ namespace CricketCreations.Models
         [Required]
         public string Content { get; set; }
         public string Image { get; set; }
-        // Foreign Key
+        [ForeignKey("UserId")]
+        public User User { get; set; }
         public int UserId { get; set; }
-        // Navigation Property
-        public virtual User User { get; set; }
     }
 }
