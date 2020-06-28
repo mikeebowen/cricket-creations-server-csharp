@@ -12,7 +12,6 @@ namespace CricketCreations.Models
     public class User
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
         [MaxLength(200)]
@@ -26,9 +25,9 @@ namespace CricketCreations.Models
         public List<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
         private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<User, UserDTO>().ReverseMap());
         private static IMapper mapper = config.CreateMapper();
-        public List<User> GetAll()
+        public static IEnumerable<User> GetAll()
         {
-            return UserDTO.GetAll().Select(udto => mapper.Map<UserDTO, User>(udto)).ToList();
+            return UserDTO.GetAll().Select(udto => mapper.Map<UserDTO, User>(udto)).ToArray();
         }
     }
 }

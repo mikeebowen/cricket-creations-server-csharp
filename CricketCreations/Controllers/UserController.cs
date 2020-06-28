@@ -13,9 +13,9 @@ namespace CricketCreations.Controllers
     {
         // GET: api/User
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<CricketCreations.Models.User> Get()
         {
-            return new string[] { "value1", "value2" };
+            return CricketCreations.Models.User.GetAll();
         }
 
         // GET: api/User/5
