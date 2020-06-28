@@ -14,10 +14,8 @@ namespace CricketCreations.Controllers
     {
         // GET: api/User
         [HttpGet]
-        public Task<IEnumerable<CricketCreations.Models.User>> Get()
-        {
-            return CricketCreations.Models.User.GetAll();
-        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<Task<IEnumerable<User>>>> Get() => await Models.User.GetAll();
 
         // GET: api/User/5
         [HttpGet("{id}", Name = "Get")]
