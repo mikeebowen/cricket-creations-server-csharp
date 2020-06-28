@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CricketCreations.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,16 +14,16 @@ namespace CricketCreations.Controllers
     {
         // GET: api/User
         [HttpGet]
-        public IEnumerable<CricketCreations.Models.User> Get()
+        public Task<IEnumerable<CricketCreations.Models.User>> Get()
         {
             return CricketCreations.Models.User.GetAll();
         }
 
         // GET: api/User/5
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public Task<User> Get(int id)
         {
-            return "value";
+            return CricketCreations.Models.User.GetUser(id);
         }
 
         // POST: api/User

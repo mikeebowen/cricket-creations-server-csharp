@@ -25,9 +25,20 @@ namespace CricketCreations.Models
         public List<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
         private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<User, UserDTO>().ReverseMap());
         private static IMapper mapper = config.CreateMapper();
-        public static IEnumerable<User> GetAll()
+        public static async Task<IEnumerable<User>> GetAll()
         {
-            return UserDTO.GetAll().Select(udto => mapper.Map<UserDTO, User>(udto)).ToArray();
+            //return await UserDTO.GetAll().Select(udto => convertToUser(udto)).ToArray();
+            List<UserDTO> userDTOs = await UserDTO.GetAll();
+            return userDTOs.Select(userDTO => convertToUser(userDTO)).ToArray();
+        }
+        public static async Task<User> GetUser(int id)
+        {
+            UserDTO userDTO = await UserDTO.GetUserDTO(id);
+            return convertToUser(userDTO);
+        }
+        private static User convertToUser(UserDTO userDTO)
+        {
+            return mapper.Map<UserDTO, User>(userDTO);
         }
     }
 }
