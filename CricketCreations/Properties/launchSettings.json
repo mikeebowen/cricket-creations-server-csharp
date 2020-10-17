@@ -14,15 +14,16 @@
       "launchBrowser": true,
       "launchUrl": "weatherforecast",
       "environmentVariables": {
-        "DB_CONNECTION_STRING": "Server=(localdb)\\\\MSSQLLocalDB;Database=CricketCreations_Dev;Trusted_Connection=True;",
+        "DB_CONNECTION_STRING": "Server=localhost\\SQLEXPRESS;Database=master;Trusted_Connection=True;",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "CricketCreations": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "api/blogpost",
       "environmentVariables": {
+        "DB_CONNECTION_STRING": "Server=localhost\\SQLEXPRESS;Database=master;Trusted_Connection=True;",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:5000"
