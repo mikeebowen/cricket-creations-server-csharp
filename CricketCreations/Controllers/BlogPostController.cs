@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CricketCreationsDatabase.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 
@@ -34,13 +36,8 @@ namespace CricketCreations.Controllers
 
         // POST api/<BlogPostController>
         [HttpPost]
-        public async void Post([FromBody] JsonElement json)
+        public async Task<IActionResult> Post([FromBody] JsonElement json)
         {
-            //JObject jObject = JObject.Parse(value);
-            // BlogPost blogPost = Newtonsoft.Json.JsonConvert.DeserializeObject<BlogPost>(json.ToString());
-            //JsonSchemaGenerator jsonSchemaGenerator = new JsonSchemaGenerator();
-            //JsonSchema jsonSchema = jsonSchemaGenerator.Generate(typeof(BlogPost));
-            //JObject jObject = JObject.Parse(json.ToString());
             string jsonString = json.ToString();
             NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPost>();
             ICollection<NJsonSchema.Validation.ValidationError> erros = jsonSchema.Validate(jsonString);
@@ -48,8 +45,19 @@ namespace CricketCreations.Controllers
             if (erros.Count == 0)
             {
                 CricketCreations.Models.BlogPost blogPost = Newtonsoft.Json.JsonConvert.DeserializeObject<CricketCreations.Models.BlogPost>(jsonString);
+                blogPost.Created = DateTime.Now;
+                blogPost.LastUpdated = blogPost.Created;
                 CricketCreations.Models.BlogPost post = await CricketCreations.Models.BlogPost.Create(blogPost);
-                Ok();
+                return Created($"api/blogpost/{post.Id}", post);
+            }
+            else
+            {
+                List<ErrorObject> errs = new List<ErrorObject>();
+                erros.ToList().ForEach(e =>
+                {
+                    errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
+                });
+                return BadRequest(errs);
             }
         }
 
@@ -63,6 +71,11 @@ namespace CricketCreations.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+        private class ErrorObject
+        {
+            public string Message { get; set; }
+            public string Property { get; set; }
         }
     }
 }

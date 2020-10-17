@@ -32,8 +32,7 @@ namespace CricketCreations.Models
         public static async Task<BlogPost> Create(BlogPost blogPost)
         {
             BlogPostDTO blogPostDTO = convertToBlogPostDTO(blogPost);
-            BlogPostDTO dto = await BlogPostDTO.Create(blogPostDTO);
-            return convertToBlogPost(await BlogPostDTO.Create(dto));
+            return convertToBlogPost(await BlogPostDTO.Create(blogPostDTO));
         }
         private static BlogPost convertToBlogPost(BlogPostDTO blogPostDTO)
         {
