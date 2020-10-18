@@ -30,6 +30,11 @@ namespace CricketCreationsRepository.Models
             List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost.ToListAsync();
             return blogPosts.Select(b => convertToBlogPostDTO(b)).ToList();
         }
+        public static async Task<BlogPostDTO> GeyById(int id)
+        {
+            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
+            return convertToBlogPostDTO(blogPost);
+        }
         public static async Task<BlogPostDTO> Create(BlogPostDTO blogPostDTO)
         {
             BlogPost blogPost = convertToBlogPost(blogPostDTO);
