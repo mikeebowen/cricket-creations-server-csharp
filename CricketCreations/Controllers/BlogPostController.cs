@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading.Tasks;
+using CricketCreations.Models;
 using CricketCreationsDatabase.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 
@@ -24,7 +27,8 @@ namespace CricketCreations.Controllers
         public async Task<IActionResult> Get()
         {
             List<CricketCreations.Models.BlogPost> blogPosts = await CricketCreations.Models.BlogPost.GetAll();
-            return Ok(blogPosts);
+            string response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts").GetJson();
+            return Ok(response);
         }
 
         // GET api/<BlogPostController>/5
@@ -34,7 +38,8 @@ namespace CricketCreations.Controllers
             CricketCreations.Models.BlogPost blogPost = await CricketCreations.Models.BlogPost.GetById(id);
             if (blogPost != null)
             {
-                return Ok(blogPost);
+                string response = new ResponseBody<CricketCreations.Models.BlogPost>(blogPost, "BlogPost").GetJson();
+                return Ok(response);
             }
             else
             {
@@ -47,7 +52,7 @@ namespace CricketCreations.Controllers
         public async Task<IActionResult> Post([FromBody] JsonElement json)
         {
             string jsonString = json.ToString();
-            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPost>();
+            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<CricketCreations.Models.BlogPost>();
             ICollection<NJsonSchema.Validation.ValidationError> erros = jsonSchema.Validate(jsonString);
 
             if (erros.Count == 0)
@@ -56,7 +61,8 @@ namespace CricketCreations.Controllers
                 blogPost.Created = DateTime.Now;
                 blogPost.LastUpdated = blogPost.Created;
                 CricketCreations.Models.BlogPost post = await CricketCreations.Models.BlogPost.Create(blogPost);
-                return Created($"api/blogpost/{post.Id}", post);
+                string response = new ResponseBody<Models.BlogPost>(post, "BlogPost").GetJson();
+                return Created($"api/blogpost/{post.Id}", response);
             }
             else
             {
@@ -86,4 +92,5 @@ namespace CricketCreations.Controllers
             public string Property { get; set; }
         }
     }
+
 }
