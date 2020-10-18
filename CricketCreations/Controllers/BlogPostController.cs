@@ -21,7 +21,7 @@ namespace CricketCreations.Controllers
     {
         // GET: api/<BlogPostController>
         [HttpGet]
-        public async Task<IActionResult> GetResultAsync()
+        public async Task<IActionResult> Get()
         {
             List<CricketCreations.Models.BlogPost> blogPosts = await CricketCreations.Models.BlogPost.GetAll();
             return Ok(blogPosts);
@@ -29,9 +29,17 @@ namespace CricketCreations.Controllers
 
         // GET api/<BlogPostController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            CricketCreations.Models.BlogPost blogPost = await CricketCreations.Models.BlogPost.GetById(id);
+            if (blogPost != null)
+            {
+                return Ok(blogPost);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         // POST api/<BlogPostController>
