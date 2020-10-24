@@ -11,9 +11,7 @@ namespace CricketCreationsDatabase.Models
         public int Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
-        [Required]
         public string Title { get; set; }
-        [Required]
         public string Content { get; set; }
         public string Image { get; set; }
         [ForeignKey("UserId")]
