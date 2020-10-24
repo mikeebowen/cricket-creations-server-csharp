@@ -112,8 +112,15 @@ namespace CricketCreations.Controllers
                     blogPost.LastUpdated = DateTime.Now;
                     blogPost.Id = id;
                     Models.BlogPost post = await Models.BlogPost.Update(blogPost);
-                    string response = new ResponseBody<Models.BlogPost>(post, "BlogPost").GetJson();
-                    return Ok(response);
+                    if (post != null)
+                    {
+                        string response = new ResponseBody<Models.BlogPost>(post, "BlogPost").GetJson();
+                        return Ok(response);
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
                 }
                 else
                 {
