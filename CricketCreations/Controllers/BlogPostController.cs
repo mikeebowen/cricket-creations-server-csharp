@@ -26,24 +26,38 @@ namespace CricketCreations.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            List<CricketCreations.Models.BlogPost> blogPosts = await CricketCreations.Models.BlogPost.GetAll();
-            string response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts").GetJson();
-            return Ok(response);
+            try
+            {
+                List<CricketCreations.Models.BlogPost> blogPosts = await CricketCreations.Models.BlogPost.GetAll();
+                string response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts").GetJson();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
 
         // GET api/<BlogPostController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            CricketCreations.Models.BlogPost blogPost = await CricketCreations.Models.BlogPost.GetById(id);
-            if (blogPost != null)
+            try
             {
-                string response = new ResponseBody<CricketCreations.Models.BlogPost>(blogPost, "BlogPost").GetJson();
-                return Ok(response);
+                CricketCreations.Models.BlogPost blogPost = await CricketCreations.Models.BlogPost.GetById(id);
+                if (blogPost != null)
+                {
+                    string response = new ResponseBody<CricketCreations.Models.BlogPost>(blogPost, "BlogPost").GetJson();
+                    return Ok(response);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound();
+                return StatusCode(500);
             }
         }
 
@@ -51,27 +65,34 @@ namespace CricketCreations.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] JsonElement json)
         {
-            string jsonString = json.ToString();
-            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<CricketCreations.Models.BlogPost>();
-            ICollection<NJsonSchema.Validation.ValidationError> erros = jsonSchema.Validate(jsonString);
+            try
+            {
+                string jsonString = json.ToString();
+                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<Models.BlogPost>();
+                ICollection<NJsonSchema.Validation.ValidationError> erros = jsonSchema.Validate(jsonString);
 
-            if (erros.Count == 0)
-            {
-                CricketCreations.Models.BlogPost blogPost = Newtonsoft.Json.JsonConvert.DeserializeObject<CricketCreations.Models.BlogPost>(jsonString);
-                blogPost.Created = DateTime.Now;
-                blogPost.LastUpdated = blogPost.Created;
-                CricketCreations.Models.BlogPost post = await CricketCreations.Models.BlogPost.Create(blogPost);
-                string response = new ResponseBody<Models.BlogPost>(post, "BlogPost").GetJson();
-                return Created($"api/blogpost/{post.Id}", response);
-            }
-            else
-            {
-                List<ErrorObject> errs = new List<ErrorObject>();
-                erros.ToList().ForEach(e =>
+                if (erros.Count == 0)
                 {
-                    errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
-                });
-                return BadRequest(errs);
+                    Models.BlogPost blogPost = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.BlogPost>(jsonString);
+                    blogPost.Created = DateTime.Now;
+                    blogPost.LastUpdated = blogPost.Created ?? DateTime.Now;
+                    Models.BlogPost post = await Models.BlogPost.Create(blogPost);
+                    string response = new ResponseBody<Models.BlogPost>(post, "BlogPost").GetJson();
+                    return Created($"api/blogpost/{post.Id}", response);
+                }
+                else
+                {
+                    List<ErrorObject> errs = new List<ErrorObject>();
+                    erros.ToList().ForEach(e =>
+                    {
+                        errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
+                    });
+                    return BadRequest(errs);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
             }
         }
 
@@ -92,5 +113,4 @@ namespace CricketCreations.Controllers
             public string Property { get; set; }
         }
     }
-
 }
