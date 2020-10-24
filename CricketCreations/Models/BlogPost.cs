@@ -10,18 +10,28 @@ namespace CricketCreations.Models
 {
     public class BlogPost
     {
-        public int Id { get; set; }
-        //[Required]
-        public DateTime Created { get; set; }
+        private int? id;
+        public int? Id { get; set; }
+        public Nullable<DateTime> Created { get; set; }
         public DateTime LastUpdated { get; set; }
-        [Required]
         public string Title { get; set; }
-        [Required]
         public string Content { get; set; }
         public string Image { get; set; }
         public User User { get; set; }
-        [Required]
-        public int UserId { get; set; }
+        public int? UserId
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                if (value > 0)
+                {
+                    id = value;
+                }
+            }
+        }
         private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<BlogPost, BlogPostDTO>().ReverseMap());
         private static IMapper mapper = config.CreateMapper();
         public static async Task<List<BlogPost>> GetAll()
@@ -39,12 +49,26 @@ namespace CricketCreations.Models
             BlogPostDTO blogPostDTO = convertToBlogPostDTO(blogPost);
             return convertToBlogPost(await BlogPostDTO.Create(blogPostDTO));
         }
+        public static async Task<BlogPost> Update(BlogPost blogPost)
+        {
+            BlogPostDTO blogPostDTO = convertToBlogPostDTO(blogPost);
+            BlogPostDTO updatedBlogPostDTO = await BlogPostDTO.Update(blogPostDTO);
+            return convertToBlogPost(updatedBlogPostDTO);
+        }
         private static BlogPost convertToBlogPost(BlogPostDTO blogPostDTO)
         {
+            if (blogPostDTO == null)
+            {
+                return null;
+            }
             return mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
         }
         private static BlogPostDTO convertToBlogPostDTO(BlogPost blogPost)
         {
+            if (blogPost == null)
+            {
+                return null;
+            }
             return mapper.Map<BlogPost, BlogPostDTO>(blogPost);
         }
     }

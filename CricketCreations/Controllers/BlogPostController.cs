@@ -96,10 +96,39 @@ namespace CricketCreations.Controllers
             }
         }
 
-        // PUT api/<BlogPostController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // PATCH api/<BlogPostController>/5
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(int id, [FromBody] JsonElement json)
         {
+            try
+            {
+                string jsonString = json.ToString();
+                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<Models.BlogPost>();
+                ICollection<NJsonSchema.Validation.ValidationError> erros = jsonSchema.Validate(jsonString);
+
+                if (erros.Count == 0)
+                {
+                    Models.BlogPost blogPost = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.BlogPost>(jsonString);
+                    blogPost.LastUpdated = DateTime.Now;
+                    blogPost.Id = id;
+                    Models.BlogPost post = await Models.BlogPost.Update(blogPost);
+                    string response = new ResponseBody<Models.BlogPost>(post, "BlogPost").GetJson();
+                    return Ok(response);
+                }
+                else
+                {
+                    List<ErrorObject> errs = new List<ErrorObject>();
+                    erros.ToList().ForEach(e =>
+                    {
+                        errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
+                    });
+                    return BadRequest(errs);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
 
         // DELETE api/<BlogPostController>/5
