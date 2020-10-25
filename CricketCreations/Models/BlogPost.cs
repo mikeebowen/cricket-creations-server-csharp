@@ -39,6 +39,11 @@ namespace CricketCreations.Models
             List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetAll();
             return blogPostDTOs.Select(b => convertToBlogPost(b)).ToList();
         }
+        public static async Task<List<BlogPost>> GetRange(int page, int count)
+        {
+            List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetRange(page, count);
+            return blogPostDTOs.Select(b => convertToBlogPost(b)).ToList();
+        }
         public static async Task<BlogPost> GetById(int id)
         {
             BlogPostDTO blogPostDTO = await BlogPostDTO.GeyById(id);
