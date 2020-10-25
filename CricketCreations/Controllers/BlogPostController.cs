@@ -140,8 +140,24 @@ namespace CricketCreations.Controllers
 
         // DELETE api/<BlogPostController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                bool deleted = await CricketCreations.Models.BlogPost.Delete(id);
+                if (deleted)
+                {
+                    return StatusCode(204);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
         private class ErrorObject
         {

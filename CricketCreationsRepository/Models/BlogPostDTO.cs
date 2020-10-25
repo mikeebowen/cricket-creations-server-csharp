@@ -66,6 +66,24 @@ namespace CricketCreationsRepository.Models
             }
             return null;
         }
+        public static async Task<bool> Delete(int id)
+        {
+            try
+            {
+                BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
+                if (blogPost != null)
+                {
+                    DatabaseManager.Instance.BlogPost.Remove(blogPost);
+                    await DatabaseManager.Instance.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return false;
+            }
+        }
         private static BlogPostDTO convertToBlogPostDTO(BlogPost blogPost)
         {
             return mapper.Map<BlogPost, BlogPostDTO>(blogPost);
