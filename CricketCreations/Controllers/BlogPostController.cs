@@ -24,12 +24,23 @@ namespace CricketCreations.Controllers
     {
         // GET: api/<BlogPostController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count)
         {
             try
             {
-                List<CricketCreations.Models.BlogPost> blogPosts = await CricketCreations.Models.BlogPost.GetAll();
-                string response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts").GetJson();
+                string response;
+                if (int.TryParse(page, out int pg) && int.TryParse(count, out int cnt))
+                {
+
+                    List<CricketCreations.Models.BlogPost> blogPosts = await CricketCreations.Models.BlogPost.GetRange(pg, cnt);
+                    response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts").GetJson();
+                }
+                else
+                {
+                    List<CricketCreations.Models.BlogPost> blogPosts = await CricketCreations.Models.BlogPost.GetAll();
+                    response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts").GetJson();
+                }
+
                 return Ok(response);
             }
             catch (Exception ex)
