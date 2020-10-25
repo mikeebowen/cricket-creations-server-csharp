@@ -55,6 +55,10 @@ namespace CricketCreations.Models
             BlogPostDTO updatedBlogPostDTO = await BlogPostDTO.Update(blogPostDTO);
             return convertToBlogPost(updatedBlogPostDTO);
         }
+        public static async Task<bool> Delete(int id)
+        {
+            return await BlogPostDTO.Delete(id);
+        }
         private static BlogPost convertToBlogPost(BlogPostDTO blogPostDTO)
         {
             if (blogPostDTO == null)
