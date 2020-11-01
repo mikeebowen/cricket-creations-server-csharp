@@ -25,19 +25,30 @@ namespace CricketCreationsRepository.Models
         public string Email { get; set; }
         public string Avatar { get; set; }
         public List<BlogPostDTO> BlogPosts { get; set; } = new List<BlogPostDTO>();
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<User, UserDTO>().ReverseMap());
+        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<User, UserDTO>()
+            .ForMember(dest => dest.BlogPosts, opt => opt.Ignore()).ReverseMap());
         private static IMapper mapper = config.CreateMapper();
         public static async Task<List<UserDTO>> GetAll()
         {
             List<User> users = await DatabaseManager.Instance.User.ToListAsync();
-            return users.Select(u => convertToUserDTO(u)).ToList();
+            return users.Select(u => ConvertToUserDTO(u)).ToList();
+        }
+        public static async Task<UserDTO> GetUserDTOWithPosts(int id)
+        {
+            User user = await DatabaseManager.Instance.User.Include(user => user.BlogPosts).Where(user => user.Id == id).FirstAsync();
+            UserDTO userDTO = ConvertToUserDTO(user);
+            foreach (BlogPost blogPost in user.BlogPosts)
+            {
+                userDTO.BlogPosts.Add(BlogPostDTO.ConvertToBlogPostDTO(blogPost));
+            }
+            return userDTO;
         }
         public static async Task<UserDTO> GetUserDTO(int id)
         {
             User user = await DatabaseManager.Instance.User.FindAsync(id);
-            return convertToUserDTO(user);
+            return ConvertToUserDTO(user);
         }
-        private static UserDTO convertToUserDTO(User user)
+        public static UserDTO ConvertToUserDTO(User user)
         {
             return mapper.Map<User, UserDTO>(user);
         }

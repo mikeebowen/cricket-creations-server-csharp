@@ -22,31 +22,30 @@ namespace CricketCreationsRepository.Models
         public string Image { get; set; }
         public UserDTO User { get; set; }
         public int? UserId { get; set; }
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<BlogPostDTO, BlogPost>().ReverseMap());
-        private static MapperConfiguration updateConfig = new MapperConfiguration(c => c.CreateMap<BlogPostDTO, BlogPost>().ReverseMap().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)));
+        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<BlogPost, BlogPostDTO > ()
+            .ForMember(dest => dest.User, opt => opt.Ignore()));
         private static IMapper mapper = config.CreateMapper();
-        private static IMapper updateMapper = updateConfig.CreateMapper();
         public static async Task<List<BlogPostDTO>> GetAll()
         {
             List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost.ToListAsync();
-            return blogPosts.Select(b => convertToBlogPostDTO(b)).ToList();
+            return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
         public static async Task<List<BlogPostDTO>> GetRange(int page, int count)
         {
             List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost.Skip((page - 1) * count).Take(count).ToListAsync();
-            return blogPosts.Select(b => convertToBlogPostDTO(b)).ToList();
+            return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
         public static async Task<BlogPostDTO> GeyById(int id)
         {
             BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
-            return convertToBlogPostDTO(blogPost);
+            return ConvertToBlogPostDTO(blogPost);
         }
         public static async Task<BlogPostDTO> Create(BlogPostDTO blogPostDTO)
         {
             BlogPost blogPost = convertToBlogPost(blogPostDTO);
             var blog = await DatabaseManager.Instance.BlogPost.AddAsync(blogPost);
             await DatabaseManager.Instance.SaveChangesAsync();
-            return convertToBlogPostDTO(blog.Entity);
+            return ConvertToBlogPostDTO(blog.Entity);
         }
         public static async Task<BlogPostDTO> Update(BlogPostDTO blogPostDto)
         {
@@ -67,7 +66,7 @@ namespace CricketCreationsRepository.Models
                     }
                 }
                 await DatabaseManager.Instance.SaveChangesAsync();
-                return convertToBlogPostDTO(blogPost);
+                return ConvertToBlogPostDTO(blogPost);
             }
             return null;
         }
@@ -89,7 +88,7 @@ namespace CricketCreationsRepository.Models
                 return false;
             }
         }
-        private static BlogPostDTO convertToBlogPostDTO(BlogPost blogPost)
+        public static BlogPostDTO ConvertToBlogPostDTO(BlogPost blogPost)
         {
             return mapper.Map<BlogPost, BlogPostDTO>(blogPost);
         }

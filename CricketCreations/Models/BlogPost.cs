@@ -37,34 +37,34 @@ namespace CricketCreations.Models
         public static async Task<List<BlogPost>> GetAll()
         {
             List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetAll();
-            return blogPostDTOs.Select(b => convertToBlogPost(b)).ToList();
+            return blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
         }
         public static async Task<List<BlogPost>> GetRange(int page, int count)
         {
             List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetRange(page, count);
-            return blogPostDTOs.Select(b => convertToBlogPost(b)).ToList();
+            return blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
         }
         public static async Task<BlogPost> GetById(int id)
         {
             BlogPostDTO blogPostDTO = await BlogPostDTO.GeyById(id);
-            return convertToBlogPost(blogPostDTO);
+            return ConvertToBlogPost(blogPostDTO);
         }
         public static async Task<BlogPost> Create(BlogPost blogPost)
         {
             BlogPostDTO blogPostDTO = convertToBlogPostDTO(blogPost);
-            return convertToBlogPost(await BlogPostDTO.Create(blogPostDTO));
+            return ConvertToBlogPost(await BlogPostDTO.Create(blogPostDTO));
         }
         public static async Task<BlogPost> Update(BlogPost blogPost)
         {
             BlogPostDTO blogPostDTO = convertToBlogPostDTO(blogPost);
             BlogPostDTO updatedBlogPostDTO = await BlogPostDTO.Update(blogPostDTO);
-            return convertToBlogPost(updatedBlogPostDTO);
+            return ConvertToBlogPost(updatedBlogPostDTO);
         }
         public static async Task<bool> Delete(int id)
         {
             return await BlogPostDTO.Delete(id);
         }
-        private static BlogPost convertToBlogPost(BlogPostDTO blogPostDTO)
+        public static BlogPost ConvertToBlogPost(BlogPostDTO blogPostDTO)
         {
             if (blogPostDTO == null)
             {
