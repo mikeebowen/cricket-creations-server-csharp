@@ -24,7 +24,7 @@ namespace CricketCreations.Controllers
     {
         // GET: api/<BlogPostController>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count)
+        public async Task<IActionResult> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userid")]  string userId)
         {
             try
             {
