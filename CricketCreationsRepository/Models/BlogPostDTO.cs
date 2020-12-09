@@ -22,17 +22,33 @@ namespace CricketCreationsRepository.Models
         public string Image { get; set; }
         public UserDTO User { get; set; }
         public int? UserId { get; set; }
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<BlogPost, BlogPostDTO > ()
+        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<BlogPost, BlogPostDTO>()
             .ForMember(dest => dest.User, opt => opt.Ignore()));
         private static IMapper mapper = config.CreateMapper();
-        public static async Task<List<BlogPostDTO>> GetAll()
+        public static async Task<List<BlogPostDTO>> GetAll(int? id)
         {
-            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost.ToListAsync();
+            List<BlogPost> blogPosts;
+            if (id == null)
+            {
+                blogPosts = await DatabaseManager.Instance.BlogPost.ToListAsync();
+            }
+            else
+            {
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id).ToListAsync();
+            }
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
-        public static async Task<List<BlogPostDTO>> GetRange(int page, int count)
+        public static async Task<List<BlogPostDTO>> GetRange(int page, int count, int? id)
         {
-            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost.Skip((page - 1) * count).Take(count).ToListAsync();
+            List<BlogPost> blogPosts;
+            if (id == null)
+            {
+                blogPosts = await DatabaseManager.Instance.BlogPost.Skip((page - 1) * count).Take(count).ToListAsync();
+            }
+            else
+            {
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id).Skip((page - 1) * count).Take(count).ToListAsync();
+            }
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
         public static async Task<BlogPostDTO> GeyById(int id)

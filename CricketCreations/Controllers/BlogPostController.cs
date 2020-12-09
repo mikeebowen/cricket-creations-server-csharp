@@ -24,23 +24,38 @@ namespace CricketCreations.Controllers
     {
         // GET: api/<BlogPostController>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userid")]  string userId)
+        public async Task<IActionResult> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userId")] string userId)
         {
             try
             {
                 string response;
+                List<CricketCreations.Models.BlogPost> blogPosts;
+                bool validId = int.TryParse(userId, out int id);
+
                 if (int.TryParse(page, out int pg) && int.TryParse(count, out int cnt))
                 {
-
-                    List<CricketCreations.Models.BlogPost> blogPosts = await CricketCreations.Models.BlogPost.GetRange(pg, cnt);
-                    response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts").GetJson();
+                    if (validId)
+                    {
+                        blogPosts = await CricketCreations.Models.BlogPost.GetRange(pg, cnt, id);
+                    }
+                    else
+                    {
+                        blogPosts = await CricketCreations.Models.BlogPost.GetRange(pg, cnt, null);
+                    }
                 }
                 else
                 {
-                    List<CricketCreations.Models.BlogPost> blogPosts = await CricketCreations.Models.BlogPost.GetAll();
-                    response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts").GetJson();
-                }
+                    if (validId)
+                    {
+                        blogPosts = await CricketCreations.Models.BlogPost.GetAll(id);
+                    }
+                    else
+                    {
+                        blogPosts = await CricketCreations.Models.BlogPost.GetAll(null);
+                    }
 
+                }
+                response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts").GetJson();
                 return Ok(response);
             }
             catch (Exception ex)

@@ -34,14 +34,14 @@ namespace CricketCreations.Models
         }
         private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<BlogPost, BlogPostDTO>().ReverseMap());
         private static IMapper mapper = config.CreateMapper();
-        public static async Task<List<BlogPost>> GetAll()
+        public static async Task<List<BlogPost>> GetAll(int? id)
         {
-            List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetAll();
+            List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetAll(id);
             return blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
         }
-        public static async Task<List<BlogPost>> GetRange(int page, int count)
-        {
-            List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetRange(page, count);
+        public static async Task<List<BlogPost>> GetRange(int page, int count, int? id)
+        { 
+            List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetRange(page, count, id);
             return blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
         }
         public static async Task<BlogPost> GetById(int id)
