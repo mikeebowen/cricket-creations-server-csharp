@@ -13,10 +13,12 @@ namespace CricketCreations.Models
     {
         T t;
         string type;
-        public ResponseBody(T typ, string s = null)
+        int? count;
+        public ResponseBody(T typ, string s, int? cnt)
         {
             t = typ;
             type = s;
+            count = cnt;
         }
         public string Id
         {
@@ -33,6 +35,16 @@ namespace CricketCreations.Models
             get
             {
                 return type ?? typeof(T).ToString();
+            }
+        }
+        public Object Meta
+        {
+            get
+            {
+                return new
+                {
+                    total = count
+                };
             }
         }
         public T Data

@@ -104,6 +104,10 @@ namespace CricketCreationsRepository.Models
                 return false;
             }
         }
+        public static async Task<int> GetCount()
+        {
+            return await DatabaseManager.Instance.BlogPost.CountAsync();
+        }
         public static BlogPostDTO ConvertToBlogPostDTO(BlogPost blogPost)
         {
             return mapper.Map<BlogPost, BlogPostDTO>(blogPost);
