@@ -64,6 +64,10 @@ namespace CricketCreations.Models
         {
             return await BlogPostDTO.Delete(id);
         }
+        public static async Task<int> GetCount()
+        {
+            return await BlogPostDTO.GetCount();
+        }
         public static BlogPost ConvertToBlogPost(BlogPostDTO blogPostDTO)
         {
             if (blogPostDTO == null)

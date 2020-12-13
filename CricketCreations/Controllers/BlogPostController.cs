@@ -31,8 +31,16 @@ namespace CricketCreations.Controllers
                 string response;
                 List<CricketCreations.Models.BlogPost> blogPosts;
                 bool validId = int.TryParse(userId, out int id);
+                bool validPage = int.TryParse(page, out int pg);
+                bool validCount = int.TryParse(count, out int cnt);
+                bool inRange = await Models.BlogPost.GetCount() - (pg * cnt) > ((cnt * -1) + 1);
 
-                if (int.TryParse(page, out int pg) && int.TryParse(count, out int cnt))
+                if (!inRange)
+                {
+                    return StatusCode(416);
+                }
+
+                if (validPage && validCount)
                 {
                     if (validId)
                     {
@@ -55,7 +63,8 @@ namespace CricketCreations.Controllers
                     }
 
                 }
-                response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts").GetJson();
+                int blogPostCount = await Models.BlogPost.GetCount();
+                response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts", blogPostCount).GetJson();
                 return Ok(response);
             }
             catch (Exception ex)
@@ -73,7 +82,7 @@ namespace CricketCreations.Controllers
                 CricketCreations.Models.BlogPost blogPost = await CricketCreations.Models.BlogPost.GetById(id);
                 if (blogPost != null)
                 {
-                    string response = new ResponseBody<CricketCreations.Models.BlogPost>(blogPost, "BlogPost").GetJson();
+                    string response = new ResponseBody<CricketCreations.Models.BlogPost>(blogPost, "BlogPost", null).GetJson();
                     return Ok(response);
                 }
                 else
@@ -103,7 +112,7 @@ namespace CricketCreations.Controllers
                     blogPost.Created = DateTime.Now;
                     blogPost.LastUpdated = blogPost.Created ?? DateTime.Now;
                     Models.BlogPost post = await Models.BlogPost.Create(blogPost);
-                    string response = new ResponseBody<Models.BlogPost>(post, "BlogPost").GetJson();
+                    string response = new ResponseBody<Models.BlogPost>(post, "BlogPost", null).GetJson();
                     return Created($"api/blogpost/{post.Id}", response);
                 }
                 else
@@ -140,7 +149,7 @@ namespace CricketCreations.Controllers
                     Models.BlogPost post = await Models.BlogPost.Update(blogPost);
                     if (post != null)
                     {
-                        string response = new ResponseBody<Models.BlogPost>(post, "BlogPost").GetJson();
+                        string response = new ResponseBody<Models.BlogPost>(post, "BlogPost", null).GetJson();
                         return Ok(response);
                     }
                     else
