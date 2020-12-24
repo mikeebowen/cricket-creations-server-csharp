@@ -23,7 +23,7 @@ namespace CricketCreationsRepository.Models
         public UserDTO User { get; set; }
         public int? UserId { get; set; }
         private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<BlogPost, BlogPostDTO>()
-            .ForMember(dest => dest.User, opt => opt.Ignore()));
+            .ForMember(dest => dest.User, opt => opt.Ignore()).ReverseMap());
         private static IMapper mapper = config.CreateMapper();
         public static async Task<List<BlogPostDTO>> GetAll(int? id)
         {
@@ -47,7 +47,7 @@ namespace CricketCreationsRepository.Models
             }
             else
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id).Skip((page - 1) * count).Take(count).ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id).OrderByDescending(s => s.LastUpdated).Skip((page - 1) * count).Take(count).ToListAsync();
             }
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
