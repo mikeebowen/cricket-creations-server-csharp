@@ -26,6 +26,9 @@ namespace CricketCreationsDatabase
         public DbSet<BlogPost> BlogPost { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
+            modelBuilder.Entity<BlogPostTag>().HasOne(bpt => bpt.BlogPost).WithMany(t => t.BlogPostTags).HasForeignKey(bpt => bpt.BlogPostId);
+            modelBuilder.Entity<BlogPostTag>().HasOne(bpt => bpt.Tag).WithMany(t => t.BlogPostTags).HasForeignKey(bpt => bpt.TagId);
             modelBuilder.Seed();
         }
     }
