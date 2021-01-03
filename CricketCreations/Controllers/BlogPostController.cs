@@ -194,10 +194,5 @@ namespace CricketCreations.Controllers
                 return StatusCode(500);
             }
         }
-        private class ErrorObject
-        {
-            public string Message { get; set; }
-            public string Property { get; set; }
-        }
     }
 }

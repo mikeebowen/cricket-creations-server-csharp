@@ -10,7 +10,7 @@ namespace CricketCreationsDatabase.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Name { get; set; }
         public ICollection<BlogPostTag> BlogPostTags { get; set; }
     }

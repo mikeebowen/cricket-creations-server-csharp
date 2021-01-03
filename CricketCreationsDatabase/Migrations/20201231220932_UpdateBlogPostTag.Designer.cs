@@ -4,18 +4,20 @@ using CricketCreationsDatabase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CricketCreationsDatabase.Migrations
 {
     [DbContext(typeof(CricketCreationsContext))]
-    partial class CricketCreationsContextModelSnapshot : ModelSnapshot
+    [Migration("20201231220932_UpdateBlogPostTag")]
+    partial class UpdateBlogPostTag
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
+                .HasAnnotation("ProductVersion", "3.1.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -55,8 +57,8 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 1,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 1, 3, 13, 40, 21, 650, DateTimeKind.Local).AddTicks(8814),
-                            LastUpdated = new DateTime(2021, 1, 3, 13, 40, 21, 652, DateTimeKind.Local).AddTicks(9772),
+                            Created = new DateTime(2020, 12, 31, 14, 9, 32, 251, DateTimeKind.Local).AddTicks(6012),
+                            LastUpdated = new DateTime(2020, 12, 31, 14, 9, 32, 253, DateTimeKind.Local).AddTicks(6903),
                             Title = "enim neque volutpat ac tincidunt",
                             UserId = 1
                         },
@@ -64,8 +66,8 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 2,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 1, 3, 13, 40, 21, 653, DateTimeKind.Local).AddTicks(1140),
-                            LastUpdated = new DateTime(2021, 1, 3, 13, 40, 21, 653, DateTimeKind.Local).AddTicks(1161),
+                            Created = new DateTime(2020, 12, 31, 14, 9, 32, 253, DateTimeKind.Local).AddTicks(8250),
+                            LastUpdated = new DateTime(2020, 12, 31, 14, 9, 32, 253, DateTimeKind.Local).AddTicks(8269),
                             Title = "volutpat odio facilisis mauris sit",
                             UserId = 1
                         },
@@ -73,8 +75,8 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 3,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 1, 3, 13, 40, 21, 653, DateTimeKind.Local).AddTicks(1181),
-                            LastUpdated = new DateTime(2021, 1, 3, 13, 40, 21, 653, DateTimeKind.Local).AddTicks(1183),
+                            Created = new DateTime(2020, 12, 31, 14, 9, 32, 253, DateTimeKind.Local).AddTicks(8289),
+                            LastUpdated = new DateTime(2020, 12, 31, 14, 9, 32, 253, DateTimeKind.Local).AddTicks(8291),
                             Title = "maecenas volutpat blandit aliquam etiam",
                             UserId = 1
                         },
@@ -82,8 +84,8 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 4,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 1, 3, 13, 40, 21, 653, DateTimeKind.Local).AddTicks(1186),
-                            LastUpdated = new DateTime(2021, 1, 3, 13, 40, 21, 653, DateTimeKind.Local).AddTicks(1189),
+                            Created = new DateTime(2020, 12, 31, 14, 9, 32, 253, DateTimeKind.Local).AddTicks(8294),
+                            LastUpdated = new DateTime(2020, 12, 31, 14, 9, 32, 253, DateTimeKind.Local).AddTicks(8296),
                             Title = "viverra mauris in aliquam sem",
                             UserId = 1
                         });
@@ -91,22 +93,20 @@ namespace CricketCreationsDatabase.Migrations
 
             modelBuilder.Entity("CricketCreationsDatabase.Models.BlogPostTag", b =>
                 {
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BlogPostId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BlogPostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("TagId", "BlogPostId");
 
                     b.HasIndex("BlogPostId");
-
-                    b.HasIndex("TagId");
 
                     b.ToTable("BlogPostTag");
                 });
