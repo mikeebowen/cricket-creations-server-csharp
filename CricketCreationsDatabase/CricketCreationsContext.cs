@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CricketCreationsDatabase.Models;
 using Microsoft.EntityFrameworkCore;
-using CricketCreationsDatabase.Models;
+using System;
 
 namespace CricketCreationsDatabase
 {
@@ -22,13 +19,21 @@ namespace CricketCreationsDatabase
             optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;");
         }
         public DbSet<User> User { get; set; }
-
         public DbSet<BlogPost> BlogPost { get; set; }
+        public DbSet<Tag> Tag { get; set; }
+        public DbSet<BlogPostTag> BlogPostTag { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
-            modelBuilder.Entity<BlogPostTag>().HasOne(bpt => bpt.BlogPost).WithMany(t => t.BlogPostTags).HasForeignKey(bpt => bpt.BlogPostId);
-            modelBuilder.Entity<BlogPostTag>().HasOne(bpt => bpt.Tag).WithMany(t => t.BlogPostTags).HasForeignKey(bpt => bpt.TagId);
+            modelBuilder.Entity<BlogPostTag>()
+                .HasOne(b => b.BlogPost)
+                .WithMany(b => b.BlogPostTags)
+                .HasForeignKey(bc => bc.BlogPostId);
+            modelBuilder.Entity<BlogPostTag>()
+                .HasOne(bc => bc.Tag)
+                .WithMany(c => c.BlogPostTags)
+                .HasForeignKey(bc => bc.TagId);
+            modelBuilder.Entity<BlogPostTag>().HasKey(k => new { k.BlogPostId, k.TagId });
             modelBuilder.Seed();
         }
     }
@@ -84,5 +89,11 @@ public static class ModelBuilderExtensions
                   Title = "viverra mauris in aliquam sem"
               }
         );
+        //modelBuilder.Entity<Tag>().HasData(
+        //    new Tag { Id = 1, Name = "car" }
+        //);
+        //modelBuilder.Entity<BlogPostTag>().HasData(
+        //    new BlogPostTag { Id = 1, BlogPostId = 1, TagId = 1 }
+        //);
     }
 }

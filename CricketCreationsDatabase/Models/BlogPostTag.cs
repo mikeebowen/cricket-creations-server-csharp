@@ -12,8 +12,10 @@ namespace CricketCreationsDatabase.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int TagId { get; set; }
+        [ForeignKey("TagId")]
         public Tag Tag { get; set; }
         public int BlogPostId { get; set; }
+        [ForeignKey("BlogPostId")]
         public BlogPost BlogPost { get; set; }
     }
 }

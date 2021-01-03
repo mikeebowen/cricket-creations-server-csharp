@@ -26,7 +26,7 @@ namespace CricketCreations.Models
             {
                 Type tp = t.GetType();
                 PropertyInfo prop = tp.GetProperty("Id");
-                string val = prop != null ? prop.GetValue(t).ToString() : null;
+                string val = prop != null && prop.GetValue(t)  != null ? prop.GetValue(t).ToString() : null;
                 return val;
             }
         }

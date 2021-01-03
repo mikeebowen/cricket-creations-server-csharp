@@ -22,8 +22,10 @@ namespace CricketCreationsRepository.Models
         public string Image { get; set; }
         public UserDTO User { get; set; }
         public int? UserId { get; set; }
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<BlogPost, BlogPostDTO>()
-            .ForMember(dest => dest.User, opt => opt.Ignore()).ReverseMap());
+        private static MapperConfiguration config = new MapperConfiguration(c => c
+        .CreateMap<BlogPost, BlogPostDTO>()
+        .ForMember(dest => dest.User, opt => opt.Ignore())
+        .ReverseMap());
         private static IMapper mapper = config.CreateMapper();
         public static async Task<List<BlogPostDTO>> GetAll(int? id)
         {
