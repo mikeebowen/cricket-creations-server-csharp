@@ -32,7 +32,11 @@ namespace CricketCreations.Models
                 }
             }
         }
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<BlogPost, BlogPostDTO>().ReverseMap());
+        public List<Tag> Tags { get; set; }
+        private static MapperConfiguration config = new MapperConfiguration(c => {
+            c.CreateMap<BlogPost, BlogPostDTO>().ReverseMap();
+            c.CreateMap<Tag, TagDTO>().ReverseMap();
+        });
         private static IMapper mapper = config.CreateMapper();
         public static async Task<List<BlogPost>> GetAll(int? id)
         {
@@ -74,7 +78,10 @@ namespace CricketCreations.Models
             {
                 return null;
             }
-            return mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
+            BlogPost blogPost = mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
+            List<Tag> tags = blogPostDTO.TagDTOs.Select(t => mapper.Map<TagDTO, Tag>(t)).ToList();
+            blogPost.Tags = tags;
+            return blogPost;
         }
         private static BlogPostDTO convertToBlogPostDTO(BlogPost blogPost)
         {

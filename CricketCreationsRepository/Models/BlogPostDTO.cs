@@ -22,6 +22,7 @@ namespace CricketCreationsRepository.Models
         public string Image { get; set; }
         public UserDTO User { get; set; }
         public int? UserId { get; set; }
+        public List<TagDTO> TagDTOs { get; set; }
         private static MapperConfiguration config = new MapperConfiguration(c => c
         .CreateMap<BlogPost, BlogPostDTO>()
         .ForMember(dest => dest.User, opt => opt.Ignore())
@@ -32,11 +33,11 @@ namespace CricketCreationsRepository.Models
             List<BlogPost> blogPosts;
             if (id == null)
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Include(b => b.BlogPostTags).ThenInclude(t => t.Tag).ToListAsync();
             }
             else
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id).ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Include(b => b.BlogPostTags).ThenInclude(t => t.Tag).Where(b => b.UserId == id).ToListAsync();
             }
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
@@ -112,7 +113,10 @@ namespace CricketCreationsRepository.Models
         }
         public static BlogPostDTO ConvertToBlogPostDTO(BlogPost blogPost)
         {
-            return mapper.Map<BlogPost, BlogPostDTO>(blogPost);
+            BlogPostDTO blogPostDTO = mapper.Map<BlogPost, BlogPostDTO>(blogPost);
+            List<TagDTO> tagDTOs = blogPost.BlogPostTags.Select(bpt => new TagDTO { Id = bpt.Id, Name = bpt.Tag.Name }).ToList();
+            blogPostDTO.TagDTOs = tagDTOs;
+            return blogPostDTO;
         }
         private static BlogPost convertToBlogPost(BlogPostDTO blogPostDTO)
         {
