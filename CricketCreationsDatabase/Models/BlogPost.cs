@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,6 +19,6 @@ namespace CricketCreationsDatabase.Models
         [ForeignKey("UserId")]
         public User User { get; set; }
         public int UserId { get; set; }
-        public ICollection<BlogPostTag> BlogPostTags { get; set; }
+        public ICollection<BlogPostTag> BlogPostTags { get; set; } = new Collection<BlogPostTag>();
     }
 }
