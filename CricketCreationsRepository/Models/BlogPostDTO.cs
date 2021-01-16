@@ -22,7 +22,7 @@ namespace CricketCreationsRepository.Models
         public string Image { get; set; }
         public UserDTO User { get; set; }
         public int? UserId { get; set; }
-        public List<TagDTO> TagDTOs { get; set; }
+        public List<TagDTO> TagDTOs { get; set; } = new List<TagDTO>();
         private static MapperConfiguration config = new MapperConfiguration(c => c
         .CreateMap<BlogPost, BlogPostDTO>()
         .ForMember(dest => dest.User, opt => opt.Ignore())
@@ -62,6 +62,9 @@ namespace CricketCreationsRepository.Models
         public static async Task<BlogPostDTO> Create(BlogPostDTO blogPostDTO)
         {
             BlogPost blogPost = convertToBlogPost(blogPostDTO);
+            List<int?> ids = blogPostDTO.TagDTOs.Select(t => t.Id).ToList();
+            List<Tag> tags = DatabaseManager.Instance.Tag.ToList().FindAll(t => ids.Contains(t.Id));
+            blogPost.BlogPostTags = tags.Select(t => new BlogPostTag { Tag = t, BlogPost = blogPost }).ToList();
             var blog = await DatabaseManager.Instance.BlogPost.AddAsync(blogPost);
             await DatabaseManager.Instance.SaveChangesAsync();
             return ConvertToBlogPostDTO(blog.Entity);
@@ -114,7 +117,7 @@ namespace CricketCreationsRepository.Models
         public static BlogPostDTO ConvertToBlogPostDTO(BlogPost blogPost)
         {
             BlogPostDTO blogPostDTO = mapper.Map<BlogPost, BlogPostDTO>(blogPost);
-            List<TagDTO> tagDTOs = blogPost.BlogPostTags.Select(bpt => new TagDTO { Id = bpt.Id, Name = bpt.Tag.Name }).ToList();
+            List<TagDTO> tagDTOs = blogPost.BlogPostTags.Select(bpt => new TagDTO { Id = bpt.TagId, Name = bpt.Tag.Name }).ToList();
             blogPostDTO.TagDTOs = tagDTOs;
             return blogPostDTO;
         }

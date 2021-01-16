@@ -32,7 +32,7 @@ namespace CricketCreations.Models
                 }
             }
         }
-        public List<Tag> Tags { get; set; }
+        public List<Tag> Tags { get; set; } = new List<Tag>();
         private static MapperConfiguration config = new MapperConfiguration(c => {
             c.CreateMap<BlogPost, BlogPostDTO>().ReverseMap();
             c.CreateMap<Tag, TagDTO>().ReverseMap();
@@ -56,7 +56,8 @@ namespace CricketCreations.Models
         public static async Task<BlogPost> Create(BlogPost blogPost)
         {
             BlogPostDTO blogPostDTO = convertToBlogPostDTO(blogPost);
-            return ConvertToBlogPost(await BlogPostDTO.Create(blogPostDTO));
+            BlogPostDTO createdBlogPostDTO = await BlogPostDTO.Create(blogPostDTO);
+            return ConvertToBlogPost(createdBlogPostDTO);
         }
         public static async Task<BlogPost> Update(BlogPost blogPost)
         {
@@ -89,7 +90,10 @@ namespace CricketCreations.Models
             {
                 return null;
             }
-            return mapper.Map<BlogPost, BlogPostDTO>(blogPost);
+            BlogPostDTO blogPostDTO = mapper.Map<BlogPost, BlogPostDTO>(blogPost);
+            List<TagDTO> tagDTOs = blogPost.Tags.Select(t => mapper.Map<Tag, TagDTO>(t)).ToList();
+            blogPostDTO.TagDTOs = tagDTOs;
+            return blogPostDTO;
         }
     }
 }
