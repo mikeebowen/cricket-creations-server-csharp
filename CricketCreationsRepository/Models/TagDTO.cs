@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CricketCreationsDatabase.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,6 +22,12 @@ namespace CricketCreationsRepository.Models
         .ForMember(src => src.Id, options => options.Ignore())
         .ReverseMap());
         private static IMapper mapper = config.CreateMapper();
+        public static async Task<List<TagDTO>> GetAll()
+        {
+            List<Tag> tags = await DatabaseManager.Instance.Tag.ToListAsync();
+            List<TagDTO> tagDTOs = tags.Select(t => ConvertToTagDTO(t)).ToList();
+            return tagDTOs;
+        }
         public static async Task<TagDTO> Create(TagDTO tagDTO)
         {
             Tag newTag = convertToTag(tagDTO);

@@ -26,6 +26,12 @@ namespace CricketCreations.Models
             .ReverseMap();
         });
         private static IMapper mapper = config.CreateMapper();
+        public static async Task<List<Tag>> GetAll()
+        {
+            List<TagDTO> tagDTOs = await TagDTO.GetAll();
+            List<Tag> tags = tagDTOs.Select(td => convertToTag(td)).ToList();
+            return tags;
+        }
         public static async Task<Tag> Create(Tag tag)
         {
             TagDTO tagDTO = convertToTagDTO(tag);
