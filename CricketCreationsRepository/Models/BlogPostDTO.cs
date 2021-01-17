@@ -102,11 +102,9 @@ namespace CricketCreationsRepository.Models
                     {
                         tag = await DatabaseManager.Instance.Tag.FindAsync(tagDTO.Id);
                     }
-                    BlogPostTag blogPostTag = await DatabaseManager.Instance.BlogPostTag.Where(bpt => bpt.BlogPostId == blogPost.Id && bpt.TagId == tag.Id).FirstOrDefaultAsync() ?? new BlogPostTag { Tag = tag, BlogPost = updatedBlogPost };
-                    if (updatedBlogPost.BlogPostTags.Where(bpt => bpt.Id == blogPostTag.Id).FirstOrDefault() == null)
-                    {
-                        updatedBlogPost.BlogPostTags.Add(blogPostTag);
-                    }
+                    BlogPostTag blogPostTag = await DatabaseManager.Instance.BlogPostTag.Where(bpt => bpt.BlogPostId == blogPost.Id && bpt.TagId == tag.Id).FirstOrDefaultAsync()
+                        ?? new BlogPostTag { Tag = tag, BlogPost = updatedBlogPost };
+                    updatedBlogPost.BlogPostTags.Add(blogPostTag);
                 }
                 PropertyInfo[] propertyInfos = blogPost.GetType().GetProperties();
                 foreach (PropertyInfo property in propertyInfos)
