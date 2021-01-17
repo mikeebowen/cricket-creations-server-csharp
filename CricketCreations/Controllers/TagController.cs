@@ -16,9 +16,18 @@ namespace CricketCreations.Controllers
     {
         // GET: api/<TagController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                List<Tag> tags = await Tag.GetAll();
+                string response = new ResponseBody<List<Tag>>(tags, "Tag", tags.Count).GetJson();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
 
         // GET api/<TagController>/5

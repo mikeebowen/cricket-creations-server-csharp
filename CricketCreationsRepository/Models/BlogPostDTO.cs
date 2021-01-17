@@ -89,7 +89,7 @@ namespace CricketCreationsRepository.Models
             {
                 BlogPost updatedBlogPost = mapper.Map<BlogPostDTO, BlogPost>(blogPostDto);
                 foreach (TagDTO tagDTO in blogPostDto.TagDTOs)
-                { 
+                {
                     Tag tag;
                     if (tagDTO.Id == null)
                     {
