@@ -22,6 +22,7 @@ namespace CricketCreationsDatabase
         public DbSet<BlogPost> BlogPost { get; set; }
         public DbSet<Tag> Tag { get; set; }
         public DbSet<BlogPostTag> BlogPostTag { get; set; }
+        public DbSet<PageContent> PageContent { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
