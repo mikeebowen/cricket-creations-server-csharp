@@ -76,23 +76,8 @@ namespace CricketCreations.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Get(int id)
         {
-            try
-            {
-                BlogPost blogPost = await BlogPost.GetById(id);
-                if (blogPost != null)
-                {
-                    ResponseBody<BlogPost> response = new ResponseBody<BlogPost>(blogPost, "BlogPost", null);
-                    return response;
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
-            }
+            APIModel<BlogPost> aPIModel = new APIModel<BlogPost>();
+            return await aPIModel.GetById(id);
         }
 
         // POST api/<BlogPostController>
