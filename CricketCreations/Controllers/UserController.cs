@@ -19,13 +19,13 @@ namespace CricketCreations.Controllers
 
         // GET: api/User/5
         [HttpGet("{id}", Name = "Get")]
-        public Task<User> Get(int id, [FromQuery(Name = "withPosts")] string withPosts)
+        public ActionResult<Task<User>> Get(int id, [FromQuery(Name = "withPosts")] string withPosts)
         {
             if (withPosts == "true")
             {
                 return Models.User.GetUserWithPosts(id);
             }
-            return CricketCreations.Models.User.GetUser(id);
+            return Models.User.GetUser(id);
         }
 
         // POST: api/User

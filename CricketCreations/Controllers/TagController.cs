@@ -16,13 +16,13 @@ namespace CricketCreations.Controllers
     {
         // GET: api/<TagController>
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<ResponseBody<List<Tag>>>> GetAll()
         {
             try
             {
                 List<Tag> tags = await Tag.GetAll();
-                string response = new ResponseBody<List<Tag>>(tags, "Tag", tags.Count).GetJson();
-                return Ok(response);
+                ResponseBody<List<Tag>> response = new ResponseBody<List<Tag>>(tags, "Tag", tags.Count);
+                return response;
             }
             catch (Exception ex)
             {
@@ -39,7 +39,7 @@ namespace CricketCreations.Controllers
 
         // POST api/<TagController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] JsonElement json)
+        public async Task<ActionResult<Tag>> Post([FromBody] JsonElement json)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace CricketCreations.Controllers
                     Tag tag = new Tag { Name = tagPostBody.Name, BlogPosts = blogPosts };
                     Tag newTag = await Tag.Create(tag);
                     newTag.BlogPosts = blogPosts;
-                    string response = new ResponseBody<Tag>(newTag, "Tag", null).GetJson();
+                    ResponseBody<Tag> response = new ResponseBody<Tag>(newTag, "Tag", null);
                     return Created($"api/tag/{tag.Id}", response);
                 }
                 else

@@ -16,11 +16,11 @@ namespace CricketCreations.Controllers
     {
         // GET: api/<PageContentController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<ResponseBody<List<PageContent>>>> Get()
         {
             List<PageContent> pageContents = await PageContent.GetAll();
-            string response = new ResponseBody<List<PageContent>>(pageContents, "BlogPosts", pageContents.Count).GetJson();
-            return Ok(response);
+            ResponseBody<List<PageContent>> response = new ResponseBody<List<PageContent>>(pageContents, "BlogPosts", pageContents.Count);
+            return response;
         }
 
         // GET api/<PageContentController>/5
@@ -32,7 +32,7 @@ namespace CricketCreations.Controllers
 
         // POST api/<PageContentController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] JsonElement json)
+        public async Task<ActionResult<ResponseBody<PageContent>>> Post([FromBody] JsonElement json)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace CricketCreations.Controllers
                     pageContent.Created = DateTime.Now;
                     pageContent.LastUpdated = pageContent.Created;
                     PageContent content = await PageContent.Create(pageContent);
-                    string response = new ResponseBody<PageContent>(content, "PageContent", null).GetJson();
+                    ResponseBody<PageContent> response = new ResponseBody<PageContent>(content, "PageContent", null);
                     return Created($"api/blogpost/{content.Id}", response);
                 }
                 else
@@ -67,7 +67,7 @@ namespace CricketCreations.Controllers
 
         // PUT api/<PageContentController>/5
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] JsonElement json)
+        public async Task<ActionResult<ResponseBody<PageContent>>> Patch(int id, [FromBody] JsonElement json)
         {
             try
             {
@@ -83,8 +83,8 @@ namespace CricketCreations.Controllers
                     PageContent content = await PageContent.Update(pageContent);
                     if (content != null)
                     {
-                        string response = new ResponseBody<PageContent>(content, "BlogPost", null).GetJson();
-                        return Ok(response);
+                        ResponseBody<PageContent> response = new ResponseBody<PageContent>(content, "BlogPost", null);
+                        return response;
                     }
                     else
                     {

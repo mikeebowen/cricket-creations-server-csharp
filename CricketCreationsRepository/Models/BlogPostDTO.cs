@@ -148,8 +148,11 @@ namespace CricketCreationsRepository.Models
         public static BlogPostDTO ConvertToBlogPostDTO(BlogPost blogPost)
         {
             BlogPostDTO blogPostDTO = mapper.Map<BlogPost, BlogPostDTO>(blogPost);
-            List<TagDTO> tagDTOs = blogPost.BlogPostTags.Select(bpt => new TagDTO { Id = bpt.TagId, Name = bpt.Tag.Name }).ToList();
-            blogPostDTO.TagDTOs = tagDTOs;
+            if (blogPost != null)
+            {
+                List<TagDTO> tagDTOs = blogPost.BlogPostTags.Select(bpt => new TagDTO { Id = bpt.TagId, Name = bpt.Tag.Name }).ToList();
+                blogPostDTO.TagDTOs = tagDTOs;
+            }
             return blogPostDTO;
         }
         private static BlogPost convertToBlogPost(BlogPostDTO blogPostDTO)

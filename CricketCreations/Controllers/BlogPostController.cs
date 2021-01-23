@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CricketCreations.Models;
-using CricketCreationsDatabase.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using Newtonsoft.Json;
@@ -24,16 +23,16 @@ namespace CricketCreations.Controllers
     {
         // GET: api/<BlogPostController>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userId")] string userId)
+        public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userId")] string userId)
         {
             try
             {
-                string response;
-                List<CricketCreations.Models.BlogPost> blogPosts;
+                ResponseBody<List<BlogPost>> response;
+                List<BlogPost> blogPosts;
                 bool validId = int.TryParse(userId, out int id);
                 bool validPage = int.TryParse(page, out int pg);
                 bool validCount = int.TryParse(count, out int cnt);
-                bool inRange = await Models.BlogPost.GetCount() - (pg * cnt) > ((cnt * -1) + 1);
+                bool inRange = await BlogPost.GetCount() - (pg * cnt) > ((cnt * -1) + 1);
 
                 if (!inRange)
                 {
@@ -44,28 +43,28 @@ namespace CricketCreations.Controllers
                 {
                     if (validId)
                     {
-                        blogPosts = await CricketCreations.Models.BlogPost.GetRange(pg, cnt, id);
+                        blogPosts = await BlogPost.GetRange(pg, cnt, id);
                     }
                     else
                     {
-                        blogPosts = await CricketCreations.Models.BlogPost.GetRange(pg, cnt, null);
+                        blogPosts = await BlogPost.GetRange(pg, cnt, null);
                     }
                 }
                 else
                 {
                     if (validId)
                     {
-                        blogPosts = await CricketCreations.Models.BlogPost.GetAll(id);
+                        blogPosts = await BlogPost.GetAll(id);
                     }
                     else
                     {
-                        blogPosts = await CricketCreations.Models.BlogPost.GetAll(null);
+                        blogPosts = await BlogPost.GetAll(null);
                     }
 
                 }
-                int blogPostCount = await Models.BlogPost.GetCount();
-                response = new ResponseBody<List<Models.BlogPost>>(blogPosts, "BlogPosts", blogPostCount).GetJson();
-                return Ok(response);
+                int blogPostCount = await BlogPost.GetCount();
+                response = new ResponseBody<List<BlogPost>>(blogPosts, "BlogPosts", blogPostCount);
+                return response;
             }
             catch (Exception ex)
             {
@@ -75,15 +74,15 @@ namespace CricketCreations.Controllers
 
         // GET api/<BlogPostController>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<ActionResult<ResponseBody<BlogPost>>> Get(int id)
         {
             try
             {
-                CricketCreations.Models.BlogPost blogPost = await CricketCreations.Models.BlogPost.GetById(id);
+                BlogPost blogPost = await BlogPost.GetById(id);
                 if (blogPost != null)
                 {
-                    string response = new ResponseBody<CricketCreations.Models.BlogPost>(blogPost, "BlogPost", null).GetJson();
-                    return Ok(response);
+                    ResponseBody<BlogPost> response = new ResponseBody<BlogPost>(blogPost, "BlogPost", null);
+                    return response;
                 }
                 else
                 {
@@ -98,21 +97,21 @@ namespace CricketCreations.Controllers
 
         // POST api/<BlogPostController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] JsonElement json)
+        public async Task<ActionResult<ResponseBody<BlogPost>>> Post([FromBody] JsonElement json)
         {
             try
             {
                 string jsonString = json.ToString();
-                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<Models.BlogPost>();
+                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPost>();
                 ICollection<NJsonSchema.Validation.ValidationError> erros = jsonSchema.Validate(jsonString);
 
                 if (erros.Count == 0)
                 {
-                    Models.BlogPost blogPost = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.BlogPost>(jsonString);
+                    BlogPost blogPost = Newtonsoft.Json.JsonConvert.DeserializeObject<BlogPost>(jsonString);
                     blogPost.Created = DateTime.Now;
                     blogPost.LastUpdated = blogPost.Created ?? DateTime.Now;
-                    Models.BlogPost post = await Models.BlogPost.Create(blogPost);
-                    string response = new ResponseBody<Models.BlogPost>(post, "BlogPost", null).GetJson();
+                    BlogPost post = await BlogPost.Create(blogPost);
+                    ResponseBody<BlogPost> response = new ResponseBody<BlogPost>(post, "BlogPost", null);
                     return Created($"api/blogpost/{post.Id}", response);
                 }
                 else
@@ -133,24 +132,24 @@ namespace CricketCreations.Controllers
 
         // PATCH api/<BlogPostController>/5
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] JsonElement json)
+        public async Task<ActionResult<ResponseBody<BlogPost>>> Patch(int id, [FromBody] JsonElement json)
         {
             try
             {
                 string jsonString = json.ToString();
-                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<Models.BlogPost>();
+                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPost>();
                 ICollection<NJsonSchema.Validation.ValidationError> erros = jsonSchema.Validate(jsonString);
 
                 if (erros.Count == 0)
                 {
-                    Models.BlogPost blogPost = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.BlogPost>(jsonString);
+                    BlogPost blogPost = Newtonsoft.Json.JsonConvert.DeserializeObject<BlogPost>(jsonString);
                     blogPost.LastUpdated = DateTime.Now;
                     blogPost.Id = id;
-                    Models.BlogPost post = await Models.BlogPost.Update(blogPost);
+                    BlogPost post = await BlogPost.Update(blogPost);
                     if (post != null)
                     {
-                        string response = new ResponseBody<Models.BlogPost>(post, "BlogPost", null).GetJson();
-                        return Ok(response);
+                        ResponseBody<BlogPost> response = new ResponseBody<BlogPost>(post, "BlogPost", null);
+                        return response;
                     }
                     else
                     {
@@ -175,11 +174,11 @@ namespace CricketCreations.Controllers
 
         // DELETE api/<BlogPostController>/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                bool deleted = await CricketCreations.Models.BlogPost.Delete(id);
+                bool deleted = await BlogPost.Delete(id);
                 if (deleted)
                 {
                     return StatusCode(204);
