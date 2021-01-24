@@ -10,7 +10,7 @@ namespace CricketCreations.interfaces
     public interface IDataModel<T>
     {
         public abstract int? Id { get; set; }
-        public abstract Nullable<DateTime> Created { get; set; }
+        public abstract DateTime Created { get; set; }
         public abstract DateTime LastUpdated { get; set; }
         public abstract Task<T> GetById(int id, bool? myBool);
         public abstract Task<List<T>> GetAll(int? id);

@@ -22,10 +22,11 @@ namespace CricketCreationsDatabase
         public DbSet<BlogPost> BlogPost { get; set; }
         public DbSet<Tag> Tag { get; set; }
         public DbSet<BlogPostTag> BlogPostTag { get; set; }
+        public DbSet<Page> Page { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
-            modelBuilder.Entity<User>().HasMany(u => u.Tags);
+            //modelBuilder.Entity<User>().HasMany(u => u.Tags);
             modelBuilder.Entity<BlogPostTag>()
                 .HasOne(b => b.BlogPost)
                 .WithMany(b => b.BlogPostTags)
@@ -35,6 +36,7 @@ namespace CricketCreationsDatabase
                 .WithMany(c => c.BlogPostTags)
                 .HasForeignKey(bc => bc.TagId);
             modelBuilder.Entity<BlogPostTag>().HasKey(k => new { k.BlogPostId, k.TagId });
+            modelBuilder.Entity<Tag>().HasOne(t => t.User);
             modelBuilder.Seed();
         }
     }
@@ -92,6 +94,26 @@ public static class ModelBuilderExtensions
                   Title = "viverra mauris in aliquam sem"
               }
         );
+        modelBuilder.Entity<Page>().HasData(
+            new Page
+            {
+                Id = 1,
+                Title = "About",
+                Heading = "The About Page",
+                Content = "Bacon ipsum dolor amet strip steak bresaola chislic, bacon short loin kevin andouille brisket corned beef. Turducken spare ribs pork chop frankfurter, bresaola kielbasa meatball meatloaf pork chislic shoulder short loin leberkas. Frankfurter kevin bacon leberkas ham drumstick shankle flank t-bone biltong shank meatball pork chop bresaola turducken. Frankfurter bacon cupim, hamburger doner pork chop ribeye beef.",
+                Created = DateTime.Now,
+                LastUpdated = DateTime.Now
+            },
+            new Page
+            {
+                Id = 2,
+                Title = "Taco",
+                Heading = "The Taco Page",
+                Content = "Fish tacos with cabbage slaw and a side of chips and guac. CARNITAS!! These tacos are lit 🔥. Can you put some peppers and onions on that? Black or pinto beans? Give me all the tacos, immediately. How bout a gosh darn quesadilla? Black or pinto beans? It’s taco time all the time. Um, Tabasco? No thanks, do you have any Cholula? It’s a wonderful morning for breakfast tacos. How do you feel about hard shelled tacos? Make it a double there pal. I’d have to say, those tacos are on fleek",
+                Created = DateTime.Now,
+                LastUpdated = DateTime.Now
+            }
+            );
         //modelBuilder.Entity<Tag>().HasData(
         //    new Tag { Id = 1, Name = "car" }
         //);

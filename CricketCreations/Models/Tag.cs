@@ -14,7 +14,7 @@ namespace CricketCreations.Models
         public int CreatedBy { get; set; }
         public string Name { get; set; }
         public ICollection<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
-        public DateTime? Created { get; set; }
+        public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
 
         private static MapperConfiguration config = new MapperConfiguration(config =>

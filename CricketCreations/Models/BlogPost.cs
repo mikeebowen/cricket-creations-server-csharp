@@ -13,7 +13,7 @@ namespace CricketCreations.Models
     {
         private int? id;
         public int? Id { get; set; }
-        public Nullable<DateTime> Created { get; set; }
+        public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }

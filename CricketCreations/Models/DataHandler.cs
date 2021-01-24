@@ -103,7 +103,7 @@ namespace CricketCreations.Models
                     var instance = (T)Activator.CreateInstance(type);
                     T t = JsonConvert.DeserializeObject<T>(jsonString);
                     t.Created = DateTime.Now;
-                    t.LastUpdated = t.Created ?? DateTime.Now;
+                    t.LastUpdated = t.Created;
                     T newT = await (Task<T>)create.Invoke(instance, new object[] { t });
                     ResponseBody<T> response = new ResponseBody<T>(newT, type.Name.ToString(), null);
                     string path = $"api/{type.Name.ToLower().ToString()}/{newT.Id}";

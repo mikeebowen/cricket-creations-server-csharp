@@ -27,7 +27,7 @@ namespace CricketCreations.Models
         public string Avatar { get; set; }
         public List<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
         int? IDataModel<User>.Id { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public DateTime? Created { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public DateTime Created { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public DateTime LastUpdated { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<UserDTO, User>().ForMember(dest => dest.BlogPosts, opts => opts.Ignore()).ReverseMap());
