@@ -12,6 +12,8 @@ namespace CricketCreationsDatabase.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastUpdated { get; set; }
         [Required]
         [MaxLength(200)]
         public string Name { get; set; }

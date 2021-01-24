@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CricketCreations.interfaces;
 using CricketCreationsRepository.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CricketCreations.Models
 {
-    public class BlogPost
+    public class BlogPost: IDataModel<BlogPost>
     {
         private int? id;
         public int? Id { get; set; }
@@ -38,38 +39,38 @@ namespace CricketCreations.Models
             c.CreateMap<Tag, TagDTO>().ReverseMap();
         });
         private static IMapper mapper = config.CreateMapper();
-        public static async Task<List<BlogPost>> GetAll(int? id)
+        public async Task<List<BlogPost>> GetAll(int? id)
         {
             List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetAll(id);
             return blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
         }
-        public static async Task<List<BlogPost>> GetRange(int page, int count, int? id)
+        public async Task<List<BlogPost>> GetRange(int page, int count, int? id)
         { 
             List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetRange(page, count, id);
             return blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
         }
-        public static async Task<BlogPost> GetById(int id)
+        public async Task<BlogPost> GetById(int id, bool? include)
         {
             BlogPostDTO blogPostDTO = await BlogPostDTO.GeyById(id);
             return ConvertToBlogPost(blogPostDTO);
         }
-        public static async Task<BlogPost> Create(BlogPost blogPost)
+        public async Task<BlogPost> Create(BlogPost blogPost)
         {
             BlogPostDTO blogPostDTO = convertToBlogPostDTO(blogPost);
             BlogPostDTO createdBlogPostDTO = await BlogPostDTO.Create(blogPostDTO);
             return ConvertToBlogPost(createdBlogPostDTO);
         }
-        public static async Task<BlogPost> Update(BlogPost blogPost)
+        public async Task<BlogPost> Update(BlogPost blogPost)
         {
             BlogPostDTO blogPostDTO = convertToBlogPostDTO(blogPost);
             BlogPostDTO updatedBlogPostDTO = await BlogPostDTO.Update(blogPostDTO);
             return ConvertToBlogPost(updatedBlogPostDTO);
         }
-        public static async Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             return await BlogPostDTO.Delete(id);
         }
-        public static async Task<int> GetCount()
+        public async Task<int> GetCount()
         {
             return await BlogPostDTO.GetCount();
         }

@@ -18,16 +18,7 @@ namespace CricketCreations.Controllers
         [HttpGet]
         public async Task<ActionResult<ResponseBody<List<Tag>>>> GetAll()
         {
-            try
-            {
-                List<Tag> tags = await Tag.GetAll();
-                ResponseBody<List<Tag>> response = new ResponseBody<List<Tag>>(tags, "Tag", tags.Count);
-                return response;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
-            }
+            return await DataHandler<Tag>.Get(null, null, null);
         }
 
         // GET api/<TagController>/5
@@ -39,45 +30,14 @@ namespace CricketCreations.Controllers
 
         // POST api/<TagController>
         [HttpPost]
-        public async Task<ActionResult<Tag>> Post([FromBody] JsonElement json)
+        public async Task<ActionResult<ResponseBody<Tag>>> Post([FromBody] JsonElement json)
         {
-            try
-            {
-                string jsonString = json.ToString();
-                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<TagPostBody>();
-                ICollection<NJsonSchema.Validation.ValidationError> erros = jsonSchema.Validate(jsonString);
-
-                if (erros.Count == 0)
-                {
-                    TagPostBody tagPostBody = Newtonsoft.Json.JsonConvert.DeserializeObject<TagPostBody>(jsonString);
-                    BlogPost blogPost = await BlogPost.GetById(tagPostBody.BlogPostId);
-                    List<BlogPost> blogPosts = new List<BlogPost>();
-                    blogPosts.Add(blogPost);
-                    Tag tag = new Tag { Name = tagPostBody.Name, BlogPosts = blogPosts };
-                    Tag newTag = await Tag.Create(tag);
-                    newTag.BlogPosts = blogPosts;
-                    ResponseBody<Tag> response = new ResponseBody<Tag>(newTag, "Tag", null);
-                    return Created($"api/tag/{tag.Id}", response);
-                }
-                else
-                {
-                    List<ErrorObject> errs = new List<ErrorObject>();
-                    erros.ToList().ForEach(e =>
-                    {
-                        errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
-                    });
-                    return BadRequest(errs);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
-            }
+            return await DataHandler<Tag>.Post(json);
         }
 
         // PUT api/<TagController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPatch("{id}")]
+        public void Patch(int id, [FromBody] string value)
         {
         }
 
