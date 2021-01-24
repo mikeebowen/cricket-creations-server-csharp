@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20210118203815_AddPageContent.cs" />
     <Compile Remove="Migrations\20210118203815_AddPageContent.Designer.cs" />
+    <Compile Remove="Migrations\20210124222458_AddPageTable.cs" />
+    <Compile Remove="Migrations\20210124222458_AddPageTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
