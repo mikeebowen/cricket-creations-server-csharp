@@ -22,7 +22,6 @@ namespace CricketCreationsDatabase
         public DbSet<BlogPost> BlogPost { get; set; }
         public DbSet<Tag> Tag { get; set; }
         public DbSet<BlogPostTag> BlogPostTag { get; set; }
-        public DbSet<PageContent> PageContent { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
@@ -47,6 +46,8 @@ public static class ModelBuilderExtensions
             new User
             {
                 Id = 1,
+                Created = DateTime.Now,
+                LastUpdated = DateTime.Now,
                 Name = "Michael",
                 SurName = "Test",
                 Email = "michael@example.com"

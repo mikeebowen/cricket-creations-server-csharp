@@ -11,6 +11,8 @@ namespace CricketCreationsDatabase.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? Id { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastUpdated { get; set; }
         public string Name { get; set; }
         public ICollection<BlogPostTag> BlogPostTags { get; set; }
     }

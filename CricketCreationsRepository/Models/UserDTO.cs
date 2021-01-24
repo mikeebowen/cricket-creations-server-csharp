@@ -22,6 +22,8 @@ namespace CricketCreationsRepository.Models
         [Required]
         [MaxLength(200)]
         [EmailAddress]
+        public DateTime Created { get; set; }
+        public DateTime LastUpdated { get; set; }
         public string Email { get; set; }
         public string Avatar { get; set; }
         public List<BlogPostDTO> BlogPosts { get; set; } = new List<BlogPostDTO>();
