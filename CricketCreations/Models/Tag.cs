@@ -11,6 +11,7 @@ namespace CricketCreations.Models
     public class Tag: IDataModel<Tag>
     {
         public int? Id { get; set; }
+        public int CreatedBy { get; set; }
         public string Name { get; set; }
         public ICollection<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
         public DateTime? Created { get; set; }

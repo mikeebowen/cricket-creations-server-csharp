@@ -93,6 +93,13 @@ namespace CricketCreations.Models
             }
             BlogPostDTO blogPostDTO = mapper.Map<BlogPost, BlogPostDTO>(blogPost);
             List<TagDTO> tagDTOs = blogPost.Tags.Select(t => mapper.Map<Tag, TagDTO>(t)).ToList();
+            foreach(TagDTO tagDTO in tagDTOs)
+            {
+                if (tagDTO.CreatedBy == null || tagDTO.CreatedBy < 1)
+                {
+                    tagDTO.CreatedBy = blogPostDTO.UserId;
+                }
+            }
             blogPostDTO.TagDTOs = tagDTOs;
             return blogPostDTO;
         }

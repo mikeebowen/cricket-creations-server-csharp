@@ -25,6 +25,7 @@ namespace CricketCreationsDatabase
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
+            modelBuilder.Entity<User>().HasMany(u => u.Tags);
             modelBuilder.Entity<BlogPostTag>()
                 .HasOne(b => b.BlogPost)
                 .WithMany(b => b.BlogPostTags)

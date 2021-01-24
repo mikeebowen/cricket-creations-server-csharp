@@ -24,5 +24,6 @@ namespace CricketCreationsDatabase.Models
         public string Email { get; set; }
         public string Avatar { get; set; }
         public List<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
+        public List<Tag> Tags { get; set; } = new List<Tag>();
     }
 }
