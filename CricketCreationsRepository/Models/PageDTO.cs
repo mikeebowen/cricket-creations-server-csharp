@@ -7,6 +7,7 @@ using CricketCreationsDatabase.Models;
 using System.Threading.Tasks;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CricketCreationsRepository.Models
 {
@@ -80,6 +81,15 @@ namespace CricketCreationsRepository.Models
             {
                 return false;
             }
+        }
+        public static async Task<int> GetCount()
+        {
+            return await DatabaseManager.Instance.Page.CountAsync();
+        }
+        public static async Task<List<PageDTO>> GetRange(int page, int count, int? id)
+        {
+            List<Page> pages = await DatabaseManager.Instance.Page.Skip((page - 1) * count).Take(count).ToListAsync();
+            return pages.Select(p => mapper.Map<PageDTO>(p)).ToList();
         }
     }
 }

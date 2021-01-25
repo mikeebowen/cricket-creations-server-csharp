@@ -16,12 +16,12 @@ namespace CricketCreations.Models
         public string Content { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<Page, TagDTO>().ReverseMap());
+        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<Page, PageDTO>().ReverseMap());
         private static IMapper mapper = config.CreateMapper();
         public async Task<List<Page>> GetAll(int? id)
         {
             List<PageDTO> pageDTOs = await PageDTO.GetAll();
-            List<Page> pages = pageDTOs.ConvertAll(p => mapper.Map<Page>(p));
+            List<Page> pages = pageDTOs.ConvertAll(p => mapper.Map<PageDTO, Page>(p));
             return pages;
         }
         public async Task<Page> Create(Page page)
@@ -45,14 +45,15 @@ namespace CricketCreations.Models
             return mapper.Map<Page>(pageDTO);
         }
 
-        public Task<int> GetCount()
+        public async Task<int> GetCount()
         {
-            throw new NotImplementedException();
+            return await PageDTO.GetCount();
         }
 
-        public Task<List<Page>> GetRange(int page, int count, int? id)
+        public async Task<List<Page>> GetRange(int page, int count, int? id)
         {
-            throw new NotImplementedException();
+            List<PageDTO> pageDTOs = await PageDTO.GetRange(page, count, id);
+            return pageDTOs.ConvertAll(p => mapper.Map<PageDTO, Page>(p));
         }
 
         public Task<bool> Delete(int id)
