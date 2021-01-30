@@ -26,7 +26,8 @@ namespace CricketCreationsDatabase
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
-            //modelBuilder.Entity<User>().HasMany(u => u.Tags);
+            modelBuilder.Entity<User>().HasMany(u => u.Pages);
+            modelBuilder.Entity<User>().HasMany(u => u.Tags);
             modelBuilder.Entity<BlogPostTag>()
                 .HasOne(b => b.BlogPost)
                 .WithMany(b => b.BlogPostTags)
@@ -36,7 +37,9 @@ namespace CricketCreationsDatabase
                 .WithMany(c => c.BlogPostTags)
                 .HasForeignKey(bc => bc.TagId);
             modelBuilder.Entity<BlogPostTag>().HasKey(k => new { k.BlogPostId, k.TagId });
+            modelBuilder.Entity<BlogPostTag>().HasAlternateKey(e => e.Id);
             modelBuilder.Entity<Tag>().HasOne(t => t.User);
+            modelBuilder.Entity<Page>().HasOne(p => p.User);
             modelBuilder.Seed();
         }
     }
@@ -97,6 +100,7 @@ public static class ModelBuilderExtensions
         modelBuilder.Entity<Page>().HasData(
             new Page
             {
+                UserId = 1,
                 Id = 1,
                 Title = "About",
                 Heading = "The About Page",
@@ -106,6 +110,7 @@ public static class ModelBuilderExtensions
             },
             new Page
             {
+                UserId = 1,
                 Id = 2,
                 Title = "Taco",
                 Heading = "The Taco Page",

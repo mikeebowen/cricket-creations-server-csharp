@@ -16,7 +16,7 @@ namespace CricketCreationsRepository.Models
         public int? Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
-        public int? CreatedBy { get; set; }
+        public int? UserId { get; set; }
         public string Name { get; set; }
         public ICollection<BlogPostDTO> BlogPostsDTOs { get; set; }
 

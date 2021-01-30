@@ -73,7 +73,7 @@ namespace CricketCreationsRepository.Models
             {
                 if (tagDTO.Id == null)
                 {
-                    Tag tag = new Tag { Name = tagDTO.Name, CreatedBy = blogPost.UserId };
+                    Tag tag = new Tag { Name = tagDTO.Name, UserId = blogPost.UserId };
                     BlogPostTag blogPostTag = new BlogPostTag { Tag = tag, BlogPost = blogPost };
                     blogPost.BlogPostTags.Add(blogPostTag);
                 }
@@ -150,7 +150,7 @@ namespace CricketCreationsRepository.Models
             BlogPostDTO blogPostDTO = mapper.Map<BlogPost, BlogPostDTO>(blogPost);
             if (blogPost != null)
             {
-                List<TagDTO> tagDTOs = blogPost.BlogPostTags.Select(bpt => new TagDTO { Id = bpt.TagId, Name = bpt.Tag.Name, CreatedBy = blogPost.UserId }).ToList();
+                List<TagDTO> tagDTOs = blogPost.BlogPostTags.Select(bpt => new TagDTO { Id = bpt.TagId, Name = bpt.Tag.Name, UserId = blogPost.UserId }).ToList();
                 blogPostDTO.TagDTOs = tagDTOs;
             }
             return blogPostDTO;
