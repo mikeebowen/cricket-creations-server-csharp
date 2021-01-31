@@ -3,42 +3,51 @@ using System;
 using CricketCreationsDatabase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CricketCreationsDatabase.Migrations
 {
     [DbContext(typeof(CricketCreationsContext))]
-    [Migration("20210130213319_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20210131213219_AddSoftDelete")]
+    partial class AddSoftDelete
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "3.1.9")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("CricketCreationsDatabase.Models.BlogPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Image")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Published")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -54,8 +63,10 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 1,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(2100),
-                            LastUpdated = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(2680),
+                            Created = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(4319),
+                            Deleted = false,
+                            LastUpdated = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(4771),
+                            Published = false,
                             Title = "enim neque volutpat ac tincidunt",
                             UserId = 1
                         },
@@ -63,8 +74,10 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 2,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(4060),
-                            LastUpdated = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(4080),
+                            Created = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(5971),
+                            Deleted = false,
+                            LastUpdated = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(5991),
+                            Published = false,
                             Title = "volutpat odio facilisis mauris sit",
                             UserId = 1
                         },
@@ -72,8 +85,10 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 3,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(4110),
-                            LastUpdated = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(4110),
+                            Created = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(6012),
+                            Deleted = false,
+                            LastUpdated = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(6015),
+                            Published = false,
                             Title = "maecenas volutpat blandit aliquam etiam",
                             UserId = 1
                         },
@@ -81,8 +96,10 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 4,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(4110),
-                            LastUpdated = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(4120),
+                            Created = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(6019),
+                            Deleted = false,
+                            LastUpdated = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(6022),
+                            Published = false,
                             Title = "viverra mauris in aliquam sem",
                             UserId = 1
                         });
@@ -98,7 +115,8 @@ namespace CricketCreationsDatabase.Migrations
 
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasKey("BlogPostId", "TagId");
 
@@ -113,22 +131,26 @@ namespace CricketCreationsDatabase.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Heading")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
@@ -144,19 +166,23 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 1,
                             Content = "Bacon ipsum dolor amet strip steak bresaola chislic, bacon short loin kevin andouille brisket corned beef. Turducken spare ribs pork chop frankfurter, bresaola kielbasa meatball meatloaf pork chislic shoulder short loin leberkas. Frankfurter kevin bacon leberkas ham drumstick shankle flank t-bone biltong shank meatball pork chop bresaola turducken. Frankfurter bacon cupim, hamburger doner pork chop ribeye beef.",
-                            Created = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(7110),
+                            Created = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(8556),
+                            Deleted = false,
                             Heading = "The About Page",
-                            LastUpdated = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(7560),
-                            Title = "About"
+                            LastUpdated = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(8970),
+                            Title = "About",
+                            UserId = 1
                         },
                         new
                         {
                             Id = 2,
                             Content = "Fish tacos with cabbage slaw and a side of chips and guac. CARNITAS!! These tacos are lit 🔥. Can you put some peppers and onions on that? Black or pinto beans? Give me all the tacos, immediately. How bout a gosh darn quesadilla? Black or pinto beans? It’s taco time all the time. Um, Tabasco? No thanks, do you have any Cholula? It’s a wonderful morning for breakfast tacos. How do you feel about hard shelled tacos? Make it a double there pal. I’d have to say, those tacos are on fleek",
-                            Created = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(8040),
+                            Created = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(9424),
+                            Deleted = false,
                             Heading = "The Taco Page",
-                            LastUpdated = new DateTime(2021, 1, 30, 13, 33, 19, 110, DateTimeKind.Local).AddTicks(8070),
-                            Title = "Taco"
+                            LastUpdated = new DateTime(2021, 1, 31, 13, 32, 18, 536, DateTimeKind.Local).AddTicks(9444),
+                            Title = "Taco",
+                            UserId = 1
                         });
                 });
 
@@ -164,16 +190,20 @@ namespace CricketCreationsDatabase.Migrations
                 {
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
@@ -189,29 +219,33 @@ namespace CricketCreationsDatabase.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Avatar")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("SurName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -221,9 +255,10 @@ namespace CricketCreationsDatabase.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2021, 1, 30, 13, 33, 19, 90, DateTimeKind.Local).AddTicks(990),
+                            Created = new DateTime(2021, 1, 31, 13, 32, 18, 533, DateTimeKind.Local).AddTicks(998),
+                            Deleted = false,
                             Email = "michael@example.com",
-                            LastUpdated = new DateTime(2021, 1, 30, 13, 33, 19, 108, DateTimeKind.Local).AddTicks(3040),
+                            LastUpdated = new DateTime(2021, 1, 31, 13, 32, 18, 535, DateTimeKind.Local).AddTicks(942),
                             Name = "Michael",
                             SurName = "Test"
                         });

@@ -16,6 +16,8 @@ namespace CricketCreationsRepository.Models
         public int? Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
+        public bool Published { get; set; } = false;
+
         public int? UserId { get; set; }
         public string Name { get; set; }
         public ICollection<BlogPostDTO> BlogPostsDTOs { get; set; }
@@ -26,7 +28,7 @@ namespace CricketCreationsRepository.Models
         private static IMapper mapper = config.CreateMapper();
         public static async Task<List<TagDTO>> GetAll()
         {
-            List<Tag> tags = await DatabaseManager.Instance.Tag.ToListAsync();
+            List<Tag> tags = await DatabaseManager.Instance.Tag.Where(t => t.Deleted == false).ToListAsync();
             List<TagDTO> tagDTOs = tags.Select(t => ConvertToTagDTO(t)).ToList();
             return tagDTOs;
         }
@@ -51,7 +53,7 @@ namespace CricketCreationsRepository.Models
         }
         public static async Task<int> GetCount()
         {
-            return await DatabaseManager.Instance.Tag.CountAsync();
+            return await DatabaseManager.Instance.Tag.Where(t => t.Deleted == false).CountAsync();
         }
         public static async Task<List<TagDTO>> GetRange(int page, int count)
         {

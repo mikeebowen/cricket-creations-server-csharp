@@ -19,6 +19,7 @@ namespace CricketCreations.Models
         public string Content { get; set; }
         public string Image { get; set; }
         public User User { get; set; }
+        public bool Published { get; set; }
         public int? UserId
         {
             get

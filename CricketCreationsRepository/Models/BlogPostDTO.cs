@@ -23,6 +23,7 @@ namespace CricketCreationsRepository.Models
         public string Image { get; set; }
         public UserDTO User { get; set; }
         public int? UserId { get; set; }
+        public bool Published { get; set; } = false;
         public List<TagDTO> TagDTOs { get; set; } = new List<TagDTO>();
         private static MapperConfiguration config = new MapperConfiguration(c =>
         {
@@ -37,11 +38,11 @@ namespace CricketCreationsRepository.Models
             List<BlogPost> blogPosts;
             if (id == null)
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Include(b => b.BlogPostTags).ThenInclude(t => t.Tag).ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(x => x.Deleted == false).Include(b => b.BlogPostTags).ThenInclude(t => t.Tag).ToListAsync();
             }
             else
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Include(b => b.BlogPostTags).ThenInclude(t => t.Tag).Where(b => b.UserId == id).ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id && b.Deleted == false).Include(b => b.BlogPostTags).ThenInclude(t => t.Tag).ToListAsync();
             }
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
@@ -50,11 +51,11 @@ namespace CricketCreationsRepository.Models
             List<BlogPost> blogPosts;
             if (id == null)
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Skip((page - 1) * count).Take(count).ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b =>  b.Deleted == false).Skip((page - 1) * count).Take(count).ToListAsync();
             }
             else
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id).OrderByDescending(s => s.LastUpdated).Skip((page - 1) * count).Take(count).ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id && b.Deleted == false).OrderByDescending(s => s.LastUpdated).Skip((page - 1) * count).Take(count).ToListAsync();
             }
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
@@ -130,7 +131,7 @@ namespace CricketCreationsRepository.Models
                 BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
                 if (blogPost != null)
                 {
-                    DatabaseManager.Instance.BlogPost.Remove(blogPost);
+                    blogPost.Deleted = true;
                     await DatabaseManager.Instance.SaveChangesAsync();
                     return true;
                 }
