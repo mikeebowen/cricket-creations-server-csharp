@@ -13,6 +13,7 @@ namespace CricketCreationsDatabase.Models
         public int? Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
+        public bool Deleted { get; set; } = false;
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
         public int? UserId { get; set; }

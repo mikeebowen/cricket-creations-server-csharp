@@ -19,6 +19,9 @@ namespace CricketCreationsDatabase.Models
         [ForeignKey("UserId")]
         public User User { get; set; }
         public int UserId { get; set; }
+
+        public bool Published { get; set; } = false;
+        public bool Deleted { get; set; } = false;
         public ICollection<BlogPostTag> BlogPostTags { get; set; } = new Collection<BlogPostTag>();
     }
 }

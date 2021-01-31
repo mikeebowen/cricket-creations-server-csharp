@@ -10,12 +10,27 @@ namespace CricketCreations.Models
 {
     public class Page: IDataModel<Page>
     {
+        private int? id;
         public int? Id { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
+        public int? UserId
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                if (value > 0)
+                {
+                    id = value;
+                }
+            }
+        }
         private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<Page, PageDTO>().ReverseMap());
         private static IMapper mapper = config.CreateMapper();
         public async Task<List<Page>> GetAll(int? id)

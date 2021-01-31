@@ -15,6 +15,7 @@ namespace CricketCreationsRepository.Models
     {
         [Key]
         public int Id { get; set; }
+        public bool Deleted { get; set; } = false;
         public string Name { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
@@ -24,7 +25,7 @@ namespace CricketCreationsRepository.Models
         private static IMapper mapper = config.CreateMapper();
         public static async Task<List<PageDTO>> GetAll()
         {
-            List<Page> Pages = await DatabaseManager.Instance.Page.ToListAsync();
+            List<Page> Pages = await DatabaseManager.Instance.Page.Where(p => p.Deleted == false).ToListAsync();
             List<PageDTO> PageDTOs = Pages.ConvertAll(p => mapper.Map<PageDTO>(p));
             return PageDTOs;
         }
@@ -33,12 +34,12 @@ namespace CricketCreationsRepository.Models
             Page page = await DatabaseManager.Instance.Page.FindAsync(id);
             return mapper.Map<PageDTO>(page);
         }
-        public static async Task<PageDTO> Create(PageDTO PageDTO)
+        public static async Task<PageDTO> Create(PageDTO pageDTO)
         {
-            Page Page = mapper.Map<Page>(PageDTO);
-            var newPage = await DatabaseManager.Instance.Page.AddAsync(Page);
-            PageDTO newPageDTO = mapper.Map<PageDTO>(newPage.Entity);
+            Page page = mapper.Map<Page>(pageDTO);
+            var newPage = await DatabaseManager.Instance.Page.AddAsync(page);
             await DatabaseManager.Instance.SaveChangesAsync();
+            PageDTO newPageDTO = mapper.Map<PageDTO>(newPage.Entity);
             return newPageDTO;
         }
         public static async Task<PageDTO> Update(PageDTO pageDTO)
@@ -71,7 +72,7 @@ namespace CricketCreationsRepository.Models
                 Page page = await DatabaseManager.Instance.Page.FindAsync(id);
                 if (page != null)
                 {
-                    DatabaseManager.Instance.Page.Remove(page);
+                    page.Deleted = true;
                     await DatabaseManager.Instance.SaveChangesAsync();
                     return true;
                 }
@@ -88,7 +89,7 @@ namespace CricketCreationsRepository.Models
         }
         public static async Task<List<PageDTO>> GetRange(int page, int count, int? id)
         {
-            List<Page> pages = await DatabaseManager.Instance.Page.Skip((page - 1) * count).Take(count).ToListAsync();
+            List<Page> pages = await DatabaseManager.Instance.Page.Where(p => p.Deleted == false).Skip((page - 1) * count).Take(count).ToListAsync();
             return pages.Select(p => mapper.Map<PageDTO>(p)).ToList();
         }
     }
