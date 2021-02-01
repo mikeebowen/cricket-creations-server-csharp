@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CricketCreations.Models
 {
-    public class DataHandler<T> where T : IDataModel<T>
+    public class Controller<T> where T : IDataModel<T>
     {
         public static async Task<ActionResult<ResponseBody<T>>> GetById(int id, bool? include)
         {

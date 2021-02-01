@@ -18,28 +18,28 @@ namespace CricketCreations.Controllers
         [HttpGet]
         public async Task<ActionResult<ResponseBody<List<Page>>>> Get()
         {
-            return await DataHandler<Page>.Get(null, null, null);
+            return await Controller<Page>.Get(null, null, null);
         }
 
         // GET api/<PageController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseBody<Page>>> Get(int id)
         {
-            return await DataHandler<Page>.GetById(id, null);
+            return await Controller<Page>.GetById(id, null);
         }
 
         // POST api/<PageController>
         [HttpPost]
         public async Task<ActionResult<ResponseBody<Page>>> Post([FromBody] JsonElement json)
         {
-            return await DataHandler<Page>.Post(json);
+            return await Controller<Page>.Post(json);
         }
 
         // PUT api/<PageController>/5
         [HttpPatch("{id}")]
         public async Task<ActionResult<ResponseBody<Page>>> Patch(int id, [FromBody] JsonElement json)
         {
-            return await DataHandler<Page>.Patch(id, json);
+            return await Controller<Page>.Patch(id, json);
         }
 
         // DELETE api/<PageController>/5

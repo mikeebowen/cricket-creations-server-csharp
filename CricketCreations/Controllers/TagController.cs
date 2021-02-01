@@ -18,7 +18,7 @@ namespace CricketCreations.Controllers
         [HttpGet]
         public async Task<ActionResult<ResponseBody<List<Tag>>>> GetAll()
         {
-            return await DataHandler<Tag>.Get(null, null, null);
+            return await Controller<Tag>.Get(null, null, null);
         }
 
         // GET api/<TagController>/5
@@ -32,7 +32,7 @@ namespace CricketCreations.Controllers
         [HttpPost]
         public async Task<ActionResult<ResponseBody<Tag>>> Post([FromBody] JsonElement json)
         {
-            return await DataHandler<Tag>.Post(json);
+            return await Controller<Tag>.Post(json);
         }
 
         // PUT api/<TagController>/5

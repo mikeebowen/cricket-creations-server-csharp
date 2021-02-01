@@ -25,35 +25,35 @@ namespace CricketCreations.Controllers
         [HttpGet]
         public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userId")] string userId)
         {
-            return await DataHandler<BlogPost>.Get(page, count, userId);
+            return await Controller<BlogPost>.Get(page, count, userId);
         }
 
         // GET api/<BlogPostController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Get(int id)
         {
-            return await DataHandler<BlogPost>.GetById(id, null);
+            return await Controller<BlogPost>.GetById(id, null);
         }
 
         // POST api/<BlogPostController>
         [HttpPost]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Post([FromBody] JsonElement json)
         {
-            return await DataHandler<BlogPost>.Post(json);
+            return await Controller<BlogPost>.Post(json);
         }
 
         // PATCH api/<BlogPostController>/5
         [HttpPatch("{id}")]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Patch(int id, [FromBody] JsonElement json)
         {
-            return await DataHandler<BlogPost>.Patch(id, json);
+            return await Controller<BlogPost>.Patch(id, json);
         }
 
         // DELETE api/<BlogPostController>/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            return await DataHandler<BlogPost>.Delete(id);
+            return await Controller<BlogPost>.Delete(id);
         }
     }
 }

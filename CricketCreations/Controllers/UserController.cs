@@ -15,13 +15,13 @@ namespace CricketCreations.Controllers
         // GET: api/User
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<ResponseBody<List<User>>>> Get() => await DataHandler<User>.Get(null, null, null);
+        public async Task<ActionResult<ResponseBody<List<User>>>> Get() => await Controller<User>.Get(null, null, null);
 
         // GET: api/User/5
         [HttpGet("{id}", Name = "Get")]
         public async Task<ActionResult<ResponseBody<User>>> Get(int id, [FromQuery(Name = "withPosts")] string withPosts)
         {
-            return await DataHandler<User>.GetById(id, withPosts == "true");
+            return await Controller<User>.GetById(id, withPosts == "true");
         }
 
         // POST: api/User
