@@ -12,7 +12,7 @@ namespace CricketCreations.Models
     {
         private int? id;
         public int? Id { get; set; }
-        public string Name { get; set; }
+        public string Heading { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime Created { get; set; }
