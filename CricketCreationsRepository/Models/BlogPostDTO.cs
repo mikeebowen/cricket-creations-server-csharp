@@ -126,21 +126,14 @@ namespace CricketCreationsRepository.Models
         }
         public static async Task<bool> Delete(int id)
         {
-            try
+            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
+            if (blogPost != null)
             {
-                BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
-                if (blogPost != null)
-                {
-                    blogPost.Deleted = true;
-                    await DatabaseManager.Instance.SaveChangesAsync();
-                    return true;
-                }
-                return false;
+                blogPost.Deleted = true;
+                await DatabaseManager.Instance.SaveChangesAsync();
+                return true;
             }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                return false;
-            }
+            return false;
         }
         public static async Task<int> GetCount()
         {
