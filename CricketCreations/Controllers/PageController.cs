@@ -44,8 +44,9 @@ namespace CricketCreations.Controllers
 
         // DELETE api/<PageController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            return await Controller<Page>.Delete(id);
         }
     }
 }
