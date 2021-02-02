@@ -50,7 +50,7 @@ namespace CricketCreations.Models
                 bool validPage = int.TryParse(page, out int pg);
                 bool validCount = int.TryParse(count, out int cnt);
                 int tCount = await (Task<int>)getCount.Invoke(instance, null);
-                bool inRange = tCount - (pg * cnt) > ((cnt * -1) + 1);
+                bool inRange = tCount - (pg * cnt) >= ((cnt * -1) + 1);
 
                 if (!inRange)
                 {
