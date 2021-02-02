@@ -71,9 +71,9 @@ namespace CricketCreations.Models
             return pageDTOs.ConvertAll(p => mapper.Map<PageDTO, Page>(p));
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            return await PageDTO.Delete(id);
         }
     }
 }
