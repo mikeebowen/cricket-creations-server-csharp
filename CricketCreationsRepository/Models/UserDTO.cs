@@ -19,7 +19,7 @@ namespace CricketCreationsRepository.Models
         [Required]
         [MaxLength(200)]
         public string Name { get; set; }
-        public string SurName { get; set; }
+        public string Surname { get; set; }
         [Required]
         [MaxLength(200)]
         [EmailAddress]
