@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using CricketCreations.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CricketCreations.Controllers
 {
@@ -12,6 +15,11 @@ namespace CricketCreations.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private class PasswordObj
+        {
+            public string Password { get; set; }
+            public string Email { get; set; }
+        }
         // GET: api/User
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -26,8 +34,9 @@ namespace CricketCreations.Controllers
 
         // POST: api/User
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] JsonElement json)
         {
+            Console.WriteLine("Hello World");
         }
 
         // PUT: api/User/5
@@ -40,6 +49,12 @@ namespace CricketCreations.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+        [HttpPost("password")]
+        public IActionResult CheckPassword([FromBody] JsonElement json)
+        {
+            PasswordObj vals = JsonConvert.DeserializeObject<PasswordObj>(json.ToString());
+            return Ok(Models.User.CheckPassword(vals.Password, vals.Email));
         }
     }
 }
