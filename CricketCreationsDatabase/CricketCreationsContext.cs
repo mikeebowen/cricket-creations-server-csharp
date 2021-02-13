@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using Pomelo.EntityFrameworkCore;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace CricketCreationsDatabase
 {
@@ -50,6 +52,18 @@ public static class ModelBuilderExtensions
 {
     public static void Seed(this ModelBuilder modelBuilder)
     {
+        byte[] salt = new byte[128 / 8];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(salt);
+        }
+        string password = 
+            Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: "password",
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA1,
+            iterationCount: 10000,
+            numBytesRequested: 256 / 8));
         modelBuilder.Entity<User>().HasData(
             new User
             {
@@ -58,7 +72,9 @@ public static class ModelBuilderExtensions
                 LastUpdated = DateTime.Now,
                 Name = "Michael",
                 Surname = "Test",
-                Email = "michael@example.com"
+                Email = "michael@example.com",
+                Password = password,
+                Salt = salt
             }
         );
         modelBuilder.Entity<BlogPost>().HasData(

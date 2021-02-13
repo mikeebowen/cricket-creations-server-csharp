@@ -14,6 +14,10 @@ namespace CricketCreationsDatabase.Models
         public int Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
+        [Required]
+        public string Password { get; set; }
+        [Required]
+        public byte[] Salt { get; set; }
         public bool Deleted { get; set; } = false;
         [Required]
         [MaxLength(200)]

@@ -26,9 +26,9 @@ namespace CricketCreations.Models
         public string Email { get; set; }
         public string Avatar { get; set; }
         public List<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
-        int? IDataModel<User>.Id { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public DateTime Created { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public DateTime LastUpdated { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        int? IDataModel<User>.Id { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastUpdated { get; set; }
 
         private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<UserDTO, User>().ForMember(dest => dest.BlogPosts, opts => opts.Ignore()).ReverseMap());
         private static IMapper mapper = config.CreateMapper();
@@ -84,6 +84,10 @@ namespace CricketCreations.Models
         public Task<bool> Delete(int id)
         {
             throw new NotImplementedException();
+        }
+        public static bool CheckPassword(string password, string userEmail)
+        {
+            return UserDTO.CheckPassword(password, userEmail);
         }
     }
 }
