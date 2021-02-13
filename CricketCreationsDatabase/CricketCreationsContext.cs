@@ -57,7 +57,7 @@ public static class ModelBuilderExtensions
                 Created = DateTime.Now,
                 LastUpdated = DateTime.Now,
                 Name = "Michael",
-                SurName = "Test",
+                Surname = "Test",
                 Email = "michael@example.com"
             }
         );
