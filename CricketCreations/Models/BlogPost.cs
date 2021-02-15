@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CricketCreations.interfaces;
+using CricketCreations.Interfaces;
 using CricketCreationsRepository.Models;
 using System;
 using System.Collections.Generic;
