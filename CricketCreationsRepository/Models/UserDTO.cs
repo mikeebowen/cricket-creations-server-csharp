@@ -2,11 +2,14 @@
 using CricketCreationsDatabase.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -78,14 +81,22 @@ namespace CricketCreationsRepository.Models
         {
             return mapper.Map<User, UserDTO>(user);
         }
-        public static bool CheckPassword(string password, string userName)
+        public static AuthenticationResponse CheckPassword(string password, string userName)
         {
             var user = DatabaseManager.Instance.User.Where(u => u.Email == userName).First();
             if (user == null)
             {
-                return false;
+                return null;
             }
-            return hashPassword(password, user.Salt) == user.Password;
+            if( hashPassword(password, user.Salt) == user.Password)
+            {
+                string token = generateJwtToken(user);
+                return new AuthenticationResponse(user, token);
+            }
+            else
+            {
+                return null;
+            }
         }
         private static string hashPassword(string pw, byte[] salt)
         {
@@ -95,6 +106,19 @@ namespace CricketCreationsRepository.Models
             prf: KeyDerivationPrf.HMACSHA1,
             iterationCount: 10000,
             numBytesRequested: 256 / 8));
+        }
+        private static string generateJwtToken(User user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(user.Password);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }
