@@ -85,7 +85,7 @@ namespace CricketCreations.Models
         {
             throw new NotImplementedException();
         }
-        public static bool CheckPassword(string password, string userEmail)
+        public static AuthenticationResponse CheckPassword(string password, string userEmail)
         {
             return UserDTO.CheckPassword(password, userEmail);
         }

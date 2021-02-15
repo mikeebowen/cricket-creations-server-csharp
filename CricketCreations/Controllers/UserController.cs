@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CricketCreations.Models;
@@ -54,7 +55,15 @@ namespace CricketCreations.Controllers
         public IActionResult CheckPassword([FromBody] JsonElement json)
         {
             PasswordObj vals = JsonConvert.DeserializeObject<PasswordObj>(json.ToString());
-            return Ok(Models.User.CheckPassword(vals.Password, vals.Email));
+            var response = Models.User.CheckPassword(vals.Password, vals.Email);
+            if (response == null)
+            {
+                return Unauthorized();
+            }
+            else
+            {
+                return Ok(response);
+            }
         }
     }
 }
