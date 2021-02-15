@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CricketCreations.interfaces
+namespace CricketCreations.Interfaces
 {
     public interface IDataModel<T>
     {

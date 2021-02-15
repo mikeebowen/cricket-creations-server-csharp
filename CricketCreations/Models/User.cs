@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using CricketCreationsRepository.Models;
 using Microsoft.AspNetCore.Mvc;
 using CricketCreations.Models;
-using CricketCreations.interfaces;
+using CricketCreations.Interfaces;
 
 namespace CricketCreations.Models
 {
