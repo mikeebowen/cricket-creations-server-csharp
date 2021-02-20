@@ -12,6 +12,11 @@ using CricketCreations.Interfaces;
 
 namespace CricketCreations.Models
 {
+    public enum Role
+    {
+        Administrator,
+        User
+    }
     public class User: IDataModel<User>
     {
         [Key]
@@ -24,7 +29,12 @@ namespace CricketCreations.Models
         [MaxLength(200)]
         [EmailAddress]
         public string Email { get; set; }
+        [Required]
+        [MaxLength(200)]
+        public string UserName { get; set; }
+
         public string Avatar { get; set; }
+        public Role Role { get; set; }
         public List<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
         int? IDataModel<User>.Id { get; set; }
         public DateTime Created { get; set; }
@@ -85,9 +95,10 @@ namespace CricketCreations.Models
         {
             throw new NotImplementedException();
         }
-        public static AuthenticationResponse CheckPassword(string password, string userEmail)
+        public static User CheckPassword(string password, string userEmail)
         {
-            return UserDTO.CheckPassword(password, userEmail);
+            UserDTO userDTO = UserDTO.CheckPassword(password, userEmail);
+            return convertToUser(userDTO);
         }
     }
 }

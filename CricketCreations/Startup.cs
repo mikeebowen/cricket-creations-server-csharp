@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +12,9 @@ using Microsoft.Extensions.Logging;
 using VueCliMiddleware;
 using System.Runtime.CompilerServices;
 using CricketCreationsRepository;
+using CricketCreations.Middleware;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace CricketCreations
 {
@@ -30,6 +33,7 @@ namespace CricketCreations
             //string dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
             //services.AddDbContext<CricketCreationsContext>(opt => opt.UseSqlServer("Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;"));
             services.AddControllers();
+            services.AddTokenAuthentication(Configuration);
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp";
@@ -46,6 +50,7 @@ namespace CricketCreations
 
             app.UseRouting();
             app.UseSpaStaticFiles();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

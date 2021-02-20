@@ -4,11 +4,14 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using CricketCreations.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using CricketCreationsRepository.Models;
+using CricketCreations.Services;
 
 namespace CricketCreations.Controllers
 {
@@ -16,10 +19,15 @@ namespace CricketCreations.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private IConfiguration config;
         private class PasswordObj
         {
             public string Password { get; set; }
             public string Email { get; set; }
+        }
+        public UserController(IConfiguration configuration)
+        {
+            config = configuration;
         }
         // GET: api/User
         [HttpGet]
@@ -51,18 +59,20 @@ namespace CricketCreations.Controllers
         public void Delete(int id)
         {
         }
-        [HttpPost("password")]
+        [HttpPost("authenticate")]
         public IActionResult CheckPassword([FromBody] JsonElement json)
         {
             PasswordObj vals = JsonConvert.DeserializeObject<PasswordObj>(json.ToString());
-            var response = Models.User.CheckPassword(vals.Password, vals.Email);
+            User response = Models.User.CheckPassword(vals.Password, vals.Email);
             if (response == null)
             {
                 return Unauthorized();
             }
             else
             {
-                return Ok(response);
+                var jwt = new JwtService(config);
+                var token = jwt.GenerateSecurityToken(response);
+                return Ok(token);
             }
         }
     }
