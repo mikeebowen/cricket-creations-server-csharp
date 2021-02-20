@@ -5,6 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210220183834_AddRole.cs" />
+    <Compile Remove="Migrations\20210220183834_AddRole.Designer.cs" />
+    <Compile Remove="Migrations\20210220184809_AddRoleDefault.cs" />
+    <Compile Remove="Migrations\20210220184809_AddRoleDefault.Designer.cs" />
+    <Compile Remove="Migrations\20210220192135_AddRole.cs" />
+    <Compile Remove="Migrations\20210220192135_AddRole.Designer.cs" />
+    <Compile Remove="Migrations\20210220192247_AddRole.cs" />
+    <Compile Remove="Migrations\20210220192247_AddRole.Designer.cs" />
+    <Compile Remove="Migrations\20210220193444_AddRole.cs" />
+    <Compile Remove="Migrations\20210220193444_AddRole.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="5.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />

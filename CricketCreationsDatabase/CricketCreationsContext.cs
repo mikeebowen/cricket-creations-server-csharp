@@ -29,9 +29,11 @@ namespace CricketCreationsDatabase
         public DbSet<Page> Page { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
             modelBuilder.Entity<User>().HasMany(u => u.Pages);
             modelBuilder.Entity<User>().HasMany(u => u.Tags);
+            modelBuilder.Entity<User>().Property(u => u.Role).HasConversion<int>();
             modelBuilder.Entity<BlogPostTag>()
                 .HasOne(b => b.BlogPost)
                 .WithMany(b => b.BlogPostTags)
@@ -73,6 +75,8 @@ public static class ModelBuilderExtensions
                 Name = "Michael",
                 Surname = "Test",
                 Email = "michael@example.com",
+                UserName = "tacocat",
+                Role = Role.Administrator,
                 Password = password,
                 Salt = salt
             }
