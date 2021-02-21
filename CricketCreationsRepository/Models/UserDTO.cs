@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -56,6 +57,8 @@ namespace CricketCreationsRepository.Models
         }
         [Required]
         public byte[] Salt { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
         [Required]
         [MaxLength(200)]
         public string Email { get; set; }
@@ -82,6 +85,29 @@ namespace CricketCreationsRepository.Models
                 userDTO.BlogPosts.Add(BlogPostDTO.ConvertToBlogPostDTO(blogPost));
             }
             return userDTO;
+        }
+        public static async Task<UserDTO> Update(UserDTO userDto)
+        {
+            User user = await DatabaseManager.Instance.User.FindAsync(userDto.Id);
+            if (user != null)
+            {
+                User updatedUser = mapper.Map<User>(userDto);
+                PropertyInfo[] propertyInfos = user.GetType().GetProperties();
+                foreach (PropertyInfo property in propertyInfos)
+                {
+                    var val = property.GetValue(updatedUser);
+                    if (val != null)
+                    {
+                        if (!(property.Name != "Id" && int.TryParse(val.ToString(), out int res) && res < 1) && property.Name != "Created" && property.Name != "Salt")
+                        {
+                            property.SetValue(user, val);
+                        }
+                    }
+                }
+                await DatabaseManager.Instance.SaveChangesAsync();
+                return mapper.Map<UserDTO>(user);
+            }
+            return null;
         }
         public static async Task<UserDTO> GetUserDTO(int id)
         {

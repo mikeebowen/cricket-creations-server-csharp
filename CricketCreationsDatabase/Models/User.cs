@@ -24,6 +24,8 @@ namespace CricketCreationsDatabase.Models
         public string Password { get; set; }
         [Required]
         public byte[] Salt { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
         public bool Deleted { get; set; } = false;
         [Required]
         [MaxLength(200)]

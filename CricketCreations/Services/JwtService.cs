@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Configuration;
 using CricketCreations.Models;
 using CricketCreationsRepository.Models;
+using System.Security.Cryptography;
 
 namespace CricketCreations.Services
 {
@@ -44,6 +45,15 @@ namespace CricketCreations.Services
 
             return tokenHandler.WriteToken(token);
 
+        }
+        public string GenerateRefreshToken()
+        {
+            byte[] randomNumber = new byte[32];
+            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
         }
     }
 }

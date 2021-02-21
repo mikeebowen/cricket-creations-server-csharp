@@ -21,6 +21,8 @@ namespace CricketCreations.Models
     {
         [Key]
         public int Id { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
         [Required]
         [MaxLength(200)]
         public string Name { get; set; }
@@ -86,9 +88,12 @@ namespace CricketCreations.Models
             throw new NotImplementedException();
         }
 
-        public Task<User> Update(User t)
+        public async Task<User> Update(User user)
         {
-            throw new NotImplementedException();
+            UserDTO userDto = mapper.Map<UserDTO>(user);
+            UserDTO updatedUserDto = await UserDTO.Update(userDto);
+            User updatedUser = mapper.Map<User>(updatedUserDto);
+            return updatedUser;
         }
 
         public Task<bool> Delete(int id)
