@@ -20,14 +20,21 @@ namespace CricketCreations.Controllers
     public class UserController : ControllerBase
     {
         private IConfiguration config;
+        private JwtService jwt;
         private class PasswordObj
         {
             public string Password { get; set; }
             public string Email { get; set; }
         }
+        private class RefreshRequest
+        {
+            public int Id { get; set; }
+            public string RefreshToken { get; set; }
+        }
         public UserController(IConfiguration configuration)
         {
             config = configuration;
+            jwt = new JwtService(config);
         }
         // GET: api/User
         [HttpGet]
@@ -60,20 +67,47 @@ namespace CricketCreations.Controllers
         {
         }
         [HttpPost("authenticate")]
-        public IActionResult CheckPassword([FromBody] JsonElement json)
+        public async Task<IActionResult> CheckPassword([FromBody] JsonElement json)
         {
             PasswordObj vals = JsonConvert.DeserializeObject<PasswordObj>(json.ToString());
-            User response = Models.User.CheckPassword(vals.Password, vals.Email);
-            if (response == null)
+            User user = Models.User.CheckPassword(vals.Password, vals.Email);
+            if (user == null)
             {
                 return Unauthorized();
             }
             else
             {
-                var jwt = new JwtService(config);
-                var token = jwt.GenerateSecurityToken(response);
-                return Ok(token);
+                string token = jwt.GenerateSecurityToken(user);
+                string refreshToken = jwt.GenerateRefreshToken();
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(60);
+                await user.Update(user);
+                return new ObjectResult(new
+                {
+                    token = token,
+                    refreshToken = refreshToken
+                });
             }
+        }
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] JsonElement json)
+        {
+            RefreshRequest refreshRequest = JsonConvert.DeserializeObject<RefreshRequest>(json.ToString());
+            User userInstance = new User();
+            User user = await userInstance.GetById(refreshRequest.Id, null);
+            if (user == null || user.RefreshToken != refreshRequest.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            {
+                return BadRequest("Invalid Client Request");
+            }
+            string token = jwt.GenerateSecurityToken(user);
+            string refreshToken = jwt.GenerateRefreshToken();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(60);
+            await userInstance.Update(user);
+            return new ObjectResult(new {
+                token = token,
+                refreshToken = refreshToken
+            });
         }
     }
 }

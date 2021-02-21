@@ -39,7 +39,7 @@ namespace CricketCreations.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult<ResponseBody<Page>>> Patch(int id, [FromBody] JsonElement json)
         {
-            return await Controller<Page>.Patch(id, json);
+            return await Controller<Page>.Patch(id, json.ToString());
         }
 
         // DELETE api/<PageController>/5

@@ -125,11 +125,10 @@ namespace CricketCreations.Models
                 return new StatusCodeResult(500);
             }
         }
-        public static async Task<ActionResult<ResponseBody<T>>> Patch(int id, JsonElement json)
+        public static async Task<ActionResult<ResponseBody<T>>> Patch(int id, string jsonString)
         {
             try
             {
-                string jsonString = json.ToString();
                 NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<T>();
                 ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
 
