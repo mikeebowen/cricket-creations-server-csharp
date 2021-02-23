@@ -58,7 +58,6 @@ namespace CricketCreationsRepository.Models
         [Required]
         public byte[] Salt { get; set; }
         public string RefreshToken { get; set; }
-        public DateTime RefreshTokenExpiryTime { get; set; }
         [Required]
         [MaxLength(200)]
         public string Email { get; set; }
