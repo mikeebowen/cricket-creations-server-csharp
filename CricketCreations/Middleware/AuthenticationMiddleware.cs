@@ -24,8 +24,9 @@ namespace CricketCreations.Middleware
                 {
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false
-                    //ValidIssuer = "localhost"
+                    ValidateAudience = false,
+                    ValidateLifetime = true
+                    //ValidIssuer = "localhost",
                     //ValidAudience = "localhost"
                 };
                 x.RequireHttpsMetadata = false;

@@ -95,14 +95,13 @@ namespace CricketCreations.Controllers
             RefreshRequest refreshRequest = JsonConvert.DeserializeObject<RefreshRequest>(json.ToString());
             User userInstance = new User();
             User user = await userInstance.GetById(refreshRequest.Id, null);
-            if (user == null || user.RefreshToken != refreshRequest.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            if (user == null || user.RefreshToken != refreshRequest.RefreshToken)
             {
                 return BadRequest("Invalid Client Request");
             }
             string token = jwt.GenerateSecurityToken(user);
             string refreshToken = jwt.GenerateRefreshToken();
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(60);
             await userInstance.Update(user);
             return new ObjectResult(new {
                 token = token,
