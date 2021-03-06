@@ -52,7 +52,7 @@ namespace CricketCreations.Models
                 int tCount = await (Task<int>)getCount.Invoke(instance, null);
                 bool inRange = tCount - (pg * cnt) >= ((cnt * -1) + 1);
 
-                if (!inRange)
+                if (tCount > 0 && !inRange)
                 {
                     return new StatusCodeResult(416);
                 }
