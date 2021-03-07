@@ -80,7 +80,6 @@ namespace CricketCreations.Controllers
                 string token = jwt.GenerateSecurityToken(user);
                 string refreshToken = jwt.GenerateRefreshToken();
                 user.RefreshToken = refreshToken;
-                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(60);
                 await user.Update(user);
                 return new ObjectResult(new
                 {
@@ -94,8 +93,8 @@ namespace CricketCreations.Controllers
         {
             RefreshRequest refreshRequest = JsonConvert.DeserializeObject<RefreshRequest>(json.ToString());
             User userInstance = new User();
-            User user = await userInstance.GetById(refreshRequest.Id, null);
-            if (user == null || user.RefreshToken != refreshRequest.RefreshToken)
+            User user = await Models.User.CheckRefreshToken(refreshRequest.Id, refreshRequest.RefreshToken);
+            if (user == null)
             {
                 return BadRequest("Invalid Client Request");
             }
@@ -103,7 +102,8 @@ namespace CricketCreations.Controllers
             string refreshToken = jwt.GenerateRefreshToken();
             user.RefreshToken = refreshToken;
             await userInstance.Update(user);
-            return new ObjectResult(new {
+            return new ObjectResult(new
+            {
                 token = token,
                 refreshToken = refreshToken
             });
