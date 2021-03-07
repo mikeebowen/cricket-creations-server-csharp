@@ -21,8 +21,9 @@ namespace CricketCreations.Models
     {
         [Key]
         public int Id { get; set; }
+        public byte[] Salt { get; set; }
         public string RefreshToken { get; set; }
-        public DateTime RefreshTokenExpiryTime { get; set; }
+        public DateTime RefreshTokenExpiration { get; set; }
         [Required]
         [MaxLength(200)]
         public string Name { get; set; }
@@ -42,7 +43,9 @@ namespace CricketCreations.Models
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
 
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<UserDTO, User>().ForMember(dest => dest.BlogPosts, opts => opts.Ignore()).ReverseMap());
+        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<UserDTO, User>()
+        .ForMember(dest => dest.BlogPosts, opts => opts.Ignore())
+        .ReverseMap());
         private static IMapper mapper = config.CreateMapper();
         public async Task<List<User>> GetAll(int? id)
         {
@@ -72,7 +75,10 @@ namespace CricketCreations.Models
         {
             return mapper.Map<UserDTO, User>(userDTO);
         }
-
+        private static UserDTO convertToUserDTO(User user)
+        {
+            return mapper.Map<User, UserDTO>(user);
+        }
         public Task<int> GetCount()
         {
             throw new NotImplementedException();
@@ -90,7 +96,7 @@ namespace CricketCreations.Models
 
         public async Task<User> Update(User user)
         {
-            UserDTO userDto = mapper.Map<UserDTO>(user);
+            UserDTO userDto = convertToUserDTO(user);
             UserDTO updatedUserDto = await UserDTO.Update(userDto);
             User updatedUser = mapper.Map<User>(updatedUserDto);
             return updatedUser;

@@ -80,6 +80,7 @@ namespace CricketCreations.Controllers
                 string token = jwt.GenerateSecurityToken(user);
                 string refreshToken = jwt.GenerateRefreshToken();
                 user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiration = DateTime.Now.AddDays(7);
                 await user.Update(user);
                 return new ObjectResult(new
                 {
@@ -101,6 +102,7 @@ namespace CricketCreations.Controllers
             string token = jwt.GenerateSecurityToken(user);
             string refreshToken = jwt.GenerateRefreshToken();
             user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiration = DateTime.Now.AddDays(7);
             await userInstance.Update(user);
             return new ObjectResult(new
             {
