@@ -25,6 +25,7 @@ namespace CricketCreationsRepository.Models
     public class UserDTO
     {
         private string password;
+        private string refreshToken;
 
         [Key]
         public int Id { get; set; }
@@ -47,17 +48,23 @@ namespace CricketCreationsRepository.Models
             }
             set
             {
-                Salt = new byte[128 / 8];
-                using (var rng = RandomNumberGenerator.Create())
-                {
-                    rng.GetBytes(Salt);
-                }
-                password = hashPassword(value, Salt);
+                setSalt();
+                password = hashString(value, Salt);
             }
         }
         [Required]
         public byte[] Salt { get; set; }
-        public string RefreshToken { get; set; }
+        public string RefreshToken
+        {
+            get
+            {
+                return refreshToken;
+            }
+            set
+            {
+                refreshToken = hashString(value, Salt);
+            }
+        }
         [Required]
         [MaxLength(200)]
         public string Email { get; set; }
@@ -67,6 +74,10 @@ namespace CricketCreationsRepository.Models
         public string Avatar { get; set; }
         public Role Role { get; set; }
         public List<BlogPostDTO> BlogPosts { get; set; } = new List<BlogPostDTO>();
+        UserDTO()
+        {
+            setSalt();
+        }
         private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<User, UserDTO>()
             .ForMember(dest => dest.BlogPosts, opt => opt.Ignore()).ReverseMap());
         private static IMapper mapper = config.CreateMapper();
@@ -124,9 +135,8 @@ namespace CricketCreationsRepository.Models
             {
                 return null;
             }
-            if (hashPassword(password, user.Salt) == user.Password)
+            if (hashString(password, user.Salt) == user.Password)
             {
-                //string token = generateJwtToken(user);
                 return ConvertToUserDTO(user);
             }
             else
@@ -134,7 +144,16 @@ namespace CricketCreationsRepository.Models
                 return null;
             }
         }
-        private static string hashPassword(string pw, byte[] salt)
+        public static async Task<UserDTO> CheckRefreshToken(int id, string token)
+        {
+            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            if (hashString(token, user.Salt) == token)
+            {
+                return ConvertToUserDTO(user);
+            }
+            return null;
+        }
+        private static string hashString(string pw, byte[] salt)
         {
             return Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: pw,
@@ -142,6 +161,14 @@ namespace CricketCreationsRepository.Models
             prf: KeyDerivationPrf.HMACSHA1,
             iterationCount: 10000,
             numBytesRequested: 256 / 8));
+        }
+        private void setSalt()
+        {
+            Salt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(Salt);
+            }
         }
     }
 }

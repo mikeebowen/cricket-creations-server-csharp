@@ -105,5 +105,14 @@ namespace CricketCreations.Models
             UserDTO userDTO = UserDTO.CheckPassword(password, userEmail);
             return convertToUser(userDTO);
         }
+        public static async Task<User> CheckRefreshToken(int id, string token)
+        {
+            UserDTO userDTO = await UserDTO.CheckRefreshToken(id, token);
+            if (userDTO != null)
+            {
+                return convertToUser(userDTO);
+            }
+            return null;
+        }
     }
 }
