@@ -48,7 +48,11 @@ namespace CricketCreationsRepository.Models
             }
             set
             {
-                setSalt();
+                Salt = new byte[128 / 8];
+                using (var rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(Salt);
+                }
                 password = hashString(value, Salt);
             }
         }
@@ -62,9 +66,10 @@ namespace CricketCreationsRepository.Models
             }
             set
             {
-                refreshToken = hashString(value, Salt);
+                refreshToken = hashString(value ?? "", Salt);
             }
         }
+        public DateTime RefreshTokenExpiration { get; set; }
         [Required]
         [MaxLength(200)]
         public string Email { get; set; }
@@ -74,12 +79,9 @@ namespace CricketCreationsRepository.Models
         public string Avatar { get; set; }
         public Role Role { get; set; }
         public List<BlogPostDTO> BlogPosts { get; set; } = new List<BlogPostDTO>();
-        UserDTO()
-        {
-            setSalt();
-        }
         private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<User, UserDTO>()
-            .ForMember(dest => dest.BlogPosts, opt => opt.Ignore()).ReverseMap());
+            .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
+            .ReverseMap());
         private static IMapper mapper = config.CreateMapper();
         public static async Task<List<UserDTO>> GetAll()
         {
@@ -147,7 +149,8 @@ namespace CricketCreationsRepository.Models
         public static async Task<UserDTO> CheckRefreshToken(int id, string token)
         {
             User user = await DatabaseManager.Instance.User.FindAsync(id);
-            if (hashString(token, user.Salt) == token)
+            int dateDiff = DateTime.Compare(user.RefreshTokenExpiration, DateTime.Now);
+            if (user.RefreshToken == hashString(token, user.Salt) && dateDiff > 0)
             {
                 return ConvertToUserDTO(user);
             }
@@ -161,14 +164,6 @@ namespace CricketCreationsRepository.Models
             prf: KeyDerivationPrf.HMACSHA1,
             iterationCount: 10000,
             numBytesRequested: 256 / 8));
-        }
-        private void setSalt()
-        {
-            Salt = new byte[128 / 8];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(Salt);
-            }
         }
     }
 }
