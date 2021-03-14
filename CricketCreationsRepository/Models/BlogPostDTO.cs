@@ -51,7 +51,7 @@ namespace CricketCreationsRepository.Models
             List<BlogPost> blogPosts;
             if (id == null)
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.Deleted == false).Skip((page - 1) * count).Take(count).ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.Deleted == false && b.Published == true).Skip((page - 1) * count).Take(count).ToListAsync();
             }
             else
             {
