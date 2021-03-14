@@ -11,7 +11,7 @@ namespace CricketCreations.Models
 {
     public class BlogPost: IDataModel<BlogPost>
     {
-        private int? id;
+        private int id;
         public int? Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
@@ -20,7 +20,7 @@ namespace CricketCreations.Models
         public string Image { get; set; }
         public User User { get; set; }
         public bool Published { get; set; }
-        public int? UserId
+        public int UserId
         {
             get
             {

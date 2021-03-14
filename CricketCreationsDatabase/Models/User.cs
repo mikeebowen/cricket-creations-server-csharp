@@ -43,7 +43,7 @@ namespace CricketCreationsDatabase.Models
         public string Avatar { get; set; }
         [DefaultValue(Role.User)]
         public Role Role { get; set; }
-        public List<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
+        public List<BlogPost> BlogPosts { get; set; }
         public List<Tag> Tags { get; set; } = new List<Tag>();
         public List<Page> Pages { get; set; } = new List<Page>();
     }

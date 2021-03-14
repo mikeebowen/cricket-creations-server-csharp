@@ -38,7 +38,7 @@ namespace CricketCreationsRepository.Models
             List<BlogPost> blogPosts;
             if (id == null)
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(x => x.Deleted == false).Include(b => b.BlogPostTags).ThenInclude(t => t.Tag).ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(x => x.Deleted == false && x.Published == true).Include(b => b.BlogPostTags).ThenInclude(t => t.Tag).ToListAsync();
             }
             else
             {
