@@ -60,7 +60,7 @@ public static class ModelBuilderExtensions
         {
             rng.GetBytes(salt);
         }
-        string password = 
+        string password =
             Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: "password",
             salt: salt,
