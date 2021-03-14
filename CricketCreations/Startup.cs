@@ -15,6 +15,8 @@ using CricketCreationsRepository;
 using CricketCreations.Middleware;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using CricketCreationsDatabase;
+using Microsoft.EntityFrameworkCore;
 
 namespace CricketCreations
 {
@@ -30,8 +32,8 @@ namespace CricketCreations
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //string dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-            //services.AddDbContext<CricketCreationsContext>(opt => opt.UseSqlServer("Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;"));
+            string dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+            services.AddDbContext<CricketCreationsContext>(opt => opt.UseSqlServer(dbConnectionString));
             services.AddControllers();
             services.AddTokenAuthentication(Configuration);
             services.AddSpaStaticFiles(configuration =>
