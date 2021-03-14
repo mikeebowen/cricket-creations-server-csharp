@@ -17,8 +17,8 @@ namespace CricketCreations.Services
 
         public JwtService(IConfiguration config)
         {
-            secret = config.GetSection("JwtConfig").GetSection("secret").Value;
-            expDate = config.GetSection("JwtConfig").GetSection("expirationInMinutes").Value;
+            secret = Environment.GetEnvironmentVariable("JWT_SECRET");
+            expDate = Environment.GetEnvironmentVariable("TOKEN_EXPIRATION_IN_MINUTES");
         }
 
         public string GenerateSecurityToken(User user)

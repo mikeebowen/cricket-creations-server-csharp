@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CricketCreations.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -38,6 +28,7 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<BlogPostController>
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Post([FromBody] JsonElement json)
         {
@@ -45,6 +36,7 @@ namespace CricketCreations.Controllers
         }
 
         // PATCH api/<BlogPostController>/5
+        [Authorize]
         [HttpPatch("{id}")]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Patch(int id, [FromBody] JsonElement json)
         {
@@ -52,6 +44,7 @@ namespace CricketCreations.Controllers
         }
 
         // DELETE api/<BlogPostController>/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

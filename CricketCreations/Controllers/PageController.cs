@@ -1,4 +1,5 @@
 ﻿using CricketCreations.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<PageController>
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ResponseBody<Page>>> Post([FromBody] JsonElement json)
         {
@@ -36,6 +38,7 @@ namespace CricketCreations.Controllers
         }
 
         // PUT api/<PageController>/5
+        [Authorize]
         [HttpPatch("{id}")]
         public async Task<ActionResult<ResponseBody<Page>>> Patch(int id, [FromBody] JsonElement json)
         {
@@ -43,6 +46,7 @@ namespace CricketCreations.Controllers
         }
 
         // DELETE api/<PageController>/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
