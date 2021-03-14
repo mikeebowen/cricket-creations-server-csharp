@@ -20,10 +20,11 @@
     },
     "CricketCreations": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "api/blogpost",
+      "launchBrowser": false,
       "environmentVariables": {
-        "DB_CONNECTION_STRING": "Server=localhost\\SQLEXPRESS;Database=master;Trusted_Connection=True;",
+        "DB_CONNECTION_STRING": "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;",
+        "JWT_SECRET": "bWlrZ3VxMzRBWU54MHR6UVQ1OVVOelBNYVYwVEFES0dlUDNEbHh0MDBFRVNqaXd5dkNsYU9DekFtVEVweXFwUmkwUEpFVXpmT2VER1lqM1BPTklYVnlibW1mbTlPQzV0UFdueUFxZUVXWmt0dW9yWHBlSVkwRGZoMWxJUFByag==",
+        "TOKEN_EXPIRATION_IN_MINUTES": "10",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:5000"

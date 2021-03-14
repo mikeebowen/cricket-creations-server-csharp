@@ -3,13 +3,15 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System;
+
 namespace CricketCreations.Middleware
 {
     public static class AuthenticationExtension
     {
         public static IServiceCollection AddTokenAuthentication(this IServiceCollection services, IConfiguration config)
         {
-            var secret = config.GetSection("JwtConfig").GetSection("secret").Value;
+            string secret = Environment.GetEnvironmentVariable("JWT_SECRET");
 
             var key = Encoding.ASCII.GetBytes(secret);
             services.AddAuthentication(x =>

@@ -1,4 +1,5 @@
 ﻿using CricketCreations.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<TagController>
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ResponseBody<Tag>>> Post([FromBody] JsonElement json)
         {
@@ -36,12 +38,14 @@ namespace CricketCreations.Controllers
         }
 
         // PUT api/<TagController>/5
+        [Authorize]
         [HttpPatch("{id}")]
         public void Patch(int id, [FromBody] string value)
         {
         }
 
         // DELETE api/<TagController>/5
+        [Authorize]
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
