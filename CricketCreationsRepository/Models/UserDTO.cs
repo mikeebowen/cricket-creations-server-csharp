@@ -78,7 +78,7 @@ namespace CricketCreationsRepository.Models
         public string UserName { get; set; }
         public string Avatar { get; set; }
         public Role Role { get; set; }
-        public List<BlogPostDTO> BlogPosts { get; set; } = new List<BlogPostDTO>();
+        public List<BlogPostDTO> BlogPosts { get; set; }
         private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<User, UserDTO>()
             .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
             .ReverseMap());
@@ -91,6 +91,10 @@ namespace CricketCreationsRepository.Models
         public static async Task<UserDTO> GetUserDTOWithPosts(int id)
         {
             User user = await DatabaseManager.Instance.User.Include(user => user.BlogPosts).Where(user => user.Id == id).FirstAsync();
+            if (user.BlogPosts == null)
+            {
+                user.BlogPosts = new List<BlogPost>();
+            }
             UserDTO userDTO = ConvertToUserDTO(user);
             foreach (BlogPost blogPost in user.BlogPosts)
             {
