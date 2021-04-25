@@ -15,7 +15,7 @@ namespace CricketCreationsDatabase.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
+                .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -61,9 +61,9 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 1,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(2460),
+                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(2335),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(2875),
+                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(2789),
                             Published = false,
                             Title = "enim neque volutpat ac tincidunt",
                             UserId = 1
@@ -72,9 +72,9 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 2,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(3978),
+                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(3998),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(3988),
+                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(4014),
                             Published = false,
                             Title = "volutpat odio facilisis mauris sit",
                             UserId = 1
@@ -83,9 +83,9 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 3,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(3992),
+                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(4034),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(3994),
+                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(4036),
                             Published = false,
                             Title = "maecenas volutpat blandit aliquam etiam",
                             UserId = 1
@@ -94,9 +94,9 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 4,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(3996),
+                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(4041),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(3999),
+                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(4043),
                             Published = false,
                             Title = "viverra mauris in aliquam sem",
                             UserId = 1
@@ -164,10 +164,10 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 1,
                             Content = "Bacon ipsum dolor amet strip steak bresaola chislic, bacon short loin kevin andouille brisket corned beef. Turducken spare ribs pork chop frankfurter, bresaola kielbasa meatball meatloaf pork chislic shoulder short loin leberkas. Frankfurter kevin bacon leberkas ham drumstick shankle flank t-bone biltong shank meatball pork chop bresaola turducken. Frankfurter bacon cupim, hamburger doner pork chop ribeye beef.",
-                            Created = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(6305),
+                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(6536),
                             Deleted = false,
                             Heading = "The About Page",
-                            LastUpdated = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(6677),
+                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(6937),
                             Title = "About",
                             UserId = 1
                         },
@@ -175,10 +175,10 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 2,
                             Content = "Fish tacos with cabbage slaw and a side of chips and guac. CARNITAS!! These tacos are lit 🔥. Can you put some peppers and onions on that? Black or pinto beans? Give me all the tacos, immediately. How bout a gosh darn quesadilla? Black or pinto beans? It’s taco time all the time. Um, Tabasco? No thanks, do you have any Cholula? It’s a wonderful morning for breakfast tacos. How do you feel about hard shelled tacos? Make it a double there pal. I’d have to say, those tacos are on fleek",
-                            Created = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(7045),
+                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(7418),
                             Deleted = false,
                             Heading = "The Taco Page",
-                            LastUpdated = new DateTime(2021, 3, 7, 10, 52, 14, 77, DateTimeKind.Local).AddTicks(7054),
+                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(7437),
                             Title = "Taco",
                             UserId = 1
                         });
@@ -280,15 +280,15 @@ namespace CricketCreationsDatabase.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2021, 3, 7, 10, 52, 14, 73, DateTimeKind.Local).AddTicks(8736),
+                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 360, DateTimeKind.Local).AddTicks(5836),
                             Deleted = false,
                             Email = "michael@example.com",
-                            LastUpdated = new DateTime(2021, 3, 7, 10, 52, 14, 75, DateTimeKind.Local).AddTicks(7578),
+                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 362, DateTimeKind.Local).AddTicks(5567),
                             Name = "Michael",
-                            Password = "Oga0daoBSd5COy1IN+aQE8ct0OlbNkGws7oQYpO9yGg=",
+                            Password = "Nrn8Zi+qcV+DJ8nX4tBQ4Jyd31Uprb6BEdureBBk9I8=",
                             RefreshTokenExpiration = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = 0,
-                            Salt = new byte[] { 128, 229, 253, 184, 111, 87, 125, 96, 71, 53, 59, 65, 31, 5, 111, 140 },
+                            Salt = new byte[] { 136, 110, 8, 226, 179, 217, 151, 37, 27, 134, 153, 133, 142, 236, 126, 132 },
                             Surname = "Test",
                             UserName = "tacocat"
                         });
