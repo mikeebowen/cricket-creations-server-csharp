@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using CricketCreationsRepository.Models;
 using CricketCreations.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CricketCreations.Controllers
 {
@@ -39,10 +40,12 @@ namespace CricketCreations.Controllers
         // GET: api/User
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize]
         public async Task<ActionResult<ResponseBody<List<User>>>> Get() => await Controller<User>.Get(null, null, null);
 
         // GET: api/User/5
         [HttpGet("{id}", Name = "Get")]
+        [Authorize]
         public async Task<ActionResult<ResponseBody<User>>> Get(int id, [FromQuery(Name = "withPosts")] string withPosts)
         {
             return await Controller<User>.GetById(id, withPosts == "true");
@@ -50,6 +53,7 @@ namespace CricketCreations.Controllers
 
         // POST: api/User
         [HttpPost]
+        [Authorize]
         public void Post([FromBody] JsonElement json)
         {
             Console.WriteLine("Hello World");
@@ -57,12 +61,14 @@ namespace CricketCreations.Controllers
 
         // PUT: api/User/5
         [HttpPut("{id}")]
+        [Authorize]
         public void Put(int id, [FromBody] string value)
         {
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
+        [Authorize]
         public void Delete(int id)
         {
         }

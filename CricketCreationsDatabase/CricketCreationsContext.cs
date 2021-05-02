@@ -20,7 +20,9 @@ namespace CricketCreationsDatabase
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
+            //Console.WriteLine($"connectionString: {Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")}");
+            //string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
+            string connectionString = "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
             optionsBuilder.UseSqlServer(connectionString);
             //optionsBuilder.UseMySql("Server=127.0.0.1;Database=CricketCreations_Dev;User=root;Password=d@t@b@$3;");
         }
