@@ -31,7 +31,7 @@ namespace CricketCreations.Middleware
                     //ValidIssuer = "localhost",
                     //ValidAudience = "localhost"
                 };
-                x.RequireHttpsMetadata = false;
+                x.RequireHttpsMetadata = false; // TODO: change this to true for production
                 x.SaveToken = true;
             });
 
