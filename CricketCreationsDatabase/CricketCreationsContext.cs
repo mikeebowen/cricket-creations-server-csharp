@@ -29,27 +29,28 @@ namespace CricketCreationsDatabase
         public DbSet<User> User { get; set; }
         public DbSet<BlogPost> BlogPost { get; set; }
         public DbSet<Tag> Tag { get; set; }
-        public DbSet<BlogPostTag> BlogPostTag { get; set; }
         public DbSet<Page> Page { get; set; }
+        public DbSet<Image> Image { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
-            // modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
-            // modelBuilder.Entity<User>().HasMany(u => u.Pages);
-            // modelBuilder.Entity<User>().HasMany(u => u.Tags);
+            modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
+            modelBuilder.Entity<User>().HasMany(u => u.Pages);
+            modelBuilder.Entity<User>().HasMany(u => u.Tags);
+            modelBuilder.Entity<User>().HasMany(u => u.Images);
+            modelBuilder.Entity<User>().HasOne(u => u.Avatar);
             modelBuilder.Entity<User>().Property(u => u.Role).HasConversion<int>();
-            modelBuilder.Entity<BlogPostTag>()
-                .HasOne(b => b.BlogPost)
-                .WithMany(b => b.BlogPostTags)
-                .HasForeignKey(bc => bc.BlogPostId);
-            modelBuilder.Entity<BlogPostTag>()
-                .HasOne(bc => bc.Tag)
-                .WithMany(c => c.BlogPostTags)
-                .HasForeignKey(bc => bc.TagId);
-            modelBuilder.Entity<BlogPostTag>().HasKey(k => new { k.BlogPostId, k.TagId });
-            modelBuilder.Entity<BlogPostTag>().HasAlternateKey(e => e.Id);
+
+            modelBuilder.Entity<BlogPost>().HasMany(b => b.Tags);
+            modelBuilder.Entity<BlogPost>().HasOne(b => b.User);
+
+            modelBuilder.Entity<Tag>().HasMany(t => t.BlogPosts);
             modelBuilder.Entity<Tag>().HasOne(t => t.User);
+
             modelBuilder.Entity<Page>().HasOne(p => p.User);
+
+            modelBuilder.Entity<Image>().HasOne(i => i.User);
+
             modelBuilder.Seed();
         }
     }

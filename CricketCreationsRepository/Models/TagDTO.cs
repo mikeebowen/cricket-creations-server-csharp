@@ -36,17 +36,7 @@ namespace CricketCreationsRepository.Models
         {
             Tag newTag = convertToTag(tagDTO);
             BlogPost blogPost = DatabaseManager.Instance.BlogPost.ToList().FirstOrDefault(bp => tagDTO.BlogPostsDTOs.Count > 0 && bp.Id == tagDTO.BlogPostsDTOs.First().Id);
-            if (blogPost != null) {
-                newTag.BlogPostTags = new List<BlogPostTag>
-                {
-                   new BlogPostTag
-                    {
-                        Tag = newTag,
-                        BlogPost = blogPost
-                    }
-                };
-            }
-           
+
             DatabaseManager.Instance.Tag.Add(newTag);
             await DatabaseManager.Instance.SaveChangesAsync();
             return ConvertToTagDTO(newTag);
@@ -57,7 +47,7 @@ namespace CricketCreationsRepository.Models
         }
         public static async Task<List<TagDTO>> GetRange(int page, int count)
         {
-            List<Tag>    tags = await DatabaseManager.Instance.Tag.Skip((page - 1) * count).Take(count).ToListAsync();
+            List<Tag> tags = await DatabaseManager.Instance.Tag.Skip((page - 1) * count).Take(count).ToListAsync();
             return tags.Select(b => ConvertToTagDTO(b)).ToList();
         }
         public static TagDTO ConvertToTagDTO(Tag tag)

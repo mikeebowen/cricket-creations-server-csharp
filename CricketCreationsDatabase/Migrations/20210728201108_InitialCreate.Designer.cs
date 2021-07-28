@@ -10,16 +10,31 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CricketCreationsDatabase.Migrations
 {
     [DbContext(typeof(CricketCreationsContext))]
-    [Migration("20210404222512_InitialCreate")]
+    [Migration("20210728201108_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("BlogPostTag", b =>
+                {
+                    b.Property<int>("BlogPostsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BlogPostsId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("BlogPostTag");
+                });
 
             modelBuilder.Entity("CricketCreationsDatabase.Models.BlogPost", b =>
                 {
@@ -49,7 +64,7 @@ namespace CricketCreationsDatabase.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -63,9 +78,9 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 1,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(2335),
+                            Created = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(6635),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(2789),
+                            LastUpdated = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(6891),
                             Published = false,
                             Title = "enim neque volutpat ac tincidunt",
                             UserId = 1
@@ -74,9 +89,9 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 2,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(3998),
+                            Created = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(7549),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(4014),
+                            LastUpdated = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(7557),
                             Published = false,
                             Title = "volutpat odio facilisis mauris sit",
                             UserId = 1
@@ -85,9 +100,9 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 3,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(4034),
+                            Created = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(7560),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(4036),
+                            LastUpdated = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(7562),
                             Published = false,
                             Title = "maecenas volutpat blandit aliquam etiam",
                             UserId = 1
@@ -96,35 +111,55 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 4,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(4041),
+                            Created = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(7565),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(4043),
+                            LastUpdated = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(7567),
                             Published = false,
                             Title = "viverra mauris in aliquam sem",
                             UserId = 1
                         });
                 });
 
-            modelBuilder.Entity("CricketCreationsDatabase.Models.BlogPostTag", b =>
+            modelBuilder.Entity("CricketCreationsDatabase.Models.Image", b =>
                 {
-                    b.Property<int>("BlogPostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("BlogPostId", "TagId");
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
-                    b.HasAlternateKey("Id");
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("TagId");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("BlogPostTag");
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1")
+                        .IsUnique()
+                        .HasFilter("[UserId1] IS NOT NULL");
+
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("CricketCreationsDatabase.Models.Page", b =>
@@ -152,7 +187,7 @@ namespace CricketCreationsDatabase.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -166,10 +201,10 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 1,
                             Content = "Bacon ipsum dolor amet strip steak bresaola chislic, bacon short loin kevin andouille brisket corned beef. Turducken spare ribs pork chop frankfurter, bresaola kielbasa meatball meatloaf pork chislic shoulder short loin leberkas. Frankfurter kevin bacon leberkas ham drumstick shankle flank t-bone biltong shank meatball pork chop bresaola turducken. Frankfurter bacon cupim, hamburger doner pork chop ribeye beef.",
-                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(6536),
+                            Created = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(9103),
                             Deleted = false,
                             Heading = "The About Page",
-                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(6937),
+                            LastUpdated = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(9345),
                             Title = "About",
                             UserId = 1
                         },
@@ -177,10 +212,10 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 2,
                             Content = "Fish tacos with cabbage slaw and a side of chips and guac. CARNITAS!! These tacos are lit 🔥. Can you put some peppers and onions on that? Black or pinto beans? Give me all the tacos, immediately. How bout a gosh darn quesadilla? Black or pinto beans? It’s taco time all the time. Um, Tabasco? No thanks, do you have any Cholula? It’s a wonderful morning for breakfast tacos. How do you feel about hard shelled tacos? Make it a double there pal. I’d have to say, those tacos are on fleek",
-                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(7418),
+                            Created = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(9700),
                             Deleted = false,
                             Heading = "The Taco Page",
-                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 364, DateTimeKind.Local).AddTicks(7437),
+                            LastUpdated = new DateTime(2021, 7, 28, 13, 11, 8, 570, DateTimeKind.Local).AddTicks(9708),
                             Title = "Taco",
                             UserId = 1
                         });
@@ -188,7 +223,7 @@ namespace CricketCreationsDatabase.Migrations
 
             modelBuilder.Entity("CricketCreationsDatabase.Models.Tag", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -222,9 +257,6 @@ namespace CricketCreationsDatabase.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -233,16 +265,16 @@ namespace CricketCreationsDatabase.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -263,13 +295,13 @@ namespace CricketCreationsDatabase.Migrations
 
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -282,49 +314,68 @@ namespace CricketCreationsDatabase.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2021, 4, 4, 15, 25, 12, 360, DateTimeKind.Local).AddTicks(5836),
+                            Created = new DateTime(2021, 7, 28, 13, 11, 8, 567, DateTimeKind.Local).AddTicks(5631),
                             Deleted = false,
                             Email = "michael@example.com",
-                            LastUpdated = new DateTime(2021, 4, 4, 15, 25, 12, 362, DateTimeKind.Local).AddTicks(5567),
+                            LastUpdated = new DateTime(2021, 7, 28, 13, 11, 8, 569, DateTimeKind.Local).AddTicks(5824),
                             Name = "Michael",
-                            Password = "Nrn8Zi+qcV+DJ8nX4tBQ4Jyd31Uprb6BEdureBBk9I8=",
+                            Password = "YuoAKU/Mqlu3hSMvl4CGr0A9HSeb43GJtiN+wbOCdLQ=",
                             RefreshTokenExpiration = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = 0,
-                            Salt = new byte[] { 136, 110, 8, 226, 179, 217, 151, 37, 27, 134, 153, 133, 142, 236, 126, 132 },
+                            Salt = new byte[] { 192, 39, 149, 55, 155, 61, 227, 28, 181, 255, 92, 169, 78, 60, 11, 150 },
                             Surname = "Test",
                             UserName = "tacocat"
                         });
+                });
+
+            modelBuilder.Entity("BlogPostTag", b =>
+                {
+                    b.HasOne("CricketCreationsDatabase.Models.BlogPost", null)
+                        .WithMany()
+                        .HasForeignKey("BlogPostsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CricketCreationsDatabase.Models.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CricketCreationsDatabase.Models.BlogPost", b =>
                 {
                     b.HasOne("CricketCreationsDatabase.Models.User", "User")
                         .WithMany("BlogPosts")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CricketCreationsDatabase.Models.Image", b =>
+                {
+                    b.HasOne("CricketCreationsDatabase.Models.User", "User")
+                        .WithMany("Images")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("CricketCreationsDatabase.Models.BlogPostTag", b =>
-                {
-                    b.HasOne("CricketCreationsDatabase.Models.BlogPost", "BlogPost")
-                        .WithMany("BlogPostTags")
-                        .HasForeignKey("BlogPostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("CricketCreationsDatabase.Models.User", null)
+                        .WithOne("Avatar")
+                        .HasForeignKey("CricketCreationsDatabase.Models.Image", "UserId1");
 
-                    b.HasOne("CricketCreationsDatabase.Models.Tag", "Tag")
-                        .WithMany("BlogPostTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CricketCreationsDatabase.Models.Page", b =>
                 {
                     b.HasOne("CricketCreationsDatabase.Models.User", "User")
                         .WithMany("Pages")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CricketCreationsDatabase.Models.Tag", b =>
@@ -332,6 +383,21 @@ namespace CricketCreationsDatabase.Migrations
                     b.HasOne("CricketCreationsDatabase.Models.User", "User")
                         .WithMany("Tags")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CricketCreationsDatabase.Models.User", b =>
+                {
+                    b.Navigation("Avatar");
+
+                    b.Navigation("BlogPosts");
+
+                    b.Navigation("Images");
+
+                    b.Navigation("Pages");
+
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

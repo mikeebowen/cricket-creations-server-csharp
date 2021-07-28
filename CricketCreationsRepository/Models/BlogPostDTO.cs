@@ -38,11 +38,11 @@ namespace CricketCreationsRepository.Models
             List<BlogPost> blogPosts;
             if (id == null)
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(x => x.Deleted == false && x.Published == true).Include(b => b.BlogPostTags).ThenInclude(t => t.Tag).ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(x => x.Deleted == false && x.Published == true).Include(b => b.Tags).ToListAsync();
             }
             else
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id && b.Deleted == false).Include(b => b.BlogPostTags).ThenInclude(t => t.Tag).ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id && b.Deleted == false).Include(b => b.Tags).ToListAsync();
             }
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
@@ -69,16 +69,7 @@ namespace CricketCreationsRepository.Models
             BlogPost blogPost = convertToBlogPost(blogPostDTO);
             List<int?> existingTagIds = blogPostDTO.TagDTOs.Select(t => t.Id).ToList();
             List<Tag> tags = DatabaseManager.Instance.Tag.ToList().FindAll(t => existingTagIds.Contains(t.Id));
-            blogPost.BlogPostTags = tags.Select(t => new BlogPostTag { Tag = t, BlogPost = blogPost }).ToList();
-            foreach (TagDTO tagDTO in blogPostDTO.TagDTOs)
-            {
-                if (tagDTO.Id == null)
-                {
-                    Tag tag = new Tag { Name = tagDTO.Name, UserId = blogPost.UserId };
-                    BlogPostTag blogPostTag = new BlogPostTag { Tag = tag, BlogPost = blogPost };
-                    blogPost.BlogPostTags.Add(blogPostTag);
-                }
-            }
+
             var blog = await DatabaseManager.Instance.BlogPost.AddAsync(blogPost);
             await DatabaseManager.Instance.SaveChangesAsync();
             return ConvertToBlogPostDTO(blog.Entity);
@@ -103,9 +94,6 @@ namespace CricketCreationsRepository.Models
                     {
                         tag = await DatabaseManager.Instance.Tag.FindAsync(tagDTO.Id);
                     }
-                    BlogPostTag blogPostTag = await DatabaseManager.Instance.BlogPostTag.Where(bpt => bpt.BlogPostId == blogPost.Id && bpt.TagId == tag.Id).FirstOrDefaultAsync()
-                        ?? new BlogPostTag { Tag = tag, BlogPost = updatedBlogPost };
-                    updatedBlogPost.BlogPostTags.Add(blogPostTag);
                 }
                 PropertyInfo[] propertyInfos = blogPost.GetType().GetProperties();
                 foreach (PropertyInfo property in propertyInfos)
@@ -142,11 +130,7 @@ namespace CricketCreationsRepository.Models
         public static BlogPostDTO ConvertToBlogPostDTO(BlogPost blogPost)
         {
             BlogPostDTO blogPostDTO = mapper.Map<BlogPost, BlogPostDTO>(blogPost);
-            if (blogPost != null)
-            {
-                List<TagDTO> tagDTOs = blogPost.BlogPostTags.Select(bpt => new TagDTO { Id = bpt.TagId, Name = bpt.Tag.Name, UserId = blogPost.UserId }).ToList();
-                blogPostDTO.TagDTOs = tagDTOs;
-            }
+
             return blogPostDTO;
         }
         private static BlogPost convertToBlogPost(BlogPostDTO blogPostDTO)
