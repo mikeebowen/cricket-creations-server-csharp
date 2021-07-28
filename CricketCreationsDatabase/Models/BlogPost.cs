@@ -8,8 +8,7 @@ namespace CricketCreationsDatabase.Models
 {
     public class BlogPost
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
@@ -18,10 +17,10 @@ namespace CricketCreationsDatabase.Models
         public string Image { get; set; }
         [ForeignKey("UserId")]
         public User User { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         public bool Published { get; set; } = false;
         public bool Deleted { get; set; } = false;
-        public ICollection<BlogPostTag> BlogPostTags { get; set; } = new Collection<BlogPostTag>();
+        public ICollection<Tag> Tags { get; set; }
     }
 }
