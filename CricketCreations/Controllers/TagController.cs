@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 
 namespace CricketCreations.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("api/[controller]"), ApiController]
     public class TagController : ControllerBase
     {
         // GET: api/<TagController>
@@ -30,23 +29,20 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<TagController>
-        [Authorize]
-        [HttpPost]
+        [Authorize, HttpPost]
         public async Task<ActionResult<ResponseBody<Tag>>> Post([FromBody] JsonElement json)
         {
             return await Controller<Tag>.Post(json);
         }
 
         // PUT api/<TagController>/5
-        [Authorize]
-        [HttpPatch("{id}")]
+        [Authorize, HttpPatch("{id}")]
         public void Patch(int id, [FromBody] string value)
         {
         }
 
         // DELETE api/<TagController>/5
-        [Authorize]
-        [HttpDelete("{id}")]
+        [Authorize, HttpDelete("{id}")]
         public void Delete(int id)
         {
         }

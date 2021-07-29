@@ -30,13 +30,10 @@ namespace CricketCreationsRepository.Models
         [Key]
         public int Id { get; set; }
         public bool Deleted { get; set; } = false;
-        [Required]
-        [MaxLength(200)]
+        [Required, MaxLength(200)]
         public string Name { get; set; }
         public string Surname { get; set; }
-        [Required]
-        [MaxLength(200)]
-        [EmailAddress]
+        [Required, MaxLength(200), EmailAddress]
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
         [Required]
@@ -70,11 +67,9 @@ namespace CricketCreationsRepository.Models
             }
         }
         public DateTime RefreshTokenExpiration { get; set; }
-        [Required]
-        [MaxLength(200)]
+        [Required, MaxLength(200)]
         public string Email { get; set; }
-        [Required]
-        [MaxLength(200)]
+        [Required, MaxLength(200)]
         public string UserName { get; set; }
         public string Avatar { get; set; }
         public Role Role { get; set; }
