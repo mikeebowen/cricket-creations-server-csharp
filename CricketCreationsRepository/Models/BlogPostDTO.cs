@@ -38,11 +38,12 @@ namespace CricketCreationsRepository.Models
             List<BlogPost> blogPosts;
             if (id == null)
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(x => x.Deleted == false && x.Published == true).Include(b => b.Tags).ToListAsync();
+                blogPosts = await DatabaseManager.Instance.BlogPost.Where(x => !x.Deleted && x.Published).Include(b => b.Tags).ToListAsync();
             }
             else
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id && b.Deleted == false).Include(b => b.Tags).ToListAsync();
+                User user = await DatabaseManager.Instance.User.FindAsync(id);
+                blogPosts = user.BlogPosts.Where(b => !b.Deleted && b.Published).ToList();
             }
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
@@ -55,7 +56,8 @@ namespace CricketCreationsRepository.Models
             }
             else
             {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.UserId == id && b.Deleted == false).OrderByDescending(s => s.LastUpdated).Skip((page - 1) * count).Take(count).ToListAsync();
+                User user = await DatabaseManager.Instance.User.FindAsync(id);
+                blogPosts = user.BlogPosts.Where(b => !b.Deleted && b.Published).OrderByDescending(s => s.LastUpdated).Skip((page - 1) * count).Take(count).ToList();
             }
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
