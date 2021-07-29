@@ -16,8 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CricketCreations.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("api/[controller]"), ApiController]
     public class UserController : ControllerBase
     {
         private IConfiguration config;
@@ -38,37 +37,31 @@ namespace CricketCreations.Controllers
             jwt = new JwtService(config);
         }
         // GET: api/User
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize]
+        [Authorize, HttpGet, ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<ResponseBody<List<User>>>> Get() => await Controller<User>.Get(null, null, null);
 
         // GET: api/User/5
-        [HttpGet("{id}", Name = "Get")]
-        [Authorize]
+        [Authorize, HttpGet("{id}", Name = "Get")]
         public async Task<ActionResult<ResponseBody<User>>> Get(int id, [FromQuery(Name = "withPosts")] string withPosts)
         {
             return await Controller<User>.GetById(id, withPosts == "true");
         }
 
         // POST: api/User
-        [HttpPost]
-        [Authorize]
+        [Authorize, HttpPost]
         public void Post([FromBody] JsonElement json)
         {
             Console.WriteLine("Hello World");
         }
 
         // PUT: api/User/5
-        [HttpPut("{id}")]
-        [Authorize]
+        [Authorize, HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
         // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize, HttpDelete("{id}")]
         public void Delete(int id)
         {
         }

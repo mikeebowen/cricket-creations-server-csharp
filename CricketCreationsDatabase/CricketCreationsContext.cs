@@ -1,7 +1,7 @@
 ﻿using CricketCreationsDatabase.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System;
-using Pomelo.EntityFrameworkCore;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Linq;
@@ -24,7 +24,6 @@ namespace CricketCreationsDatabase
             //string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
             string connectionString = "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
             optionsBuilder.UseSqlServer(connectionString);
-            //optionsBuilder.UseMySql("Server=127.0.0.1;Database=CricketCreations_Dev;User=root;Password=d@t@b@$3;");
         }
         public DbSet<User> User { get; set; }
         public DbSet<BlogPost> BlogPost { get; set; }

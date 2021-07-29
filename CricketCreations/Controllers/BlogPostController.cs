@@ -9,8 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CricketCreations.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("api/[controller]"), ApiController]
     public class BlogPostController : ControllerBase
     {
         // GET: api/<BlogPostController>
@@ -28,24 +27,21 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<BlogPostController>
-        [Authorize]
-        [HttpPost]
+        [Authorize, HttpPost("{id}")]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Post([FromBody] JsonElement json)
         {
-            return await Controller<BlogPost>.Post(json);
+            return await Controller<BlogPost>.Post(json, id);
         }
 
         // PATCH api/<BlogPostController>/5
-        [Authorize]
-        [HttpPatch("{id}")]
+        [Authorize, HttpPatch("{id}")]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Patch(int id, [FromBody] JsonElement json)
         {
             return await Controller<BlogPost>.Patch(id, json.ToString());
         }
 
         // DELETE api/<BlogPostController>/5
-        [Authorize]
-        [HttpDelete("{id}")]
+        [Authorize, HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             return await Controller<BlogPost>.Delete(id);
