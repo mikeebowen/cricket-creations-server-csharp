@@ -41,14 +41,14 @@ namespace CricketCreationsDatabase
             modelBuilder.Entity<User>().Property(u => u.Role).HasConversion<int>();
 
             modelBuilder.Entity<BlogPost>().HasMany(b => b.Tags);
-            modelBuilder.Entity<BlogPost>().HasOne(b => b.User);
+            modelBuilder.Entity<BlogPost>().HasOne(b => b.User).WithMany(u => u.BlogPosts);
 
             modelBuilder.Entity<Tag>().HasMany(t => t.BlogPosts);
-            modelBuilder.Entity<Tag>().HasOne(t => t.User);
+            modelBuilder.Entity<Tag>().HasOne(t => t.User).WithMany(u => u.Tags);
 
-            modelBuilder.Entity<Page>().HasOne(p => p.User);
+            modelBuilder.Entity<Page>().HasOne(p => p.User).WithMany(u => u.Pages);
 
-            modelBuilder.Entity<Image>().HasOne(i => i.User);
+            modelBuilder.Entity<Image>().HasOne(i => i.User).WithMany(u => u.Images);
 
             modelBuilder.Seed();
         }

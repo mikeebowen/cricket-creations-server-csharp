@@ -11,9 +11,7 @@ namespace CricketCreationsDatabase.Models
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public bool Deleted { get; set; } = false;
-        [ForeignKey("UserId")]
         public User User { get; set; }
-        public int UserId { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
         public string Title { get; set; }

@@ -36,10 +36,10 @@ namespace CricketCreationsDatabase.Models
         public string UserName { get; set; }
         [DefaultValue(Role.User)]
         public Role Role { get; set; }
-        public List<BlogPost> BlogPosts { get; set; }
-        public List<Tag> Tags { get; set; }
-        public List<Page> Pages { get; set; }
-        public List<Image> Images { get; set; }
+        public List<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
+        public List<Tag> Tags { get; set; } = new List<Tag>();
+        public List<Page> Pages { get; set; } = new List<Page>();
+        public List<Image> Images { get; set; } = new List<Image>();
         public Image Avatar { get; set; }
     }
 }
