@@ -15,12 +15,10 @@ namespace CricketCreationsDatabase.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public string Image { get; set; }
-        [ForeignKey("UserId")]
         public User User { get; set; }
-        public int? UserId { get; set; }
 
         public bool Published { get; set; } = false;
         public bool Deleted { get; set; } = false;
-        public ICollection<Tag> Tags { get; set; }
+        public List<Tag> Tags { get; set; } = new List<Tag>();
     }
 }
