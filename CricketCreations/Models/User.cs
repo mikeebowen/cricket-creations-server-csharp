@@ -17,7 +17,7 @@ namespace CricketCreations.Models
         Administrator,
         User
     }
-    public class User: IDataModel<User>
+    public class User : IDataModel<User>
     {
         [Key]
         public int Id { get; set; }
@@ -89,7 +89,7 @@ namespace CricketCreations.Models
             throw new NotImplementedException();
         }
 
-        public Task<User> Create(User t)
+        public Task<User> Create(User t, int userId)
         {
             throw new NotImplementedException();
         }

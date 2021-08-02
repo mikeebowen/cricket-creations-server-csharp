@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CricketCreations.Models
 {
-    public class BlogPost: IDataModel<BlogPost>
+    public class BlogPost : IDataModel<BlogPost>
     {
         private int id;
         public int? Id { get; set; }
@@ -20,24 +20,16 @@ namespace CricketCreations.Models
         public string Image { get; set; }
         public User User { get; set; }
         public bool Published { get; set; }
-        public int UserId
-        {
-            get
-            {
-                return id;
-            }
-            set
-            {
-                if (value > 0)
-                {
-                    id = value;
-                }
-            }
-        }
         public List<Tag> Tags { get; set; } = new List<Tag>();
-        private static MapperConfiguration config = new MapperConfiguration(c => {
-            c.CreateMap<BlogPost, BlogPostDTO>().ReverseMap();
-            c.CreateMap<Tag, TagDTO>().ReverseMap();
+        private static MapperConfiguration config = new MapperConfiguration(c =>
+        {
+            c.CreateMap<BlogPost, BlogPostDTO>()
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => Tag.ConvertToTagDTO(t))));
+
+            c.CreateMap<BlogPostDTO, BlogPost>()
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => Tag.ConvertToTag(t))));
+
+            // c.CreateMap<Tag, TagDTO>().ReverseMap();
         });
         private static IMapper mapper = config.CreateMapper();
         public async Task<List<BlogPost>> GetAll(int? id)
@@ -46,7 +38,7 @@ namespace CricketCreations.Models
             return blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
         }
         public async Task<List<BlogPost>> GetRange(int page, int count, int? id)
-        { 
+        {
             List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetRange(page, count, id);
             return blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
         }
@@ -55,10 +47,10 @@ namespace CricketCreations.Models
             BlogPostDTO blogPostDTO = await BlogPostDTO.GeyById(id);
             return ConvertToBlogPost(blogPostDTO);
         }
-        public async Task<BlogPost> Create(BlogPost blogPost)
+        public async Task<BlogPost> Create(BlogPost blogPost, int userId)
         {
             BlogPostDTO blogPostDTO = convertToBlogPostDTO(blogPost);
-            BlogPostDTO createdBlogPostDTO = await BlogPostDTO.Create(blogPostDTO);
+            BlogPostDTO createdBlogPostDTO = await BlogPostDTO.Create(blogPostDTO, userId);
             return ConvertToBlogPost(createdBlogPostDTO);
         }
         public async Task<BlogPost> Update(BlogPost blogPost)
@@ -82,8 +74,6 @@ namespace CricketCreations.Models
                 return null;
             }
             BlogPost blogPost = mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
-            List<Tag> tags = blogPostDTO.TagDTOs.Select(t => mapper.Map<TagDTO, Tag>(t)).ToList();
-            blogPost.Tags = tags;
             return blogPost;
         }
         private static BlogPostDTO convertToBlogPostDTO(BlogPost blogPost)
@@ -93,15 +83,6 @@ namespace CricketCreations.Models
                 return null;
             }
             BlogPostDTO blogPostDTO = mapper.Map<BlogPost, BlogPostDTO>(blogPost);
-            List<TagDTO> tagDTOs = blogPost.Tags.Select(t => mapper.Map<Tag, TagDTO>(t)).ToList();
-            foreach(TagDTO tagDTO in tagDTOs)
-            {
-                if (tagDTO.UserId == null || tagDTO.UserId < 1)
-                {
-                    tagDTO.UserId = blogPostDTO.UserId;
-                }
-            }
-            blogPostDTO.TagDTOs = tagDTOs;
             return blogPostDTO;
         }
     }

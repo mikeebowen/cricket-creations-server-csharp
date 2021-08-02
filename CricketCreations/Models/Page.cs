@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CricketCreations.Models
 {
-    public class Page: IDataModel<Page>
+    public class Page : IDataModel<Page>
     {
         private int? id;
         public int? Id { get; set; }
@@ -39,7 +39,7 @@ namespace CricketCreations.Models
             List<Page> pages = pageDTOs.ConvertAll(p => mapper.Map<PageDTO, Page>(p));
             return pages;
         }
-        public async Task<Page> Create(Page page)
+        public async Task<Page> Create(Page page, int userId)
         {
             PageDTO pageDTO = mapper.Map<Page, PageDTO>(page);
             PageDTO newPageDTO = await PageDTO.Create(pageDTO);

@@ -13,18 +13,22 @@ namespace CricketCreationsRepository.Models
     public class TagDTO
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
-        public bool Published { get; set; } = false;
-
-        public int? UserId { get; set; }
+        public bool Deleted { get; set; } = false;
         public string Name { get; set; }
-        public ICollection<BlogPostDTO> BlogPostsDTOs { get; set; }
+        public ICollection<BlogPostDTO> BlogPosts { get; set; }
 
         private static MapperConfiguration config = new MapperConfiguration(config => config
         .CreateMap<Tag, TagDTO>()
+        .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
+        // .ForMember(dest => dest.BlogPosts, opt => opt.MapFrom(tag => tag.BlogPosts.Select(b => BlogPostDTO.ConvertToBlogPostDTO(b)))).MaxDepth(1)
         .ReverseMap());
+        // .ForMember(dest => dest.BlogPosts, opt => opt.MapFrom(tag => tag.BlogPosts.Select(b => BlogPostDTO.ConvertToBlogPost(b)))).MaxDepth(1));
+
+
+
         private static IMapper mapper = config.CreateMapper();
         public static async Task<List<TagDTO>> GetAll()
         {
@@ -34,8 +38,8 @@ namespace CricketCreationsRepository.Models
         }
         public static async Task<TagDTO> Create(TagDTO tagDTO)
         {
-            Tag newTag = convertToTag(tagDTO);
-            BlogPost blogPost = DatabaseManager.Instance.BlogPost.ToList().FirstOrDefault(bp => tagDTO.BlogPostsDTOs.Count > 0 && bp.Id == tagDTO.BlogPostsDTOs.First().Id);
+            Tag newTag = ConvertToTag(tagDTO);
+            BlogPost blogPost = DatabaseManager.Instance.BlogPost.ToList().FirstOrDefault(bp => tagDTO.BlogPosts.Count > 0 && bp.Id == tagDTO.BlogPosts.First().Id);
 
             DatabaseManager.Instance.Tag.Add(newTag);
             await DatabaseManager.Instance.SaveChangesAsync();
@@ -54,7 +58,7 @@ namespace CricketCreationsRepository.Models
         {
             return mapper.Map<Tag, TagDTO>(tag);
         }
-        private static Tag convertToTag(TagDTO tagDTO)
+        public static Tag ConvertToTag(TagDTO tagDTO)
         {
             return mapper.Map<TagDTO, Tag>(tagDTO);
         }
