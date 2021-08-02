@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CricketCreationsDatabase.Migrations
 {
     [DbContext(typeof(CricketCreationsContext))]
-    [Migration("20210729174102_InitialCreate")]
+    [Migration("20210802224227_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,7 +46,7 @@ namespace CricketCreationsDatabase.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Deleted")
@@ -55,7 +55,7 @@ namespace CricketCreationsDatabase.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastUpdated")
+                    b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Published")
@@ -78,45 +78,41 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 1,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(2106),
+                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(8597),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(2117),
-                            Published = true,
-                            Title = "enim neque volutpat ac tincidunt",
-                            UserId = 1
+                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(8612),
+                            Published = false,
+                            Title = "enim neque volutpat ac tincidunt"
                         },
                         new
                         {
                             Id = 2,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(2730),
+                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9048),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(2739),
-                            Published = true,
-                            Title = "volutpat odio facilisis mauris sit",
-                            UserId = 1
+                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9055),
+                            Published = false,
+                            Title = "volutpat odio facilisis mauris sit"
                         },
                         new
                         {
                             Id = 3,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(2742),
+                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9058),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(2744),
-                            Published = true,
-                            Title = "maecenas volutpat blandit aliquam etiam",
-                            UserId = 1
+                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9061),
+                            Published = false,
+                            Title = "maecenas volutpat blandit aliquam etiam"
                         },
                         new
                         {
                             Id = 4,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(2746),
+                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9063),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(2748),
-                            Published = true,
-                            Title = "viverra mauris in aliquam sem",
-                            UserId = 1
+                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9066),
+                            Published = false,
+                            Title = "viverra mauris in aliquam sem"
                         });
                 });
 
@@ -127,10 +123,13 @@ namespace CricketCreationsDatabase.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("LastUpdated")
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -165,7 +164,7 @@ namespace CricketCreationsDatabase.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Deleted")
@@ -174,7 +173,7 @@ namespace CricketCreationsDatabase.Migrations
                     b.Property<string>("Heading")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastUpdated")
+                    b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
@@ -194,23 +193,21 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 1,
                             Content = "Bacon ipsum dolor amet strip steak bresaola chislic, bacon short loin kevin andouille brisket corned beef. Turducken spare ribs pork chop frankfurter, bresaola kielbasa meatball meatloaf pork chislic shoulder short loin leberkas. Frankfurter kevin bacon leberkas ham drumstick shankle flank t-bone biltong shank meatball pork chop bresaola turducken. Frankfurter bacon cupim, hamburger doner pork chop ribeye beef.",
-                            Created = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(2751),
+                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 413, DateTimeKind.Local).AddTicks(247),
                             Deleted = false,
                             Heading = "The About Page",
-                            LastUpdated = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(2753),
-                            Title = "About",
-                            UserId = 1
+                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 413, DateTimeKind.Local).AddTicks(256),
+                            Title = "About"
                         },
                         new
                         {
                             Id = 2,
                             Content = "Fish tacos with cabbage slaw and a side of chips and guac. CARNITAS!! These tacos are lit 🔥. Can you put some peppers and onions on that? Black or pinto beans? Give me all the tacos, immediately. How bout a gosh darn quesadilla? Black or pinto beans? It’s taco time all the time. Um, Tabasco? No thanks, do you have any Cholula? It’s a wonderful morning for breakfast tacos. How do you feel about hard shelled tacos? Make it a double there pal. I’d have to say, those tacos are on fleek",
-                            Created = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(3321),
+                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 413, DateTimeKind.Local).AddTicks(260),
                             Deleted = false,
                             Heading = "The Taco Page",
-                            LastUpdated = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(3330),
-                            Title = "Taco",
-                            UserId = 1
+                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 413, DateTimeKind.Local).AddTicks(262),
+                            Title = "Taco"
                         });
                 });
 
@@ -221,13 +218,13 @@ namespace CricketCreationsDatabase.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastUpdated")
+                    b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -253,7 +250,7 @@ namespace CricketCreationsDatabase.Migrations
                     b.Property<int?>("AvatarId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Deleted")
@@ -264,7 +261,7 @@ namespace CricketCreationsDatabase.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("LastUpdated")
+                    b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -312,15 +309,15 @@ namespace CricketCreationsDatabase.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2021, 7, 29, 10, 41, 1, 690, DateTimeKind.Local).AddTicks(128),
+                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 409, DateTimeKind.Local).AddTicks(5391),
                             Deleted = false,
                             Email = "michael@example.com",
-                            LastUpdated = new DateTime(2021, 7, 29, 10, 41, 1, 692, DateTimeKind.Local).AddTicks(122),
+                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 411, DateTimeKind.Local).AddTicks(4908),
                             Name = "Michael",
-                            Password = "zmutQuSwOByHU8zFy/Rv8O/P3Um0M13eM6F1004F1mc=",
+                            Password = "nbPjQkoMwU6X6app5gCe0KrWTYwyT2U9yMpS0tFeB44=",
                             RefreshTokenExpiration = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = 0,
-                            Salt = new byte[] { 217, 113, 56, 2, 249, 126, 124, 52, 30, 93, 139, 128, 120, 78, 117, 128 },
+                            Salt = new byte[] { 91, 244, 88, 40, 71, 244, 252, 2, 107, 179, 50, 203, 253, 141, 36, 39 },
                             Surname = "Test",
                             UserName = "tacocat"
                         });

@@ -6,15 +6,17 @@ using System.Text;
 
 namespace CricketCreationsDatabase.Models
 {
-    public class Tag
+    public class Tag : BaseEntity
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime LastUpdated { get; set; }
-        public bool Deleted { get; set; } = false;
+        public bool Deleted { get; set; }
         public User User { get; set; }
         public string Name { get; set; }
-        public List<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
+        public List<BlogPost> BlogPosts { get; set; }
+
+        public Tag()
+        {
+            this.Deleted = false;
+            this.BlogPosts = new List<BlogPost>();
+        }
     }
 }

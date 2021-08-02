@@ -29,10 +29,10 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<PageController>
-        [Authorize, HttpPost]
-        public async Task<ActionResult<ResponseBody<Page>>> Post([FromBody] JsonElement json)
+        [Authorize, HttpPost("{userId}")]
+        public async Task<ActionResult<ResponseBody<Page>>> Post([FromBody] JsonElement json, int userId)
         {
-            return await Controller<Page>.Post(json);
+            return await Controller<Page>.Post(json, userId);
         }
 
         // PUT api/<PageController>/5

@@ -6,16 +6,18 @@ using System.Text;
 
 namespace CricketCreationsDatabase.Models
 {
-    public class Image
+    public class Image : BaseEntity
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime LastUpdated { get; set; }
+        public bool Deleted { get; set; }
         public User User { get; set; }
         public string Name { get; set; }
         public int Size { get; set; }
         public string Type { get; set; }
         public string Value { get; set; }
+
+        public Image()
+        {
+            this.Deleted = false;
+        }
     }
 }

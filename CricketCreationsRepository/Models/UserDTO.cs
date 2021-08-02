@@ -74,9 +74,16 @@ namespace CricketCreationsRepository.Models
         public string Avatar { get; set; }
         public Role Role { get; set; }
         public List<BlogPostDTO> BlogPosts { get; set; }
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<User, UserDTO>()
-            .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
-            .ReverseMap());
+        public List<TagDTO> Tags { get; set; }
+        private static MapperConfiguration config = new MapperConfiguration(c =>
+        {
+            c.CreateMap<User, UserDTO>()
+                .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
+                .ForMember(dest => dest.Tags, opt => opt.Ignore())
+                .ReverseMap()
+                .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
+                .ForMember(dest => dest.Tags, opt => opt.Ignore());
+        });
         private static IMapper mapper = config.CreateMapper();
         public static async Task<List<UserDTO>> GetAll()
         {
@@ -124,6 +131,10 @@ namespace CricketCreationsRepository.Models
         public static UserDTO ConvertToUserDTO(User user)
         {
             return mapper.Map<User, UserDTO>(user);
+        }
+        public static User ConvertToUser(UserDTO userDTO)
+        {
+            return mapper.Map<UserDTO, User>(userDTO);
         }
         public static UserDTO CheckPassword(string password, string userName)
         {

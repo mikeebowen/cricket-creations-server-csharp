@@ -88,7 +88,7 @@ namespace CricketCreations.Models
                 return new StatusCodeResult(500);
             }
         }
-        public static async Task<ActionResult<ResponseBody<T>>> Post(JsonElement json)
+        public static async Task<ActionResult<ResponseBody<T>>> Post(JsonElement json, int userId)
         {
             try
             {
@@ -102,9 +102,7 @@ namespace CricketCreations.Models
                     MethodInfo create = type.GetMethod("Create");
                     var instance = (T)Activator.CreateInstance(type);
                     T t = JsonConvert.DeserializeObject<T>(jsonString);
-                    t.Created = DateTime.Now;
-                    t.LastUpdated = t.Created;
-                    T newT = await (Task<T>)create.Invoke(instance, new object[] { t });
+                    T newT = await (Task<T>)create.Invoke(instance, new object[] { t, userId });
                     ResponseBody<T> response = new ResponseBody<T>(newT, type.Name.ToString(), null);
                     string path = $"api/{type.Name.ToLower().ToString()}/{newT.Id}";
                     Uri uri = new Uri(path, UriKind.Relative);
@@ -138,7 +136,6 @@ namespace CricketCreations.Models
                     MethodInfo update = type.GetMethod("Update");
                     var instance = (T)Activator.CreateInstance(type);
                     T t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(jsonString);
-                    t.LastUpdated = DateTime.Now;
                     t.Id = id;
                     T newT = await (Task<T>)update.Invoke(instance, new object[] { t });
                     if (newT != null)

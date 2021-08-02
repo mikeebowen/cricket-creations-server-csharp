@@ -1,10 +1,13 @@
-﻿using CricketCreationsDatabase.Models;
+﻿using System.Reflection;
+using CricketCreationsDatabase.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace CricketCreationsDatabase
 {
@@ -24,6 +27,32 @@ namespace CricketCreationsDatabase
             //string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
             string connectionString = "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
             optionsBuilder.UseSqlServer(connectionString);
+        }
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var AddedEntities = ChangeTracker.Entries().Where(entry => entry.State == EntityState.Added).ToList();
+
+            AddedEntities.ForEach(entry =>
+            {
+                var entityObj = entry.Entity.GetType();
+                if (entityObj.GetProperty("Created") != null && entityObj.GetProperty("LastUpdated") != null)
+                {
+                    entry.Property("Created").CurrentValue = DateTime.Now;
+                    entry.Property("LastUpdated").CurrentValue = DateTime.Now;
+                }
+            });
+
+            var EditedEntities = ChangeTracker.Entries().Where(entry => entry.State == EntityState.Modified).ToList();
+
+            EditedEntities.ForEach(entry =>
+            {
+                if (entry.Entity.GetType().GetProperty("LastUpdated") != null)
+                {
+                    entry.Property("LastUpdated").CurrentValue = DateTime.Now;
+                }
+            });
+
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
         public DbSet<User> User { get; set; }
         public DbSet<BlogPost> BlogPost { get; set; }
@@ -88,7 +117,7 @@ public static class ModelBuilderExtensions
         modelBuilder.Entity<BlogPost>().HasData(
             new BlogPost
             {
-                UserId = 1,
+                // UserId = 1,
                 Id = 1,
                 Created = DateTime.Now,
                 LastUpdated = DateTime.Now,
@@ -97,7 +126,7 @@ public static class ModelBuilderExtensions
             },
              new BlogPost
              {
-                 UserId = 1,
+                 //  UserId = 1,
                  Id = 2,
                  Created = DateTime.Now,
                  LastUpdated = DateTime.Now,
@@ -106,7 +135,7 @@ public static class ModelBuilderExtensions
              },
               new BlogPost
               {
-                  UserId = 1,
+                  //   UserId = 1,
                   Id = 3,
                   Created = DateTime.Now,
                   LastUpdated = DateTime.Now,
@@ -115,7 +144,7 @@ public static class ModelBuilderExtensions
               },
               new BlogPost
               {
-                  UserId = 1,
+                  //   UserId = 1,
                   Id = 4,
                   Created = DateTime.Now,
                   LastUpdated = DateTime.Now,
@@ -126,7 +155,7 @@ public static class ModelBuilderExtensions
         modelBuilder.Entity<Page>().HasData(
             new Page
             {
-                UserId = 1,
+                // UserId = 1,
                 Id = 1,
                 Title = "About",
                 Heading = "The About Page",
@@ -136,7 +165,7 @@ public static class ModelBuilderExtensions
             },
             new Page
             {
-                UserId = 1,
+                // UserId = 1,
                 Id = 2,
                 Title = "Taco",
                 Heading = "The Taco Page",

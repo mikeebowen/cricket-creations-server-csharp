@@ -6,16 +6,17 @@ using System.Text;
 
 namespace CricketCreationsDatabase.Models
 {
-    public class Page
+    public class Page : BaseEntity
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public bool Deleted { get; set; } = false;
+        public bool Deleted { get; set; }
         public User User { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime LastUpdated { get; set; }
         public string Title { get; set; }
         public string Heading { get; set; }
         public string Content { get; set; }
+
+        public Page()
+        {
+            this.Deleted = false;
+        }
     }
 }

@@ -8,10 +8,9 @@ using CricketCreations.Interfaces;
 
 namespace CricketCreations.Models
 {
-    public class Tag: IDataModel<Tag>
+    public class Tag : IDataModel<Tag>
     {
         public int? Id { get; set; }
-        public int UserId { get; set; }
         public string Name { get; set; }
         public ICollection<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
         public DateTime Created { get; set; }
@@ -22,25 +21,25 @@ namespace CricketCreations.Models
             config.CreateMap<Models.BlogPost, BlogPostDTO>().ReverseMap();
             config
             .CreateMap<Models.Tag, TagDTO>()
-            .ForMember(t => t.BlogPostsDTOs, option => option.Ignore())
+            .ForMember(t => t.BlogPosts, option => option.Ignore())
             .ReverseMap();
         });
         private static IMapper mapper = config.CreateMapper();
         public async Task<List<Tag>> GetAll(int? id)
         {
             List<TagDTO> tagDTOs = await TagDTO.GetAll();
-            List<Tag> tags = tagDTOs.Select(td => convertToTag(td)).ToList();
+            List<Tag> tags = tagDTOs.Select(td => ConvertToTag(td)).ToList();
             return tags;
         }
-        public async Task<Tag> Create(Tag tag)
+        public async Task<Tag> Create(Tag tag, int userId)
         {
-            TagDTO tagDTO = convertToTagDTO(tag);
+            TagDTO tagDTO = ConvertToTagDTO(tag);
             ICollection<BlogPostDTO> blogPostDTOs = tag.BlogPosts.Select(b => mapper.Map<BlogPost, BlogPostDTO>(b)).ToList();
-            tagDTO.BlogPostsDTOs = blogPostDTOs;
+            tagDTO.BlogPosts = blogPostDTOs;
             var newTagDTO = await TagDTO.Create(tagDTO);
-            return convertToTag(newTagDTO);
+            return ConvertToTag(newTagDTO);
         }
-        private static TagDTO convertToTagDTO(Tag tag)
+        public static TagDTO ConvertToTagDTO(Tag tag)
         {
             if (tag == null)
             {
@@ -48,7 +47,7 @@ namespace CricketCreations.Models
             }
             return mapper.Map<Tag, TagDTO>(tag);
         }
-        private static Tag convertToTag(TagDTO tagDTO)
+        public static Tag ConvertToTag(TagDTO tagDTO)
         {
             if (tagDTO == null)
             {
@@ -69,8 +68,8 @@ namespace CricketCreations.Models
 
         public async Task<List<Tag>> GetRange(int page, int count, int? id)
         {
-            List<TagDTO> tagDTOs =  await TagDTO.GetRange(page, count);
-            return tagDTOs.Select(t => convertToTag(t)).ToList();
+            List<TagDTO> tagDTOs = await TagDTO.GetRange(page, count);
+            return tagDTOs.Select(t => ConvertToTag(t)).ToList();
         }
 
         public Task<Tag> Update(Tag t)

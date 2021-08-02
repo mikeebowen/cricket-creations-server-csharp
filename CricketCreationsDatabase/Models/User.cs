@@ -13,19 +13,15 @@ namespace CricketCreationsDatabase.Models
         Administrator,
         User
     }
-    public class User
+    public class User : BaseEntity
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime LastUpdated { get; set; }
         [Required]
         public string Password { get; set; }
         [Required]
         public byte[] Salt { get; set; }
         public string RefreshToken { get; set; }
         public DateTime RefreshTokenExpiration { get; set; }
-        public bool Deleted { get; set; } = false;
+        public bool Deleted { get; set; }
         [Required, MaxLength(200)]
         public string Name { get; set; }
         [Required, MaxLength(200)]
@@ -36,10 +32,19 @@ namespace CricketCreationsDatabase.Models
         public string UserName { get; set; }
         [DefaultValue(Role.User)]
         public Role Role { get; set; }
-        public List<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
-        public List<Tag> Tags { get; set; } = new List<Tag>();
-        public List<Page> Pages { get; set; } = new List<Page>();
-        public List<Image> Images { get; set; } = new List<Image>();
+        public List<BlogPost> BlogPosts { get; set; }
+        public List<Tag> Tags { get; set; }
+        public List<Page> Pages { get; set; }
+        public List<Image> Images { get; set; }
         public Image Avatar { get; set; }
+
+        public User()
+        {
+            this.Deleted = false;
+            this.BlogPosts = new List<BlogPost>();
+            this.Tags = new List<Tag>();
+            this.Pages = new List<Page>();
+            this.Images = new List<Image>();
+        }
     }
 }
