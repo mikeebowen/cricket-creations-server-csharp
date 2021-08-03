@@ -76,40 +76,40 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 1,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(8597),
+                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6260),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(8612),
-                            Published = false,
+                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6274),
+                            Published = true,
                             Title = "enim neque volutpat ac tincidunt"
                         },
                         new
                         {
                             Id = 2,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9048),
+                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6660),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9055),
-                            Published = false,
+                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6668),
+                            Published = true,
                             Title = "volutpat odio facilisis mauris sit"
                         },
                         new
                         {
                             Id = 3,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9058),
+                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6672),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9061),
-                            Published = false,
+                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6674),
+                            Published = true,
                             Title = "maecenas volutpat blandit aliquam etiam"
                         },
                         new
                         {
                             Id = 4,
                             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9063),
+                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6677),
                             Deleted = false,
-                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 412, DateTimeKind.Local).AddTicks(9066),
-                            Published = false,
+                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6679),
+                            Published = true,
                             Title = "viverra mauris in aliquam sem"
                         });
                 });
@@ -191,20 +191,20 @@ namespace CricketCreationsDatabase.Migrations
                         {
                             Id = 1,
                             Content = "Bacon ipsum dolor amet strip steak bresaola chislic, bacon short loin kevin andouille brisket corned beef. Turducken spare ribs pork chop frankfurter, bresaola kielbasa meatball meatloaf pork chislic shoulder short loin leberkas. Frankfurter kevin bacon leberkas ham drumstick shankle flank t-bone biltong shank meatball pork chop bresaola turducken. Frankfurter bacon cupim, hamburger doner pork chop ribeye beef.",
-                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 413, DateTimeKind.Local).AddTicks(247),
+                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7788),
                             Deleted = false,
                             Heading = "The About Page",
-                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 413, DateTimeKind.Local).AddTicks(256),
+                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7798),
                             Title = "About"
                         },
                         new
                         {
                             Id = 2,
                             Content = "Fish tacos with cabbage slaw and a side of chips and guac. CARNITAS!! These tacos are lit 🔥. Can you put some peppers and onions on that? Black or pinto beans? Give me all the tacos, immediately. How bout a gosh darn quesadilla? Black or pinto beans? It’s taco time all the time. Um, Tabasco? No thanks, do you have any Cholula? It’s a wonderful morning for breakfast tacos. How do you feel about hard shelled tacos? Make it a double there pal. I’d have to say, those tacos are on fleek",
-                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 413, DateTimeKind.Local).AddTicks(260),
+                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7802),
                             Deleted = false,
                             Heading = "The Taco Page",
-                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 413, DateTimeKind.Local).AddTicks(262),
+                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7804),
                             Title = "Taco"
                         });
                 });
@@ -307,15 +307,15 @@ namespace CricketCreationsDatabase.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2021, 8, 2, 15, 42, 27, 409, DateTimeKind.Local).AddTicks(5391),
+                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 258, DateTimeKind.Local).AddTicks(4955),
                             Deleted = false,
                             Email = "michael@example.com",
-                            LastUpdated = new DateTime(2021, 8, 2, 15, 42, 27, 411, DateTimeKind.Local).AddTicks(4908),
+                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 260, DateTimeKind.Local).AddTicks(5840),
                             Name = "Michael",
-                            Password = "nbPjQkoMwU6X6app5gCe0KrWTYwyT2U9yMpS0tFeB44=",
+                            Password = "n6Y+XMmYlhlrUEEdyopjJkApVSsmvEX3O55oJl3wyxw=",
                             RefreshTokenExpiration = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = 0,
-                            Salt = new byte[] { 91, 244, 88, 40, 71, 244, 252, 2, 107, 179, 50, 203, 253, 141, 36, 39 },
+                            Salt = new byte[] { 214, 78, 130, 150, 19, 180, 152, 139, 237, 207, 168, 49, 90, 171, 165, 137 },
                             Surname = "Test",
                             UserName = "tacocat"
                         });

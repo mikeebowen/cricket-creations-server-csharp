@@ -36,10 +36,10 @@ namespace CricketCreations.Controllers
         }
 
         // PUT api/<PageController>/5
-        [Authorize, HttpPatch("{id}")]
-        public async Task<ActionResult<ResponseBody<Page>>> Patch(int id, [FromBody] JsonElement json)
+        [Authorize, HttpPatch()]
+        public async Task<ActionResult<ResponseBody<Page>>> Patch([FromBody] JsonElement json, int userId)
         {
-            return await Controller<Page>.Patch(id, json.ToString());
+            return await Controller<Page>.Patch(json.ToString());
         }
 
         // DELETE api/<PageController>/5

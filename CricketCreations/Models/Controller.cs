@@ -123,7 +123,7 @@ namespace CricketCreations.Models
                 return new StatusCodeResult(500);
             }
         }
-        public static async Task<ActionResult<ResponseBody<T>>> Patch(int id, string jsonString)
+        public static async Task<ActionResult<ResponseBody<T>>> Patch(string jsonString)
         {
             try
             {
@@ -136,7 +136,6 @@ namespace CricketCreations.Models
                     MethodInfo update = type.GetMethod("Update");
                     var instance = (T)Activator.CreateInstance(type);
                     T t = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(jsonString);
-                    t.Id = id;
                     T newT = await (Task<T>)update.Invoke(instance, new object[] { t });
                     if (newT != null)
                     {

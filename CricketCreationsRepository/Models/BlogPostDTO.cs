@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CricketCreationsDatabase.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +17,7 @@ namespace CricketCreationsRepository.Models
     {
         [Key]
         public int? Id { get; set; }
-        public Nullable<DateTime> Created { get; set; }
+        public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
@@ -82,36 +83,16 @@ namespace CricketCreationsRepository.Models
         }
         public static async Task<BlogPostDTO> Update(BlogPostDTO blogPostDto)
         {
-            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(blogPostDto.Id);
+            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.Where(bp => bp.Id == blogPostDto.Id).FirstAsync();
             if (blogPost != null)
             {
                 BlogPost updatedBlogPost = mapper.Map<BlogPostDTO, BlogPost>(blogPostDto);
-                foreach (TagDTO tagDTO in blogPostDto.Tags)
+                DatabaseManager.Instance.Entry(blogPost).CurrentValues.SetValues(updatedBlogPost);
+                PropertyEntry property = DatabaseManager.Instance.Entry(blogPost).Property("Created");
+
+                if (property != null)
                 {
-                    Tag tag;
-                    if (tagDTO.Id == null)
-                    {
-                        tag = new Tag
-                        {
-                            Name = tagDTO.Name
-                        };
-                    }
-                    else
-                    {
-                        tag = await DatabaseManager.Instance.Tag.FindAsync(tagDTO.Id);
-                    }
-                }
-                PropertyInfo[] propertyInfos = blogPost.GetType().GetProperties();
-                foreach (PropertyInfo property in propertyInfos)
-                {
-                    var val = property.GetValue(updatedBlogPost);
-                    if (val != null)
-                    {
-                        if (!((property.Name == "UserId" || property.Name == "Id") && int.TryParse(val.ToString(), out int res) && res < 1) && property.Name != "Created")
-                        {
-                            property.SetValue(blogPost, val);
-                        }
-                    }
+                    DatabaseManager.Instance.Entry(blogPost).Property("Created").IsModified = false;
                 }
                 await DatabaseManager.Instance.SaveChangesAsync();
                 return ConvertToBlogPostDTO(blogPost);
