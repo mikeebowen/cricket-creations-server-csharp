@@ -34,10 +34,10 @@ namespace CricketCreations.Controllers
         }
 
         // PATCH api/<BlogPostController>/5
-        [Authorize, HttpPatch("{id}")]
-        public async Task<ActionResult<ResponseBody<BlogPost>>> Patch(int id, [FromBody] JsonElement json)
+        [Authorize, HttpPatch()]
+        public async Task<ActionResult<ResponseBody<BlogPost>>> Patch([FromBody] JsonElement json)
         {
-            return await Controller<BlogPost>.Patch(id, json.ToString());
+            return await Controller<BlogPost>.Patch(json.ToString());
         }
 
         // DELETE api/<BlogPostController>/5

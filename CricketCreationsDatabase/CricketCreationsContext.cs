@@ -30,25 +30,23 @@ namespace CricketCreationsDatabase
         }
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
         {
+            var EditedEntities = ChangeTracker.Entries().Where(entry => entry.State == EntityState.Modified).ToList();
             var AddedEntities = ChangeTracker.Entries().Where(entry => entry.State == EntityState.Added).ToList();
-
-            AddedEntities.ForEach(entry =>
+            DateTime now = DateTime.Now;
+            AddedEntities.ForEach(entity =>
             {
-                var entityObj = entry.Entity.GetType();
-                if (entityObj.GetProperty("Created") != null && entityObj.GetProperty("LastUpdated") != null)
+                if (entity.Entity.GetType().GetProperty("Created") != null && entity.Entity.GetType().GetProperty("LastUpdated") != null)
                 {
-                    entry.Property("Created").CurrentValue = DateTime.Now;
-                    entry.Property("LastUpdated").CurrentValue = DateTime.Now;
+                    entity.Property("Created").CurrentValue = now;
+                    entity.Property("LastUpdated").CurrentValue = now;
                 }
             });
 
-            var EditedEntities = ChangeTracker.Entries().Where(entry => entry.State == EntityState.Modified).ToList();
-
-            EditedEntities.ForEach(entry =>
+            EditedEntities.ForEach(entity =>
             {
-                if (entry.Entity.GetType().GetProperty("LastUpdated") != null)
+                if (entity.Entity.GetType().GetProperty("LastUpdated") != null)
                 {
-                    entry.Property("LastUpdated").CurrentValue = DateTime.Now;
+                    entity.Property("LastUpdated").CurrentValue = now;
                 }
             });
 
@@ -117,7 +115,7 @@ public static class ModelBuilderExtensions
         modelBuilder.Entity<BlogPost>().HasData(
             new BlogPost
             {
-                // UserId = 1,
+                Published = true,
                 Id = 1,
                 Created = DateTime.Now,
                 LastUpdated = DateTime.Now,
@@ -126,7 +124,7 @@ public static class ModelBuilderExtensions
             },
              new BlogPost
              {
-                 //  UserId = 1,
+                 Published = true,
                  Id = 2,
                  Created = DateTime.Now,
                  LastUpdated = DateTime.Now,
@@ -135,7 +133,7 @@ public static class ModelBuilderExtensions
              },
               new BlogPost
               {
-                  //   UserId = 1,
+                  Published = true,
                   Id = 3,
                   Created = DateTime.Now,
                   LastUpdated = DateTime.Now,
@@ -144,7 +142,7 @@ public static class ModelBuilderExtensions
               },
               new BlogPost
               {
-                  //   UserId = 1,
+                  Published = true,
                   Id = 4,
                   Created = DateTime.Now,
                   LastUpdated = DateTime.Now,
