@@ -13,7 +13,7 @@ namespace CricketCreationsRepository.Models
     public class TagDTO
     {
         [Key]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
         public bool Deleted { get; set; } = false;

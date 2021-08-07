@@ -31,7 +31,7 @@ namespace CricketCreationsRepository.Models
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagDTO.ConvertToTagDTO(t)))).MaxDepth(1)
             .ForMember(dest => dest.User, opt => opt.Ignore())
             .ReverseMap()
-            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagDTO.ConvertToTag(t)))).MaxDepth(1)
+            .ForMember(dest => dest.Tags, opt => opt.Ignore())
             .ForMember(dest => dest.User, opt => opt.Ignore());
             // c.CreateMap<Tag, TagDTO>().ReverseMap();
         });
@@ -83,11 +83,27 @@ namespace CricketCreationsRepository.Models
         }
         public static async Task<BlogPostDTO> Update(BlogPostDTO blogPostDto)
         {
-            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.Where(bp => bp.Id == blogPostDto.Id).FirstAsync();
+            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.Where(bp => bp.Id == blogPostDto.Id).Include(b => b.Tags).FirstAsync();
+            List<Tag> newTags = blogPostDto.Tags.Select(t =>
+            {
+                Tag tag;
+                if (t.Id != null)
+                {
+                    tag = DatabaseManager.Instance.Tag.Where(tt => tt.Id == t.Id).FirstOrDefault();
+                    return tag;
+                }
+                else
+                {
+                    tag = TagDTO.ConvertToTag(t);
+                    return tag;
+                }
+            }).ToList();
+
             if (blogPost != null)
             {
                 BlogPost updatedBlogPost = mapper.Map<BlogPostDTO, BlogPost>(blogPostDto);
                 DatabaseManager.Instance.Entry(blogPost).CurrentValues.SetValues(updatedBlogPost);
+                blogPost.Tags = newTags;
                 PropertyEntry property = DatabaseManager.Instance.Entry(blogPost).Property("Created");
 
                 if (property != null)
