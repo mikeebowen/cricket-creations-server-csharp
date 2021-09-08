@@ -1,5 +1,6 @@
 ﻿using CricketCreations.Interfaces;
 using CricketCreations.Models;
+using CricketCreations.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,15 +16,15 @@ namespace CricketCreations.Controllers
     [Route("api/[controller]"), ApiController]
     public class TagController : ControllerBase
     {
-        IControllerService<Tag> _tag;
+        IControllerService<TagService> _tag;
 
-        public TagController(IControllerService<Tag> tag)
+        public TagController(IControllerService<TagService> tag)
         {
             _tag = tag;
         }
         // GET: api/<TagController>
         [HttpGet]
-        public async Task<ActionResult<ResponseBody<List<Tag>>>> GetAll()
+        public async Task<ActionResult<ResponseBody<List<TagService>>>> GetAll()
         {
             return await _tag.Get(null, null, null);
         }
@@ -37,7 +38,7 @@ namespace CricketCreations.Controllers
 
         // POST api/<TagController>
         [Authorize, HttpPost("{userId}")]
-        public async Task<ActionResult<ResponseBody<Tag>>> Post([FromBody] JsonElement json, int userId)
+        public async Task<ActionResult<ResponseBody<TagService>>> Post([FromBody] JsonElement json, int userId)
         {
             return await _tag.Post(json, userId);
         }

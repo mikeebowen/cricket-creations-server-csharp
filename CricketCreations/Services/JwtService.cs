@@ -4,7 +4,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Configuration;
-using CricketCreations.Models;
+using CricketCreations.Services;
 using CricketCreationsRepository.Models;
 using System.Security.Cryptography;
 
@@ -21,7 +21,7 @@ namespace CricketCreations.Services
             expDate = Environment.GetEnvironmentVariable("TOKEN_EXPIRATION_IN_MINUTES");
         }
 
-        public string GenerateSecurityToken(User user)
+        public string GenerateSecurityToken(UserService user)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             byte[] key = Encoding.ASCII.GetBytes(secret);

@@ -5,7 +5,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using CricketCreations.Models;
+using CricketCreations.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,15 +14,16 @@ using CricketCreationsRepository.Models;
 using CricketCreations.Services;
 using Microsoft.AspNetCore.Authorization;
 using CricketCreations.Interfaces;
+using CricketCreations.Models;
 
 namespace CricketCreations.Controllers
 {
     [Route("api/[controller]"), ApiController]
     public class UserController : ControllerBase
     {
-        IControllerService<User> _user;
+        IControllerService<UserService> _user;
 
-        public UserController(IControllerService<User> user)
+        public UserController(IControllerService<UserService> user)
         {
             _user = user;
         }
@@ -45,11 +46,11 @@ namespace CricketCreations.Controllers
         }
         // GET: api/User
         [Authorize, HttpGet, ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<ResponseBody<List<User>>>> Get() => await _user.Get(null, null, null);
+        public async Task<ActionResult<ResponseBody<List<UserService>>>> Get() => await _user.Get(null, null, null);
 
         // GET: api/User/5
         [Authorize, HttpGet("{id}", Name = "Get")]
-        public async Task<ActionResult<ResponseBody<User>>> Get(int id, [FromQuery(Name = "withPosts")] string withPosts)
+        public async Task<ActionResult<ResponseBody<UserService>>> Get(int id, [FromQuery(Name = "withPosts")] string withPosts)
         {
             return await _user.GetById(id, withPosts == "true");
         }
@@ -76,7 +77,7 @@ namespace CricketCreations.Controllers
         public async Task<IActionResult> CheckPassword([FromBody] JsonElement json)
         {
             PasswordObj vals = JsonConvert.DeserializeObject<PasswordObj>(json.ToString());
-            User user = Models.User.CheckPassword(vals.Password, vals.Email);
+            UserService user = Services.UserService.CheckPassword(vals.Password, vals.Email);
             if (user == null)
             {
                 return Unauthorized();
@@ -99,8 +100,8 @@ namespace CricketCreations.Controllers
         public async Task<IActionResult> Refresh([FromBody] JsonElement json)
         {
             RefreshRequest refreshRequest = JsonConvert.DeserializeObject<RefreshRequest>(json.ToString());
-            User userInstance = new User();
-            User user = await Models.User.CheckRefreshToken(refreshRequest.Id, refreshRequest.RefreshToken);
+            UserService userInstance = new UserService();
+            UserService user = await Services.UserService.CheckRefreshToken(refreshRequest.Id, refreshRequest.RefreshToken);
             if (user == null)
             {
                 return BadRequest("Invalid Client Request");

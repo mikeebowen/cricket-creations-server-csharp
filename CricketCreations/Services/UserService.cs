@@ -7,17 +7,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using CricketCreationsRepository.Models;
 using Microsoft.AspNetCore.Mvc;
-using CricketCreations.Models;
+using CricketCreations.Services;
 using CricketCreations.Interfaces;
 
-namespace CricketCreations.Models
+namespace CricketCreations.Services
 {
     public enum Role
     {
         Administrator,
         User
     }
-    public class User : IDataModel<User>
+    public class UserService : IDataService<UserService>
     {
         [Key]
         public int Id { get; set; }
@@ -38,30 +38,30 @@ namespace CricketCreations.Models
 
         public string Avatar { get; set; }
         public Role Role { get; set; }
-        public List<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
-        int? IDataModel<User>.Id { get; set; }
+        public List<BlogPostService> BlogPosts { get; set; } = new List<BlogPostService>();
+        int? IDataService<UserService>.Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
 
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<UserDTO, User>()
+        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<UserDTO, UserService>()
         .ForMember(dest => dest.BlogPosts, opts => opts.Ignore())
         .ReverseMap());
         private static IMapper mapper = config.CreateMapper();
-        public async Task<List<User>> GetAll(int? id)
+        public async Task<List<UserService>> GetAll(int? id)
         {
             List<UserDTO> userDTOs = await UserDTO.GetAll();
             return userDTOs.Select(userDTO => convertToUser(userDTO)).ToList();
         }
-        public async Task<User> GetById(int id, bool? withPosts)
+        public async Task<UserService> GetById(int id, bool? withPosts)
         {
-            User user;
+            UserService user;
             if (withPosts != null && withPosts == true)
             {
                 UserDTO userDTO = await UserDTO.GetUserDTOWithPosts(id);
                 user = convertToUser(userDTO);
                 foreach (BlogPostDTO blogPostDTO in userDTO.BlogPosts)
                 {
-                    user.BlogPosts.Add(BlogPost.ConvertToBlogPost(blogPostDTO));
+                    user.BlogPosts.Add(BlogPostService.ConvertToBlogPost(blogPostDTO));
                 }
             }
             else
@@ -71,34 +71,34 @@ namespace CricketCreations.Models
             }
             return user;
         }
-        private static User convertToUser(UserDTO userDTO)
+        private static UserService convertToUser(UserDTO userDTO)
         {
-            return mapper.Map<UserDTO, User>(userDTO);
+            return mapper.Map<UserDTO, UserService>(userDTO);
         }
-        private static UserDTO convertToUserDTO(User user)
+        private static UserDTO convertToUserDTO(UserService user)
         {
-            return mapper.Map<User, UserDTO>(user);
+            return mapper.Map<UserService, UserDTO>(user);
         }
         public Task<int> GetCount()
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<User>> GetRange(int page, int count, int? id)
+        public Task<List<UserService>> GetRange(int page, int count, int? id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<User> Create(User t, int userId)
+        public Task<UserService> Create(UserService t, int userId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<User> Update(User user)
+        public async Task<UserService> Update(UserService user)
         {
             UserDTO userDto = convertToUserDTO(user);
             UserDTO updatedUserDto = await UserDTO.Update(userDto);
-            User updatedUser = mapper.Map<User>(updatedUserDto);
+            UserService updatedUser = mapper.Map<UserService>(updatedUserDto);
             return updatedUser;
         }
 
@@ -106,12 +106,12 @@ namespace CricketCreations.Models
         {
             throw new NotImplementedException();
         }
-        public static User CheckPassword(string password, string userEmail)
+        public static UserService CheckPassword(string password, string userEmail)
         {
             UserDTO userDTO = UserDTO.CheckPassword(password, userEmail);
             return convertToUser(userDTO);
         }
-        public static async Task<User> CheckRefreshToken(int id, string token)
+        public static async Task<UserService> CheckRefreshToken(int id, string token)
         {
             UserDTO userDTO = await UserDTO.CheckRefreshToken(id, token);
             if (userDTO != null)

@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CricketCreationsDatabase;
 using Microsoft.EntityFrameworkCore;
 using CricketCreations.Interfaces;
-using CricketCreations.Models;
+using CricketCreations.Services;
 
 namespace CricketCreations
 {

@@ -1,4 +1,4 @@
-﻿using CricketCreations.Models;
+﻿using CricketCreations.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CricketCreations.Interfaces
 {
-    public interface IDataModel<T>
+    public interface IDataService<T>
     {
         public abstract int? Id { get; set; }
         public abstract DateTime Created { get; set; }
