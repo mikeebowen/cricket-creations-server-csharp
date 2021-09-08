@@ -13,12 +13,19 @@ using Newtonsoft.Json.Linq;
 using CricketCreationsRepository.Models;
 using CricketCreations.Services;
 using Microsoft.AspNetCore.Authorization;
+using CricketCreations.Interfaces;
 
 namespace CricketCreations.Controllers
 {
     [Route("api/[controller]"), ApiController]
     public class UserController : ControllerBase
     {
+        IControllerService<User> _user;
+
+        public UserController(IControllerService<User> user)
+        {
+            _user = user;
+        }
         private IConfiguration config;
         private JwtService jwt;
         private class PasswordObj
@@ -38,13 +45,13 @@ namespace CricketCreations.Controllers
         }
         // GET: api/User
         [Authorize, HttpGet, ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<ResponseBody<List<User>>>> Get() => await Controller<User>.Get(null, null, null);
+        public async Task<ActionResult<ResponseBody<List<User>>>> Get() => await _user.Get(null, null, null);
 
         // GET: api/User/5
         [Authorize, HttpGet("{id}", Name = "Get")]
         public async Task<ActionResult<ResponseBody<User>>> Get(int id, [FromQuery(Name = "withPosts")] string withPosts)
         {
-            return await Controller<User>.GetById(id, withPosts == "true");
+            return await _user.GetById(id, withPosts == "true");
         }
 
         // POST: api/User
