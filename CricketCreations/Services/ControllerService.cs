@@ -1,4 +1,5 @@
 ﻿using CricketCreations.Interfaces;
+using CricketCreations.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -8,9 +9,9 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CricketCreations.Models
+namespace CricketCreations.Services
 {
-    public class ControllerService<T> : IControllerService<T> where T : IDataModel<T>
+    public class ControllerService<T> : IControllerService<T> where T : IDataService<T>
     {
         public async Task<ActionResult<ResponseBody<T>>> GetById(int id, bool? include)
         {

@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CricketCreations.Models
+namespace CricketCreations.Services
 {
-    public class Page : IDataModel<Page>
+    public class PageService : IDataService<PageService>
     {
         private int? id;
         public int? Id { get; set; }
@@ -31,33 +31,33 @@ namespace CricketCreations.Models
                 }
             }
         }
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<Page, PageDTO>().ReverseMap());
+        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<PageService, PageDTO>().ReverseMap());
         private static IMapper mapper = config.CreateMapper();
-        public async Task<List<Page>> GetAll(int? id)
+        public async Task<List<PageService>> GetAll(int? id)
         {
             List<PageDTO> pageDTOs = await PageDTO.GetAll();
-            List<Page> pages = pageDTOs.ConvertAll(p => mapper.Map<PageDTO, Page>(p));
+            List<PageService> pages = pageDTOs.ConvertAll(p => mapper.Map<PageDTO, PageService>(p));
             return pages;
         }
-        public async Task<Page> Create(Page page, int userId)
+        public async Task<PageService> Create(PageService page, int userId)
         {
-            PageDTO pageDTO = mapper.Map<Page, PageDTO>(page);
+            PageDTO pageDTO = mapper.Map<PageService, PageDTO>(page);
             PageDTO newPageDTO = await PageDTO.Create(pageDTO);
-            Page newPage = mapper.Map<Page>(newPageDTO);
+            PageService newPage = mapper.Map<PageService>(newPageDTO);
             return newPage;
         }
-        public async Task<Page> Update(Page page)
+        public async Task<PageService> Update(PageService page)
         {
             PageDTO pageDTO = mapper.Map<PageDTO>(page);
             PageDTO updatePageDTO = await PageDTO.Update(pageDTO);
-            Page updatedPage = mapper.Map<Page>(updatePageDTO);
+            PageService updatedPage = mapper.Map<PageService>(updatePageDTO);
             return updatedPage;
         }
 
-        public async Task<Page> GetById(int id, bool? myBool)
+        public async Task<PageService> GetById(int id, bool? myBool)
         {
             PageDTO pageDTO = await PageDTO.GetById(id);
-            return mapper.Map<Page>(pageDTO);
+            return mapper.Map<PageService>(pageDTO);
         }
 
         public async Task<int> GetCount()
@@ -65,10 +65,10 @@ namespace CricketCreations.Models
             return await PageDTO.GetCount();
         }
 
-        public async Task<List<Page>> GetRange(int page, int count, int? id)
+        public async Task<List<PageService>> GetRange(int page, int count, int? id)
         {
             List<PageDTO> pageDTOs = await PageDTO.GetRange(page, count, id);
-            return pageDTOs.ConvertAll(p => mapper.Map<PageDTO, Page>(p));
+            return pageDTOs.ConvertAll(p => mapper.Map<PageDTO, PageService>(p));
         }
 
         public async Task<bool> Delete(int id)
