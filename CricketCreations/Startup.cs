@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CricketCreationsDatabase;
 using Microsoft.EntityFrameworkCore;
+using CricketCreations.Interfaces;
+using CricketCreations.Models;
 
 namespace CricketCreations
 {
@@ -40,6 +42,7 @@ namespace CricketCreations
             {
                 configuration.RootPath = "ClientApp";
             });
+            services.AddSingleton(typeof(IControllerService<>), typeof(ControllerService<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

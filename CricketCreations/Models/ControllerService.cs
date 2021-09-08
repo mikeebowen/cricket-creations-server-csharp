@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace CricketCreations.Models
 {
-    public class Controller<T> where T : IDataModel<T>
+    public class ControllerService<T> : IControllerService<T> where T : IDataModel<T>
     {
-        public static async Task<ActionResult<ResponseBody<T>>> GetById(int id, bool? include)
+        public async Task<ActionResult<ResponseBody<T>>> GetById(int id, bool? include)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace CricketCreations.Models
                 return new StatusCodeResult(500);
             }
         }
-        public static async Task<ActionResult<ResponseBody<List<T>>>> Get(string page, string count, string userId)
+        public async Task<ActionResult<ResponseBody<List<T>>>> Get(string page, string count, string userId)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace CricketCreations.Models
                 return new StatusCodeResult(500);
             }
         }
-        public static async Task<ActionResult<ResponseBody<T>>> Post(JsonElement json, int userId)
+        public async Task<ActionResult<ResponseBody<T>>> Post(JsonElement json, int userId)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace CricketCreations.Models
                 return new StatusCodeResult(500);
             }
         }
-        public static async Task<ActionResult<ResponseBody<T>>> Patch(string jsonString)
+        public async Task<ActionResult<ResponseBody<T>>> Patch(string jsonString)
         {
             try
             {
@@ -162,7 +162,7 @@ namespace CricketCreations.Models
                 return new StatusCodeResult(500);
             }
         }
-        public static async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
