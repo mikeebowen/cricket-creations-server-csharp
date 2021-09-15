@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CricketCreationsDatabase.Models;
+using CricketCreationsRepository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace CricketCreationsRepository.Models
 {
-    public class BlogPostDTO
+    public class BlogPostDTO : IBlogPostRepository
     {
         [Key]
         public int? Id { get; set; }
@@ -36,7 +37,7 @@ namespace CricketCreationsRepository.Models
             // c.CreateMap<Tag, TagDTO>().ReverseMap();
         });
         private static IMapper mapper = config.CreateMapper();
-        public static async Task<List<BlogPostDTO>> GetAll(int? id)
+        public async Task<List<BlogPostDTO>> GetAll(int? id)
         {
             List<BlogPost> blogPosts;
             if (id == null)
@@ -50,7 +51,7 @@ namespace CricketCreationsRepository.Models
             }
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
-        public static async Task<List<BlogPostDTO>> GetRange(int page, int count, int? id)
+        public async Task<List<BlogPostDTO>> GetRange(int page, int count, int? id)
         {
             List<BlogPost> blogPosts;
             if (id == null)
@@ -126,7 +127,7 @@ namespace CricketCreationsRepository.Models
             }
             return false;
         }
-        public static async Task<int> GetCount()
+        public async Task<int> GetCount()
         {
             return await DatabaseManager.Instance.BlogPost.CountAsync();
         }

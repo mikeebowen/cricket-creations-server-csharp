@@ -61,7 +61,7 @@ namespace CricketCreations.Services
                 user = convertToUser(userDTO);
                 foreach (BlogPostDTO blogPostDTO in userDTO.BlogPosts)
                 {
-                    user.BlogPosts.Add(BlogPostService.ConvertToBlogPost(blogPostDTO));
+                    //user.BlogPosts.Add(BlogPostService.ConvertToBlogPost(blogPostDTO));
                 }
             }
             else

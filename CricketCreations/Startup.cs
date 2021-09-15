@@ -19,6 +19,9 @@ using CricketCreationsDatabase;
 using Microsoft.EntityFrameworkCore;
 using CricketCreations.Interfaces;
 using CricketCreations.Services;
+using CricketCreationsRepository.Interfaces;
+using CricketCreationsRepository.Models;
+using CricketCreations.Models;
 
 namespace CricketCreations
 {
@@ -42,7 +45,10 @@ namespace CricketCreations
             {
                 configuration.RootPath = "ClientApp";
             });
-            services.AddSingleton(typeof(IControllerService<>), typeof(ControllerService<>));
+            //services.AddSingleton(typeof(IControllerService<>), typeof(ControllerService<>));
+            services.AddSingleton(typeof(IApiService<>), typeof(ControllerService<>));
+            services.AddSingleton<IBlogPostRepository, BlogPostDTO>();
+            services.AddSingleton(typeof(IApiService<BlogPost>), typeof(BlogPostService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

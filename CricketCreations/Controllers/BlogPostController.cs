@@ -14,44 +14,44 @@ namespace CricketCreations.Controllers
     [Route("api/[controller]"), ApiController]
     public class BlogPostController : ControllerBase
     {
-        IControllerService<BlogPostService> _blogPost;
-        public BlogPostController(IControllerService<BlogPostService> blogPost)
+        IApiService<BlogPost> _blogPostService;
+        public BlogPostController(IApiService<BlogPost> blogPostService)
         {
-            _blogPost = blogPost;
+            _blogPostService = blogPostService;
         }
         // GET: api/<BlogPostController>
         [HttpGet]
-        public async Task<ActionResult<ResponseBody<List<BlogPostService>>>> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userId")] string userId)
+        public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userId")] string userId)
         {
-            return await _blogPost.Get(page, count, userId);
+            return await _blogPostService.Get(page, count, userId);
         }
 
         // GET api/<BlogPostController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResponseBody<BlogPostService>>> Get(int id)
+        public async Task<ActionResult<ResponseBody<BlogPost>>> Get(int id)
         {
-            return await _blogPost.GetById(id, null);
+            return await _blogPostService.GetById(id, null);
         }
 
         // POST api/<BlogPostController>
         [Authorize, HttpPost("{userId}")]
-        public async Task<ActionResult<ResponseBody<BlogPostService>>> Post([FromBody] JsonElement json, int userId)
+        public async Task<ActionResult<ResponseBody<BlogPost>>> Post([FromBody] JsonElement json, int userId)
         {
-            return await _blogPost.Post(json, userId);
+            return await _blogPostService.Post(json, userId);
         }
 
         // PATCH api/<BlogPostController>/5
         [Authorize, HttpPatch()]
-        public async Task<ActionResult<ResponseBody<BlogPostService>>> Patch([FromBody] JsonElement json)
+        public async Task<ActionResult<ResponseBody<BlogPost>>> Patch([FromBody] JsonElement json)
         {
-            return await _blogPost.Patch(json.ToString());
+            return await _blogPostService.Patch(json.ToString());
         }
 
         // DELETE api/<BlogPostController>/5
         [Authorize, HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            return await _blogPost.Delete(id);
+            return await _blogPostService.Delete(id);
         }
     }
 }
