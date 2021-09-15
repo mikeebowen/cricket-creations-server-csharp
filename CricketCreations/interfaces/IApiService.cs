@@ -13,7 +13,7 @@ namespace CricketCreations.Interfaces
     {
         public abstract Task<ActionResult<ResponseBody<List<T>>>> Get(string page, string count, string userId);
         public abstract Task<ActionResult<ResponseBody<List<T>>>> Get(int id);
-        public abstract Task<ActionResult<ResponseBody<T>>> GetById(int id, bool? include);
+        public abstract Task<ActionResult<ResponseBody<T>>> GetById(int id/**, bool? include**/);
         public abstract Task<ActionResult<ResponseBody<T>>> Post(JsonElement json, int userId);
         public abstract Task<ActionResult<ResponseBody<T>>> Patch(string jsonString);
         public abstract Task<ActionResult> Delete(int id);

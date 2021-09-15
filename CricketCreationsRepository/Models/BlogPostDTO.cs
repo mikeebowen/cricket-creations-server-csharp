@@ -65,7 +65,7 @@ namespace CricketCreationsRepository.Models
             }
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
-        public static async Task<BlogPostDTO> GeyById(int id)
+        public async Task<BlogPostDTO> GeyById(int id)
         {
             BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
             return ConvertToBlogPostDTO(blogPost);

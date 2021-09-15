@@ -98,9 +98,27 @@ namespace CricketCreations.Services
             }
         }
 
-        public Task<BlogPost> GetById(int id, bool? include)
+        // TODO: re-add the inlclude to include unpublished blog posts
+        public async Task<ActionResult<ResponseBody<BlogPost>>> GetById(int id/**, bool? include**/)
         {
-            throw new NotImplementedException();
+            try
+            {
+                BlogPostDTO blogPostDTO = await _blogPostRepository.GeyById(id);
+                var element = ConvertToBlogPost(blogPostDTO);
+                if (element != null)
+                {
+                    ResponseBody<BlogPost> response = new ResponseBody<BlogPost>(element, typeof(BlogPost).Name.ToString(), null);
+                    return response;
+                }
+                else
+                {
+                    return new NotFoundResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
         }
 
         public Task<ActionResult<ResponseBody<BlogPost>>> Post(JsonElement json, int userId)
@@ -125,11 +143,6 @@ namespace CricketCreations.Services
             }
             BlogPost blogPost = mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
             return blogPost;
-        }
-
-        Task<ActionResult<ResponseBody<BlogPost>>> IApiService<BlogPost>.GetById(int id, bool? include)
-        {
-            throw new NotImplementedException();
         }
         //public async Task<List<BlogPostService>> GetAll(int? id)
         //{

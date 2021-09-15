@@ -12,5 +12,6 @@ namespace CricketCreationsRepository.Interfaces
         public abstract Task<List<BlogPostDTO>> GetAll(int? id);
         public abstract Task<int> GetCount();
         public abstract Task<List<BlogPostDTO>> GetRange(int page, int count, int? id);
+        public abstract Task<BlogPostDTO> GeyById(int id);
     }
 }
