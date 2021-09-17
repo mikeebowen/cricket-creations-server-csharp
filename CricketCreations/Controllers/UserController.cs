@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using CricketCreationsRepository.Models;
+using CricketCreationsRepository.Repositories;
 using CricketCreations.Services;
 using Microsoft.AspNetCore.Authorization;
 using CricketCreations.Interfaces;

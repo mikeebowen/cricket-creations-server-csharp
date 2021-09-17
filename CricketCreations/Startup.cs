@@ -20,7 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using CricketCreations.Interfaces;
 using CricketCreations.Services;
 using CricketCreationsRepository.Interfaces;
-using CricketCreationsRepository.Models;
+using CricketCreationsRepository.Repositories;
 using CricketCreations.Models;
 
 namespace CricketCreations
@@ -47,7 +47,7 @@ namespace CricketCreations
             });
             //services.AddSingleton(typeof(IControllerService<>), typeof(ControllerService<>));
             services.AddSingleton(typeof(IApiService<>), typeof(ControllerService<>));
-            services.AddSingleton<IBlogPostRepository, BlogPostDTO>();
+            services.AddSingleton<IBlogPostRepository, BlogPostRepository>();
             services.AddSingleton(typeof(IApiService<BlogPost>), typeof(BlogPostService));
         }
 

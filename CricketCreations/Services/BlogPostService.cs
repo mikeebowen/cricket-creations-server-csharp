@@ -2,7 +2,7 @@
 using CricketCreations.Interfaces;
 using CricketCreations.Models;
 using CricketCreationsRepository.Interfaces;
-using CricketCreationsRepository.Models;
+using CricketCreationsRepository.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,21 +20,12 @@ namespace CricketCreations.Services
         {
             _blogPostRepository = blogPostRepository;
         }
-        //public int? Id { get; set; }
-        //public DateTime Created { get; set; }
-        //public DateTime LastUpdated { get; set; }
-        //public string Title { get; set; }
-        //public string Content { get; set; }
-        //public string Image { get; set; }
-        //public UserService User { get; set; }
-        //public bool Published { get; set; }
-        //public List<TagService> Tags { get; set; } = new List<TagService>();
         private static MapperConfiguration config = new MapperConfiguration(c =>
         {
-            c.CreateMap<BlogPost, BlogPostDTO>()
+            c.CreateMap<BlogPost, BlogPostRepository>()
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagService.ConvertToTagDTO(t))));
 
-            c.CreateMap<BlogPostDTO, BlogPost>()
+            c.CreateMap<BlogPostRepository, BlogPost>()
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagService.ConvertToTag(t))));
 
             // c.CreateMap<Tag, TagDTO>().ReverseMap();
@@ -66,12 +57,12 @@ namespace CricketCreations.Services
                 {
                     if (validId)
                     {
-                        List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.GetRange(pg, cnt, id);
+                        List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.GetRange(pg, cnt, id);
                         blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
                     }
                     else
                     {
-                        List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.GetRange(pg, cnt, null);
+                        List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.GetRange(pg, cnt, null);
                         blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
                     }
                 }
@@ -79,12 +70,12 @@ namespace CricketCreations.Services
                 {
                     if (validId)
                     {
-                        List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.GetAll(id);
+                        List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.GetAll(id);
                         blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
                     }
                     else
                     {
-                        List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.GetAll(null);
+                        List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.GetAll(null);
                         blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
                     }
 
@@ -98,13 +89,12 @@ namespace CricketCreations.Services
             }
         }
 
-        // TODO: re-add the inlclude to include unpublished blog posts
-        public async Task<ActionResult<ResponseBody<BlogPost>>> GetById(int id/**, bool? include**/)
+        public async Task<ActionResult<ResponseBody<BlogPost>>> GetById(int id)
         {
             try
             {
-                BlogPostDTO blogPostDTO = await _blogPostRepository.GeyById(id);
-                var element = ConvertToBlogPost(blogPostDTO);
+                BlogPostRepository blogPostDTO = await _blogPostRepository.GeyById(id);
+                BlogPost element = ConvertToBlogPost(blogPostDTO);
                 if (element != null)
                 {
                     ResponseBody<BlogPost> response = new ResponseBody<BlogPost>(element, typeof(BlogPost).Name.ToString(), null);
@@ -135,13 +125,13 @@ namespace CricketCreations.Services
         {
             throw new NotImplementedException();
         }
-        public static BlogPost ConvertToBlogPost(BlogPostDTO blogPostDTO)
+        public static BlogPost ConvertToBlogPost(BlogPostRepository blogPostDTO)
         {
             if (blogPostDTO == null)
             {
                 return null;
             }
-            BlogPost blogPost = mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
+            BlogPost blogPost = mapper.Map<BlogPostRepository, BlogPost>(blogPostDTO);
             return blogPost;
         }
         //public async Task<List<BlogPostService>> GetAll(int? id)

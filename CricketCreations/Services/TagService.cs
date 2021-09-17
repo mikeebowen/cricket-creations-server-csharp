@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CricketCreationsRepository.Models;
+using CricketCreationsRepository.Repositories;
 using CricketCreations.Interfaces;
 
 namespace CricketCreations.Services
@@ -18,42 +18,42 @@ namespace CricketCreations.Services
 
         private static MapperConfiguration config = new MapperConfiguration(config =>
         {
-            config.CreateMap<Services.BlogPostService, BlogPostDTO>().ReverseMap();
+            config.CreateMap<Services.BlogPostService, BlogPostRepository>().ReverseMap();
             config
-            .CreateMap<Services.TagService, TagDTO>()
+            .CreateMap<Services.TagService, TagRepository>()
             .ForMember(t => t.BlogPosts, option => option.Ignore())
             .ReverseMap();
         });
         private static IMapper mapper = config.CreateMapper();
         public async Task<List<TagService>> GetAll(int? id)
         {
-            List<TagDTO> tagDTOs = await TagDTO.GetAll();
+            List<TagRepository> tagDTOs = await TagRepository.GetAll();
             List<TagService> tags = tagDTOs.Select(td => ConvertToTag(td)).ToList();
             return tags;
         }
         public async Task<TagService> Create(TagService tag, int userId)
         {
-            TagDTO tagDTO = ConvertToTagDTO(tag);
-            ICollection<BlogPostDTO> blogPostDTOs = tag.BlogPosts.Select(b => mapper.Map<BlogPostService, BlogPostDTO>(b)).ToList();
+            TagRepository tagDTO = ConvertToTagDTO(tag);
+            ICollection<BlogPostRepository> blogPostDTOs = tag.BlogPosts.Select(b => mapper.Map<BlogPostService, BlogPostRepository>(b)).ToList();
             tagDTO.BlogPosts = blogPostDTOs;
-            var newTagDTO = await TagDTO.Create(tagDTO);
+            var newTagDTO = await TagRepository.Create(tagDTO);
             return ConvertToTag(newTagDTO);
         }
-        public static TagDTO ConvertToTagDTO(TagService tag)
+        public static TagRepository ConvertToTagDTO(TagService tag)
         {
             if (tag == null)
             {
                 return null;
             }
-            return mapper.Map<TagService, TagDTO>(tag);
+            return mapper.Map<TagService, TagRepository>(tag);
         }
-        public static TagService ConvertToTag(TagDTO tagDTO)
+        public static TagService ConvertToTag(TagRepository tagDTO)
         {
             if (tagDTO == null)
             {
                 return null;
             }
-            return mapper.Map<TagDTO, TagService>(tagDTO);
+            return mapper.Map<TagRepository, TagService>(tagDTO);
         }
 
         public Task<TagService> GetById(int id, bool? include)
@@ -63,12 +63,12 @@ namespace CricketCreations.Services
 
         public async Task<int> GetCount()
         {
-            return await TagDTO.GetCount();
+            return await TagRepository.GetCount();
         }
 
         public async Task<List<TagService>> GetRange(int page, int count, int? id)
         {
-            List<TagDTO> tagDTOs = await TagDTO.GetRange(page, count);
+            List<TagRepository> tagDTOs = await TagRepository.GetRange(page, count);
             return tagDTOs.Select(t => ConvertToTag(t)).ToList();
         }
 

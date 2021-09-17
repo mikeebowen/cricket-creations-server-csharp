@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Configuration;
 using CricketCreations.Services;
-using CricketCreationsRepository.Models;
+using CricketCreationsRepository.Repositories;
 using System.Security.Cryptography;
 
 namespace CricketCreations.Services

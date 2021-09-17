@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using CricketCreationsRepository.Models;
+using CricketCreationsRepository.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using CricketCreations.Services;
 using CricketCreations.Interfaces;
@@ -43,13 +43,13 @@ namespace CricketCreations.Services
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
 
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<UserDTO, UserService>()
+        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<UserRepository, UserService>()
         .ForMember(dest => dest.BlogPosts, opts => opts.Ignore())
         .ReverseMap());
         private static IMapper mapper = config.CreateMapper();
         public async Task<List<UserService>> GetAll(int? id)
         {
-            List<UserDTO> userDTOs = await UserDTO.GetAll();
+            List<UserRepository> userDTOs = await UserRepository.GetAll();
             return userDTOs.Select(userDTO => convertToUser(userDTO)).ToList();
         }
         public async Task<UserService> GetById(int id, bool? withPosts)
@@ -57,27 +57,27 @@ namespace CricketCreations.Services
             UserService user;
             if (withPosts != null && withPosts == true)
             {
-                UserDTO userDTO = await UserDTO.GetUserDTOWithPosts(id);
+                UserRepository userDTO = await UserRepository.GetUserDTOWithPosts(id);
                 user = convertToUser(userDTO);
-                foreach (BlogPostDTO blogPostDTO in userDTO.BlogPosts)
+                foreach (BlogPostRepository blogPostDTO in userDTO.BlogPosts)
                 {
                     //user.BlogPosts.Add(BlogPostService.ConvertToBlogPost(blogPostDTO));
                 }
             }
             else
             {
-                UserDTO userDTO = await UserDTO.GetUserDTO(id);
+                UserRepository userDTO = await UserRepository.GetUserDTO(id);
                 user = convertToUser(userDTO);
             }
             return user;
         }
-        private static UserService convertToUser(UserDTO userDTO)
+        private static UserService convertToUser(UserRepository userDTO)
         {
-            return mapper.Map<UserDTO, UserService>(userDTO);
+            return mapper.Map<UserRepository, UserService>(userDTO);
         }
-        private static UserDTO convertToUserDTO(UserService user)
+        private static UserRepository convertToUserDTO(UserService user)
         {
-            return mapper.Map<UserService, UserDTO>(user);
+            return mapper.Map<UserService, UserRepository>(user);
         }
         public Task<int> GetCount()
         {
@@ -96,8 +96,8 @@ namespace CricketCreations.Services
 
         public async Task<UserService> Update(UserService user)
         {
-            UserDTO userDto = convertToUserDTO(user);
-            UserDTO updatedUserDto = await UserDTO.Update(userDto);
+            UserRepository userDto = convertToUserDTO(user);
+            UserRepository updatedUserDto = await UserRepository.Update(userDto);
             UserService updatedUser = mapper.Map<UserService>(updatedUserDto);
             return updatedUser;
         }
@@ -108,12 +108,12 @@ namespace CricketCreations.Services
         }
         public static UserService CheckPassword(string password, string userEmail)
         {
-            UserDTO userDTO = UserDTO.CheckPassword(password, userEmail);
+            UserRepository userDTO = UserRepository.CheckPassword(password, userEmail);
             return convertToUser(userDTO);
         }
         public static async Task<UserService> CheckRefreshToken(int id, string token)
         {
-            UserDTO userDTO = await UserDTO.CheckRefreshToken(id, token);
+            UserRepository userDTO = await UserRepository.CheckRefreshToken(id, token);
             if (userDTO != null)
             {
                 return convertToUser(userDTO);

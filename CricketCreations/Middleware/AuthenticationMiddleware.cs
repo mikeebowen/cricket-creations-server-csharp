@@ -31,7 +31,7 @@ namespace CricketCreations.Middleware
                     //ValidIssuer = "localhost",
                     //ValidAudience = "localhost"
                 };
-                x.RequireHttpsMetadata = false; // TODO: change this to true for production
+                x.RequireHttpsMetadata = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")?.ToLower() == "development" ? false : true; // TODO: change this to true for 
                 x.SaveToken = true;
             });
 

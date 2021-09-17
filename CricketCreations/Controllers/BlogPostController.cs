@@ -30,7 +30,7 @@ namespace CricketCreations.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Get(int id)
         {
-            return await _blogPostService.GetById(id/**, null**/);
+            return await _blogPostService.GetById(id);
         }
 
         // POST api/<BlogPostController>

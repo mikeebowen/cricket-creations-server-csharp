@@ -15,14 +15,14 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CricketCreationsRepository.Models
+namespace CricketCreationsRepository.Repositories
 {
     public enum Role
     {
         Administrator,
         User
     }
-    public class UserDTO
+    public class UserRepository
     {
         private string password;
         private string refreshToken;
@@ -73,11 +73,11 @@ namespace CricketCreationsRepository.Models
         public string UserName { get; set; }
         public string Avatar { get; set; }
         public Role Role { get; set; }
-        public List<BlogPostDTO> BlogPosts { get; set; }
-        public List<TagDTO> Tags { get; set; }
+        public List<BlogPostRepository> BlogPosts { get; set; }
+        public List<TagRepository> Tags { get; set; }
         private static MapperConfiguration config = new MapperConfiguration(c =>
         {
-            c.CreateMap<User, UserDTO>()
+            c.CreateMap<User, UserRepository>()
                 .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
                 .ForMember(dest => dest.Tags, opt => opt.Ignore())
                 .ReverseMap()
@@ -85,22 +85,22 @@ namespace CricketCreationsRepository.Models
                 .ForMember(dest => dest.Tags, opt => opt.Ignore());
         });
         private static IMapper mapper = config.CreateMapper();
-        public static async Task<List<UserDTO>> GetAll()
+        public static async Task<List<UserRepository>> GetAll()
         {
             List<User> users = await DatabaseManager.Instance.User.ToListAsync();
             return users.Select(u => ConvertToUserDTO(u)).ToList();
         }
-        public static async Task<UserDTO> GetUserDTOWithPosts(int id)
+        public static async Task<UserRepository> GetUserDTOWithPosts(int id)
         {
             User user = await DatabaseManager.Instance.User.Include(user => user.BlogPosts).Where(user => user.Id == id).FirstAsync();
-            UserDTO userDTO = ConvertToUserDTO(user);
+            UserRepository userDTO = ConvertToUserDTO(user);
             foreach (BlogPost blogPost in user.BlogPosts)
             {
-                userDTO.BlogPosts.Add(BlogPostDTO.ConvertToBlogPostDTO(blogPost));
+                userDTO.BlogPosts.Add(BlogPostRepository.ConvertToBlogPostDTO(blogPost));
             }
             return userDTO;
         }
-        public static async Task<UserDTO> Update(UserDTO userDto)
+        public static async Task<UserRepository> Update(UserRepository userDto)
         {
             User user = await DatabaseManager.Instance.User.FindAsync(userDto.Id);
             if (user != null)
@@ -119,24 +119,24 @@ namespace CricketCreationsRepository.Models
                     }
                 }
                 await DatabaseManager.Instance.SaveChangesAsync();
-                return mapper.Map<UserDTO>(user);
+                return mapper.Map<UserRepository>(user);
             }
             return null;
         }
-        public static async Task<UserDTO> GetUserDTO(int id)
+        public static async Task<UserRepository> GetUserDTO(int id)
         {
             User user = await DatabaseManager.Instance.User.FindAsync(id);
             return ConvertToUserDTO(user);
         }
-        public static UserDTO ConvertToUserDTO(User user)
+        public static UserRepository ConvertToUserDTO(User user)
         {
-            return mapper.Map<User, UserDTO>(user);
+            return mapper.Map<User, UserRepository>(user);
         }
-        public static User ConvertToUser(UserDTO userDTO)
+        public static User ConvertToUser(UserRepository userDTO)
         {
-            return mapper.Map<UserDTO, User>(userDTO);
+            return mapper.Map<UserRepository, User>(userDTO);
         }
-        public static UserDTO CheckPassword(string password, string userName)
+        public static UserRepository CheckPassword(string password, string userName)
         {
             var user = DatabaseManager.Instance.User.Where(u => u.Email == userName).First();
             if (user == null)
@@ -152,7 +152,7 @@ namespace CricketCreationsRepository.Models
                 return null;
             }
         }
-        public static async Task<UserDTO> CheckRefreshToken(int id, string token)
+        public static async Task<UserRepository> CheckRefreshToken(int id, string token)
         {
             User user = await DatabaseManager.Instance.User.FindAsync(id);
             int dateDiff = DateTime.Compare(user.RefreshTokenExpiration, DateTime.Now);

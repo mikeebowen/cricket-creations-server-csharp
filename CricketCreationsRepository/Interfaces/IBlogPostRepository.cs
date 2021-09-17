@@ -1,4 +1,4 @@
-﻿using CricketCreationsRepository.Models;
+﻿using CricketCreationsRepository.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +9,9 @@ namespace CricketCreationsRepository.Interfaces
 {
     public interface IBlogPostRepository
     {
-        public abstract Task<List<BlogPostDTO>> GetAll(int? id);
+        public abstract Task<List<BlogPostRepository>> GetAll(int? id);
         public abstract Task<int> GetCount();
-        public abstract Task<List<BlogPostDTO>> GetRange(int page, int count, int? id);
-        public abstract Task<BlogPostDTO> GeyById(int id);
+        public abstract Task<List<BlogPostRepository>> GetRange(int page, int count, int? id);
+        public abstract Task<BlogPostRepository> GeyById(int id);
     }
 }

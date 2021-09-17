@@ -9,9 +9,9 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace CricketCreationsRepository.Models
+namespace CricketCreationsRepository.Repositories
 {
-    public class PageDTO
+    public class PageRepository
     {
         [Key]
         public int Id { get; set; }
@@ -21,28 +21,28 @@ namespace CricketCreationsRepository.Models
         public string Content { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
-        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<Page, PageDTO>().ReverseMap());
+        private static MapperConfiguration config = new MapperConfiguration(c => c.CreateMap<Page, PageRepository>().ReverseMap());
         private static IMapper mapper = config.CreateMapper();
-        public static async Task<List<PageDTO>> GetAll()
+        public static async Task<List<PageRepository>> GetAll()
         {
             List<Page> Pages = await DatabaseManager.Instance.Page.Where(p => p.Deleted == false).ToListAsync();
-            List<PageDTO> PageDTOs = Pages.ConvertAll(p => mapper.Map<PageDTO>(p));
+            List<PageRepository> PageDTOs = Pages.ConvertAll(p => mapper.Map<PageRepository>(p));
             return PageDTOs;
         }
-        public static async Task<PageDTO> GetById(int id)
+        public static async Task<PageRepository> GetById(int id)
         {
             Page page = await DatabaseManager.Instance.Page.FindAsync(id);
-            return mapper.Map<PageDTO>(page);
+            return mapper.Map<PageRepository>(page);
         }
-        public static async Task<PageDTO> Create(PageDTO pageDTO)
+        public static async Task<PageRepository> Create(PageRepository pageDTO)
         {
             Page page = mapper.Map<Page>(pageDTO);
             var newPage = await DatabaseManager.Instance.Page.AddAsync(page);
             await DatabaseManager.Instance.SaveChangesAsync();
-            PageDTO newPageDTO = mapper.Map<PageDTO>(newPage.Entity);
+            PageRepository newPageDTO = mapper.Map<PageRepository>(newPage.Entity);
             return newPageDTO;
         }
-        public static async Task<PageDTO> Update(PageDTO pageDTO)
+        public static async Task<PageRepository> Update(PageRepository pageDTO)
         {
             Page page = await DatabaseManager.Instance.Page.FindAsync(pageDTO.Id);
             if (page != null)
@@ -61,7 +61,7 @@ namespace CricketCreationsRepository.Models
                     }
                 }
                 await DatabaseManager.Instance.SaveChangesAsync();
-                return mapper.Map<PageDTO>(page);
+                return mapper.Map<PageRepository>(page);
             }
             return null;
         }
@@ -80,10 +80,10 @@ namespace CricketCreationsRepository.Models
         {
             return await DatabaseManager.Instance.Page.CountAsync();
         }
-        public static async Task<List<PageDTO>> GetRange(int page, int count, int? id)
+        public static async Task<List<PageRepository>> GetRange(int page, int count, int? id)
         {
             List<Page> pages = await DatabaseManager.Instance.Page.Where(p => p.Deleted == false).Skip((page - 1) * count).Take(count).ToListAsync();
-            return pages.Select(p => mapper.Map<PageDTO>(p)).ToList();
+            return pages.Select(p => mapper.Map<PageRepository>(p)).ToList();
         }
     }
 }
