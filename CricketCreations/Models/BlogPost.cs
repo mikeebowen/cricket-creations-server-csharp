@@ -16,11 +16,11 @@ namespace CricketCreations.Models
         public string Image { get; set; }
         public UserService User { get; set; }
         public bool Published { get; set; }
-        public List<TagService> Tags { get; set; }
+        public List<Tag> Tags { get; set; }
 
         BlogPost()
         {
-            Tags = new List<TagService>();
+            Tags = new List<Tag>();
         }
     }
 }

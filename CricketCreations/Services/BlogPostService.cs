@@ -18,7 +18,7 @@ namespace CricketCreations.Services
 {
     public class BlogPostService : IApiService<BlogPost>
     {
-        IBlogPostRepository _blogPostRepository;
+        private IBlogPostRepository _blogPostRepository;
         public BlogPostService(IBlogPostRepository blogPostRepository)
         {
             _blogPostRepository = blogPostRepository;
@@ -161,6 +161,15 @@ namespace CricketCreations.Services
             }
             BlogPost blogPost = mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
             return blogPost;
+        }
+        public static BlogPostDTO ConvertToBlogPostDTO(BlogPost blogPost)
+        {
+            if (blogPost == null)
+            {
+                return null;
+            }
+            BlogPostDTO blogPostDTO = mapper.Map<BlogPost, BlogPostDTO>(blogPost);
+            return blogPostDTO;
         }
     }
 }

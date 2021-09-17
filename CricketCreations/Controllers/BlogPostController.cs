@@ -33,8 +33,7 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<BlogPostController>
-        //[Authorize, HttpPost("{userId}")]
-        [HttpPost("{userId}")]
+        [Authorize, HttpPost("{userId}")]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Post([FromBody] JsonElement json, int userId)
         {
             return await _blogPostService.Create(json, userId);
@@ -49,7 +48,7 @@ namespace CricketCreations.Controllers
 
         // DELETE api/<BlogPostController>/5
         [Authorize, HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<bool>> Delete(int id)
         {
             return await _blogPostService.Delete(id);
         }

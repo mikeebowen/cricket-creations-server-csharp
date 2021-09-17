@@ -8,15 +8,7 @@ using System.Threading.Tasks;
 
 namespace CricketCreationsRepository.Interfaces
 {
-    public interface IBlogPostRepository
+    public interface IBlogPostRepository : IRepository<BlogPostDTO>
     {
-        public abstract Task<BlogPostDTO> Create(BlogPostDTO blogPostDTO, int userId);
-        public abstract Task<List<BlogPostDTO>> Read();
-        public abstract Task<List<BlogPostDTO>> Read(int page, int count);
-        public abstract Task<List<BlogPostDTO>> Read(int page, int count, int id);
-        public abstract Task<BlogPostDTO> Read(int id);
-        public abstract Task<BlogPostDTO> Update(BlogPostDTO bloPostDTO);
-        public abstract Task<bool> Delete(int id);
-        public abstract Task<int> GetCount();
     }
 }

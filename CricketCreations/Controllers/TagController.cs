@@ -16,17 +16,17 @@ namespace CricketCreations.Controllers
     [Route("api/[controller]"), ApiController]
     public class TagController : ControllerBase
     {
-        IControllerService<TagService> _tag;
+        IApiService<Tag> _tagService;
 
-        public TagController(IControllerService<TagService> tag)
+        public TagController(IApiService<Tag> tagService)
         {
-            _tag = tag;
+            _tagService = tagService;
         }
         // GET: api/<TagController>
         [HttpGet]
-        public async Task<ActionResult<ResponseBody<List<TagService>>>> GetAll()
+        public async Task<ActionResult<ResponseBody<List<Tag>>>> GetAll()
         {
-            return await _tag.Get(null, null, null);
+            return await _tagService.Read(null, null);
         }
 
         // GET api/<TagController>/5
@@ -38,9 +38,9 @@ namespace CricketCreations.Controllers
 
         // POST api/<TagController>
         [Authorize, HttpPost("{userId}")]
-        public async Task<ActionResult<ResponseBody<TagService>>> Post([FromBody] JsonElement json, int userId)
+        public async Task<ActionResult<ResponseBody<Tag>>> Post([FromBody] JsonElement json, int userId)
         {
-            return await _tag.Post(json, userId);
+            return await _tagService.Create(json, userId);
         }
 
         // PUT api/<TagController>/5
