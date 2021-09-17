@@ -55,7 +55,7 @@ namespace CricketCreationsRepository.Repositories
             List<BlogPost> blogPosts = user.BlogPosts.Where(b => !b.Deleted && b.Published).OrderByDescending(s => s.LastUpdated).Skip((page - 1) * count).Take(count).ToList();
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
     }
-        public async Task<BlogPostRepository> Get(int id)
+        public async Task<BlogPostRepository> Read(int id)
         {
             BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
             return ConvertToBlogPostDTO(blogPost);
@@ -72,7 +72,7 @@ namespace CricketCreationsRepository.Repositories
             await DatabaseManager.Instance.SaveChangesAsync();
             return ConvertToBlogPostDTO(blog.Entity);
         }
-        public static async Task<BlogPostRepository> Update(BlogPostRepository blogPostDto)
+        public async Task<BlogPostRepository> Update(BlogPostRepository blogPostDto)
         {
             BlogPost blogPost = await DatabaseManager.Instance.BlogPost.Where(bp => bp.Id == blogPostDto.Id).Include(b => b.Tags).FirstAsync();
             List<Tag> newTags = blogPostDto.Tags.Select(t =>

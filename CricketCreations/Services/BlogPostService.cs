@@ -98,7 +98,7 @@ namespace CricketCreations.Services
         {
             try
             {
-                BlogPostRepository blogPostDTO = await _blogPostRepository.Get(id);
+                BlogPostRepository blogPostDTO = await _blogPostRepository.Read(id);
                 BlogPost element = ConvertToBlogPost(blogPostDTO);
                 if (element != null)
                 {
@@ -140,9 +140,12 @@ namespace CricketCreations.Services
             }
         }
 
-        public Task<ActionResult<ResponseBody<BlogPost>>> Update(string jsonString)
+        public async Task<ActionResult<ResponseBody<BlogPost>>> Update(string jsonString)
         {
-            throw new NotImplementedException();
+            BlogPostRepository blogPostDTO = JsonConvert.DeserializeObject<BlogPostRepository>(jsonString);
+            BlogPostRepository updatedBlogPostDTO = await _blogPostRepository.Update(blogPostDTO);
+            BlogPost blogPost = ConvertToBlogPost(updatedBlogPostDTO);
+            return new ResponseBody<BlogPost>(blogPost, typeof(BlogPost).Name.ToString(), null);
         }
 
         public Task<ActionResult> Delete(int id)

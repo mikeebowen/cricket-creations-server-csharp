@@ -19,16 +19,10 @@ namespace CricketCreations.Controllers
         {
             _blogPostService = blogPostService;
         }
-        // GET: api/<BlogPostController>
-        [HttpGet]
-        public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count)
-        {
-            return await _blogPostService.Read(page, count);
-        }
         [HttpGet]
         public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userId")] string userId)
         {
-            return await _blogPostService.Read(page, count, userId);
+            return userId == null ? await _blogPostService.Read(page, count) : await _blogPostService.Read(page, count, userId);
         }
 
         // GET api/<BlogPostController>/5
