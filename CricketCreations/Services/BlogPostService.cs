@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using CricketCreationsRepository.Models;
 
 namespace CricketCreations.Services
 {
@@ -24,10 +25,10 @@ namespace CricketCreations.Services
         }
         private static MapperConfiguration config = new MapperConfiguration(c =>
         {
-            c.CreateMap<BlogPost, BlogPostRepository>()
+            c.CreateMap<BlogPost, BlogPostDTO>()
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagService.ConvertToTagDTO(t))));
 
-            c.CreateMap<BlogPostRepository, BlogPost>()
+            c.CreateMap<BlogPostDTO, BlogPost>()
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagService.ConvertToTag(t))));
 
             // c.CreateMap<Tag, TagDTO>().ReverseMap();
@@ -52,7 +53,7 @@ namespace CricketCreations.Services
 
                 if (validPage && validCount)
                 {
-                    List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.Read(pg, cnt);
+                    List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.Read(pg, cnt);
                     blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
                 }
                 else
@@ -83,7 +84,7 @@ namespace CricketCreations.Services
                 {
                     return new StatusCodeResult(StatusCodes.Status406NotAcceptable);
                 }
-                List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.Read(pg, cnt, id);
+                List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.Read(pg, cnt, id);
                 blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
                 response = new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount);
                 return response;
@@ -98,7 +99,7 @@ namespace CricketCreations.Services
         {
             try
             {
-                BlogPostRepository blogPostDTO = await _blogPostRepository.Read(id);
+                BlogPostDTO blogPostDTO = await _blogPostRepository.Read(id);
                 BlogPost element = ConvertToBlogPost(blogPostDTO);
                 if (element != null)
                 {
@@ -119,13 +120,13 @@ namespace CricketCreations.Services
         public async Task<ActionResult<ResponseBody<BlogPost>>> Create(JsonElement json, int userId)
         {
             string jsonString = json.ToString();
-            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPostRepository>();
+            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPostDTO>();
             ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
 
             if (errors.Count == 0)
             {
-                BlogPostRepository blogPostDTO = JsonConvert.DeserializeObject<BlogPostRepository>(jsonString);
-                BlogPostRepository createdBlogPostDTO = await _blogPostRepository.Create(blogPostDTO, userId);
+                BlogPostDTO blogPostDTO = JsonConvert.DeserializeObject<BlogPostDTO>(jsonString);
+                BlogPostDTO createdBlogPostDTO = await _blogPostRepository.Create(blogPostDTO, userId);
                 BlogPost blog = ConvertToBlogPost(createdBlogPostDTO);
                 return new ResponseBody<BlogPost>(blog, typeof(BlogPost).Name.ToString(), null);
             }
@@ -142,86 +143,24 @@ namespace CricketCreations.Services
 
         public async Task<ActionResult<ResponseBody<BlogPost>>> Update(string jsonString)
         {
-            BlogPostRepository blogPostDTO = JsonConvert.DeserializeObject<BlogPostRepository>(jsonString);
-            BlogPostRepository updatedBlogPostDTO = await _blogPostRepository.Update(blogPostDTO);
+            BlogPostDTO blogPostDTO = JsonConvert.DeserializeObject<BlogPostDTO>(jsonString);
+            BlogPostDTO updatedBlogPostDTO = await _blogPostRepository.Update(blogPostDTO);
             BlogPost blogPost = ConvertToBlogPost(updatedBlogPostDTO);
             return new ResponseBody<BlogPost>(blogPost, typeof(BlogPost).Name.ToString(), null);
         }
 
-        public Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<bool>> Delete(int id)
         {
-            throw new NotImplementedException();
+            return new ActionResult<bool>(await _blogPostRepository.Delete(id));
         }
-        public static BlogPost ConvertToBlogPost(BlogPostRepository blogPostDTO)
+        public static BlogPost ConvertToBlogPost(BlogPostDTO blogPostDTO)
         {
             if (blogPostDTO == null)
             {
                 return null;
             }
-            BlogPost blogPost = mapper.Map<BlogPostRepository, BlogPost>(blogPostDTO);
+            BlogPost blogPost = mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
             return blogPost;
         }
-        private static BlogPostRepository convertToBlogPostDTO(BlogPost blogPost)
-        {
-            if (blogPost == null)
-            {
-                return null;
-            }
-            BlogPostRepository blogPostDTO = mapper.Map<BlogPost, BlogPostRepository>(blogPost);
-            return blogPostDTO;
-        }
-        //public async Task<List<BlogPostService>> GetAll(int? id)
-        //{
-        //    List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.GetAll(id);
-        //    return blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
-        //}
-        //public async Task<List<BlogPostService>> GetRange(int page, int count, int? id)
-        //{
-        //    List<BlogPostDTO> blogPostDTOs = await BlogPostDTO.GetRange(page, count, id);
-        //    return blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
-        //}
-        //public async Task<BlogPostService> GetById(int id, bool? include)
-        //{
-        //    BlogPostDTO blogPostDTO = await BlogPostDTO.GeyById(id);
-        //    return ConvertToBlogPost(blogPostDTO);
-        //}
-        //public async Task<BlogPostService> Create(BlogPostService blogPost, int userId)
-        //{
-        //    BlogPostDTO blogPostDTO = convertToBlogPostDTO(blogPost);
-        //    BlogPostDTO createdBlogPostDTO = await BlogPostDTO.Create(blogPostDTO, userId);
-        //    return ConvertToBlogPost(createdBlogPostDTO);
-        //}
-        //public async Task<BlogPostService> Update(BlogPostService blogPost)
-        //{
-        //    BlogPostDTO blogPostDTO = convertToBlogPostDTO(blogPost);
-        //    BlogPostDTO updatedBlogPostDTO = await BlogPostDTO.Update(blogPostDTO);
-        //    return ConvertToBlogPost(updatedBlogPostDTO);
-        //}
-        //public async Task<bool> Delete(int id)
-        //{
-        //    return await BlogPostDTO.Delete(id);
-        //}
-        //public async Task<int> GetCount()
-        //{
-        //    return await BlogPostDTO.GetCount();
-        //}
-        //public static BlogPostService ConvertToBlogPost(BlogPostDTO blogPostDTO)
-        //{
-        //    if (blogPostDTO == null)
-        //    {
-        //        return null;
-        //    }
-        //    BlogPostService blogPost = mapper.Map<BlogPostDTO, BlogPostService>(blogPostDTO);
-        //    return blogPost;
-        //}
-        //private static BlogPostDTO convertToBlogPostDTO(BlogPostService blogPost)
-        //{
-        //    if (blogPost == null)
-        //    {
-        //        return null;
-        //    }
-        //    BlogPostDTO blogPostDTO = mapper.Map<BlogPostService, BlogPostDTO>(blogPost);
-        //    return blogPostDTO;
-        //}
     }
 }

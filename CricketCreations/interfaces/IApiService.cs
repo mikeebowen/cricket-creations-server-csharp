@@ -16,6 +16,6 @@ namespace CricketCreations.Interfaces
         public abstract Task<ActionResult<ResponseBody<List<T>>>> Read(string page, string count);
         public abstract Task<ActionResult<ResponseBody<List<T>>>> Read(string page, string count, string userId);
         public abstract Task<ActionResult<ResponseBody<T>>> Update(string jsonString);
-        public abstract Task<ActionResult> Delete(int id);
+        public abstract Task<ActionResult<bool>> Delete(int id);
     }
 }

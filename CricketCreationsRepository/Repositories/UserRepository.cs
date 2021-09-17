@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CricketCreationsDatabase.Models;
+using CricketCreationsRepository.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -73,7 +74,7 @@ namespace CricketCreationsRepository.Repositories
         public string UserName { get; set; }
         public string Avatar { get; set; }
         public Role Role { get; set; }
-        public List<BlogPostRepository> BlogPosts { get; set; }
+        public List<BlogPostDTO> BlogPosts { get; set; }
         public List<TagRepository> Tags { get; set; }
         private static MapperConfiguration config = new MapperConfiguration(c =>
         {

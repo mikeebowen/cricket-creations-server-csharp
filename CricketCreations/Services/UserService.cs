@@ -9,6 +9,7 @@ using CricketCreationsRepository.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using CricketCreations.Services;
 using CricketCreations.Interfaces;
+using CricketCreationsRepository.Models;
 
 namespace CricketCreations.Services
 {
@@ -59,7 +60,7 @@ namespace CricketCreations.Services
             {
                 UserRepository userDTO = await UserRepository.GetUserDTOWithPosts(id);
                 user = convertToUser(userDTO);
-                foreach (BlogPostRepository blogPostDTO in userDTO.BlogPosts)
+                foreach (BlogPostDTO blogPostDTO in userDTO.BlogPosts)
                 {
                     //user.BlogPosts.Add(BlogPostService.ConvertToBlogPost(blogPostDTO));
                 }

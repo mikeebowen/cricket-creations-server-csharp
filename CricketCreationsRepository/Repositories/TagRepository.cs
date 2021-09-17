@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CricketCreationsDatabase.Models;
+using CricketCreationsRepository.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace CricketCreationsRepository.Repositories
         public DateTime LastUpdated { get; set; }
         public bool Deleted { get; set; } = false;
         public string Name { get; set; }
-        public ICollection<BlogPostRepository> BlogPosts { get; set; }
+        public ICollection<BlogPostDTO> BlogPosts { get; set; }
 
         private static MapperConfiguration config = new MapperConfiguration(config => config
         .CreateMap<Tag, TagRepository>()

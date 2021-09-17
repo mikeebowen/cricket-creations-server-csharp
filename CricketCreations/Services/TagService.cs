@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CricketCreationsRepository.Repositories;
 using CricketCreations.Interfaces;
+using CricketCreations.Models;
+using CricketCreationsRepository.Models;
 
 namespace CricketCreations.Services
 {
@@ -12,7 +14,7 @@ namespace CricketCreations.Services
     {
         public int? Id { get; set; }
         public string Name { get; set; }
-        public ICollection<BlogPostService> BlogPosts { get; set; } = new List<BlogPostService>();
+        public ICollection<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
 
@@ -34,7 +36,7 @@ namespace CricketCreations.Services
         public async Task<TagService> Create(TagService tag, int userId)
         {
             TagRepository tagDTO = ConvertToTagDTO(tag);
-            ICollection<BlogPostRepository> blogPostDTOs = tag.BlogPosts.Select(b => mapper.Map<BlogPostService, BlogPostRepository>(b)).ToList();
+            ICollection<BlogPostDTO> blogPostDTOs = tag.BlogPosts.Select(b => mapper.Map<BlogPost, BlogPostDTO>(b)).ToList();
             tagDTO.BlogPosts = blogPostDTOs;
             var newTagDTO = await TagRepository.Create(tagDTO);
             return ConvertToTag(newTagDTO);
