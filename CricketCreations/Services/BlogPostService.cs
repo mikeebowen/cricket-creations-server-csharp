@@ -10,6 +10,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace CricketCreations.Services
 {
@@ -32,11 +34,40 @@ namespace CricketCreations.Services
         });
         private static IMapper mapper = config.CreateMapper();
 
-        public Task<ActionResult<ResponseBody<List<BlogPost>>>> Get(int id)
+        public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Read(string page, string count)
         {
-            throw new NotImplementedException();
+            try
+            {
+                ResponseBody<List<BlogPost>> response;
+                List<BlogPost> blogPosts;
+                bool validPage = int.TryParse(page, out int pg);
+                bool validCount = int.TryParse(count, out int cnt);
+                int blogPostCount = await _blogPostRepository.GetCount();
+                bool inRange = blogPostCount - (pg * cnt) >= ((cnt * -1) + 1);
+
+                if (blogPostCount > 0 && !inRange)
+                {
+                    return new StatusCodeResult(StatusCodes.Status406NotAcceptable);
+                }
+
+                if (validPage && validCount)
+                {
+                    List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.Read(pg, cnt);
+                    blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
+                }
+                else
+                {
+                    return new StatusCodeResult(StatusCodes.Status406NotAcceptable);
+                }
+                response = new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
-        public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Get(string page, string count, string userId)
+        public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Read(string page, string count, string userId)
         {
             try
             {
@@ -48,52 +79,26 @@ namespace CricketCreations.Services
                 int blogPostCount = await _blogPostRepository.GetCount();
                 bool inRange = blogPostCount - (pg * cnt) >= ((cnt * -1) + 1);
 
-                if (blogPostCount > 0 && !inRange)
+                if ((blogPostCount > 0 && !inRange) || !validId || !validCount)
                 {
-                    return new StatusCodeResult(416);
+                    return new StatusCodeResult(StatusCodes.Status406NotAcceptable);
                 }
-
-                if (validPage && validCount)
-                {
-                    if (validId)
-                    {
-                        List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.GetRange(pg, cnt, id);
-                        blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
-                    }
-                    else
-                    {
-                        List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.GetRange(pg, cnt, null);
-                        blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
-                    }
-                }
-                else
-                {
-                    if (validId)
-                    {
-                        List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.GetAll(id);
-                        blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
-                    }
-                    else
-                    {
-                        List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.GetAll(null);
-                        blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
-                    }
-
-                }
+                List<BlogPostRepository> blogPostDTOs = await _blogPostRepository.Read(pg, cnt, id);
+                blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
                 response = new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount);
                 return response;
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(500);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
-        public async Task<ActionResult<ResponseBody<BlogPost>>> GetById(int id)
+        public async Task<ActionResult<ResponseBody<BlogPost>>> Read(int id)
         {
             try
             {
-                BlogPostRepository blogPostDTO = await _blogPostRepository.GeyById(id);
+                BlogPostRepository blogPostDTO = await _blogPostRepository.Get(id);
                 BlogPost element = ConvertToBlogPost(blogPostDTO);
                 if (element != null)
                 {
@@ -107,16 +112,35 @@ namespace CricketCreations.Services
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(500);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
-        public Task<ActionResult<ResponseBody<BlogPost>>> Post(JsonElement json, int userId)
+        public async Task<ActionResult<ResponseBody<BlogPost>>> Create(JsonElement json, int userId)
         {
-            throw new NotImplementedException();
+            string jsonString = json.ToString();
+            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPostRepository>();
+            ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
+
+            if (errors.Count == 0)
+            {
+                BlogPostRepository blogPostDTO = JsonConvert.DeserializeObject<BlogPostRepository>(jsonString);
+                BlogPostRepository createdBlogPostDTO = await _blogPostRepository.Create(blogPostDTO, userId);
+                BlogPost blog = ConvertToBlogPost(createdBlogPostDTO);
+                return new ResponseBody<BlogPost>(blog, typeof(BlogPost).Name.ToString(), null);
+            }
+            else
+            {
+                List<ErrorObject> errs = new List<ErrorObject>();
+                errors.ToList().ForEach(e =>
+                {
+                    errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
+                });
+                return new BadRequestObjectResult(errs);
+            }
         }
 
-        public Task<ActionResult<ResponseBody<BlogPost>>> Patch(string jsonString)
+        public Task<ActionResult<ResponseBody<BlogPost>>> Update(string jsonString)
         {
             throw new NotImplementedException();
         }
@@ -133,6 +157,15 @@ namespace CricketCreations.Services
             }
             BlogPost blogPost = mapper.Map<BlogPostRepository, BlogPost>(blogPostDTO);
             return blogPost;
+        }
+        private static BlogPostRepository convertToBlogPostDTO(BlogPost blogPost)
+        {
+            if (blogPost == null)
+            {
+                return null;
+            }
+            BlogPostRepository blogPostDTO = mapper.Map<BlogPost, BlogPostRepository>(blogPost);
+            return blogPostDTO;
         }
         //public async Task<List<BlogPostService>> GetAll(int? id)
         //{

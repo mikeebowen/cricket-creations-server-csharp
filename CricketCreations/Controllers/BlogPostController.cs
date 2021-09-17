@@ -21,30 +21,36 @@ namespace CricketCreations.Controllers
         }
         // GET: api/<BlogPostController>
         [HttpGet]
+        public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count)
+        {
+            return await _blogPostService.Read(page, count);
+        }
+        [HttpGet]
         public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userId")] string userId)
         {
-            return await _blogPostService.Get(page, count, userId);
+            return await _blogPostService.Read(page, count, userId);
         }
 
         // GET api/<BlogPostController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Get(int id)
         {
-            return await _blogPostService.GetById(id);
+            return await _blogPostService.Read(id);
         }
 
         // POST api/<BlogPostController>
-        [Authorize, HttpPost("{userId}")]
+        //[Authorize, HttpPost("{userId}")]
+        [HttpPost("{userId}")]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Post([FromBody] JsonElement json, int userId)
         {
-            return await _blogPostService.Post(json, userId);
+            return await _blogPostService.Create(json, userId);
         }
 
         // PATCH api/<BlogPostController>/5
         [Authorize, HttpPatch()]
         public async Task<ActionResult<ResponseBody<BlogPost>>> Patch([FromBody] JsonElement json)
         {
-            return await _blogPostService.Patch(json.ToString());
+            return await _blogPostService.Update(json.ToString());
         }
 
         // DELETE api/<BlogPostController>/5

@@ -59,6 +59,7 @@ namespace CricketCreations
                 app.UseDeveloperExceptionPage();
             }
 
+            //app.UseHttpsRedirection();
             app.UseRouting();
             app.UseSpaStaticFiles();
             app.UseAuthentication();

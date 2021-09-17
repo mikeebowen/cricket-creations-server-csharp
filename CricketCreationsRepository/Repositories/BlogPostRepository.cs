@@ -26,51 +26,41 @@ namespace CricketCreationsRepository.Repositories
         public UserRepository User { get; set; }
         public bool Published { get; set; } = false;
         public List<TagRepository> Tags { get; set; } = new List<TagRepository>();
+
         private static MapperConfiguration config = new MapperConfiguration(c =>
         {
             c.CreateMap<BlogPost, BlogPostRepository>()
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagRepository.ConvertToTagDTO(t)))).MaxDepth(1)
             .ForMember(dest => dest.User, opt => opt.Ignore())
             .ReverseMap()
-            .ForMember(dest => dest.Tags, opt => opt.Ignore())
-            .ForMember(dest => dest.User, opt => opt.Ignore());
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagRepository.ConvertToTag(t))));
+            //.ForMember(dest => dest.Tags, opt => opt.Ignore())
+            //.ForMember(dest => dest.User, opt => opt.Ignore());
             // c.CreateMap<Tag, TagDTO>().ReverseMap();
         });
         private static IMapper mapper = config.CreateMapper();
-        public async Task<List<BlogPostRepository>> GetAll(int? id)
+        public async Task<List<BlogPostRepository>> Read()
         {
-            List<BlogPost> blogPosts;
-            if (id == null)
-            {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(x => !x.Deleted && x.Published).Include(b => b.Tags).ToListAsync();
-            }
-            else
-            {
-                User user = await DatabaseManager.Instance.User.FindAsync(id);
-                blogPosts = user.BlogPosts.Where(b => !b.Deleted && b.Published).ToList();
-            }
+            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost.Where(x => !x.Deleted && x.Published).Include(b => b.Tags).ToListAsync();
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
-        public async Task<List<BlogPostRepository>> GetRange(int page, int count, int? id)
+        public async Task<List<BlogPostRepository>> Read(int page, int count)
         {
-            List<BlogPost> blogPosts;
-            if (id == null)
-            {
-                blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.Deleted == false && b.Published == true).Skip((page - 1) * count).Take(count).ToListAsync();
-            }
-            else
-            {
-                User user = await DatabaseManager.Instance.User.FindAsync(id);
-                blogPosts = user.BlogPosts.Where(b => !b.Deleted && b.Published).OrderByDescending(s => s.LastUpdated).Skip((page - 1) * count).Take(count).ToList();
-            }
+            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.Deleted == false && b.Published == true).Skip((page - 1) * count).Take(count).ToListAsync();
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
-        public async Task<BlogPostRepository> GeyById(int id)
+        public async Task<List<BlogPostRepository>> Read(int page, int count, int id)
+        {
+            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            List<BlogPost> blogPosts = user.BlogPosts.Where(b => !b.Deleted && b.Published).OrderByDescending(s => s.LastUpdated).Skip((page - 1) * count).Take(count).ToList();
+            return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
+    }
+        public async Task<BlogPostRepository> Get(int id)
         {
             BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
             return ConvertToBlogPostDTO(blogPost);
         }
-        public static async Task<BlogPostRepository> Create(BlogPostRepository blogPostDTO, int userId)
+        public async Task<BlogPostRepository> Create(BlogPostRepository blogPostDTO, int userId)
         {
             BlogPost blogPost = ConvertToBlogPost(blogPostDTO);
 
