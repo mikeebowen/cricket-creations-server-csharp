@@ -57,9 +57,9 @@ namespace CricketCreations.Services
             }
         }
 
-        public Task<ActionResult<bool>> Delete(int id)
+        public async Task<ActionResult<bool>> Delete(int id)
         {
-            throw new NotImplementedException();
+            return await _tagRepository.Delete(id);
         }
         public async Task<ActionResult<ResponseBody<Tag>>> Read(int id)
         {
@@ -107,9 +107,29 @@ namespace CricketCreations.Services
             throw new NotImplementedException();
         }
 
-        public Task<ActionResult<ResponseBody<Tag>>> Update(string jsonString)
+        public async Task<ActionResult<ResponseBody<Tag>>> Update(string jsonString)
         {
-            throw new NotImplementedException();
+            
+
+            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<TagDTO>();
+            ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
+
+            if (errors.Count == 0)
+            {
+                TagDTO tagDTO = JsonConvert.DeserializeObject<TagDTO>(jsonString);
+                TagDTO updatedTagDTO = await _tagRepository.Update(tagDTO);
+                Tag tag = ConvertToTag(updatedTagDTO);
+                return new ResponseBody<Tag>(tag, typeof(Tag).Name.ToString(), null);
+            }
+            else
+            {
+                List<ErrorObject> errs = new List<ErrorObject>();
+                errors.ToList().ForEach(e =>
+                {
+                    errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
+                });
+                return new BadRequestObjectResult(errs);
+            }
         }
         public static TagDTO ConvertToTagDTO(Tag tag)
         {

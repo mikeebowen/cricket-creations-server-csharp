@@ -8,7 +8,6 @@ namespace CricketCreationsRepository.Interfaces
 {
     public interface IRepository<T>
     {
-        public abstract Task<T> Create(T t, int userId);
         public abstract Task<List<T>> Read();
         public abstract Task<List<T>> Read(int page, int count);
         public abstract Task<List<T>> Read(int page, int count, int id);

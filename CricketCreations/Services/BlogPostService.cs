@@ -143,10 +143,25 @@ namespace CricketCreations.Services
 
         public async Task<ActionResult<ResponseBody<BlogPost>>> Update(string jsonString)
         {
-            BlogPostDTO blogPostDTO = JsonConvert.DeserializeObject<BlogPostDTO>(jsonString);
-            BlogPostDTO updatedBlogPostDTO = await _blogPostRepository.Update(blogPostDTO);
-            BlogPost blogPost = ConvertToBlogPost(updatedBlogPostDTO);
-            return new ResponseBody<BlogPost>(blogPost, typeof(BlogPost).Name.ToString(), null);
+            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPostDTO>();
+            ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
+
+            if (errors.Count == 0)
+            {
+                BlogPostDTO blogPostDTO = JsonConvert.DeserializeObject<BlogPostDTO>(jsonString);
+                BlogPostDTO updatedBlogPostDTO = await _blogPostRepository.Update(blogPostDTO);
+                BlogPost blogPost = ConvertToBlogPost(updatedBlogPostDTO);
+                return new ResponseBody<BlogPost>(blogPost, typeof(BlogPost).Name.ToString(), null);
+            }
+            else
+            {
+                List<ErrorObject> errs = new List<ErrorObject>();
+                errors.ToList().ForEach(e =>
+                {
+                    errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
+                });
+                return new BadRequestObjectResult(errs);
+            }
         }
 
         public async Task<ActionResult<bool>> Delete(int id)

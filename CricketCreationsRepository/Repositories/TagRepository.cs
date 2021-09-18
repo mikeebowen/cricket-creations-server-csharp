@@ -3,6 +3,7 @@ using CricketCreationsDatabase.Models;
 using CricketCreationsRepository.Interfaces;
 using CricketCreationsRepository.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -80,6 +81,66 @@ namespace CricketCreationsRepository.Repositories
         private static BlogPostDTO _convertToBlogPostDTO(BlogPost b)
         {
             return blogPostMapper.Map<BlogPost, BlogPostDTO>(b);
+        }
+
+        public async Task<List<TagDTO>> Read(int page, int count, int id)
+        {
+            List<Tag> tags = await DatabaseManager.Instance.Tag.Where(t => t.Id == id && t.Deleted == false).Skip((page - 1) * count).Take(count).ToListAsync();
+            return tags.Select(b => _convertToTagDTO(b)).ToList();
+        }
+
+        public async Task<TagDTO> Update(TagDTO tagDTO)
+        {
+            Tag tag = await DatabaseManager.Instance.Tag.Where(tag => tag.Id == tagDTO.Id).Include(t => t.BlogPosts).FirstAsync();
+            List<BlogPost> newBlogPosts = null;
+            if (tagDTO.BlogPosts != null)
+            {
+                newBlogPosts = tagDTO.BlogPosts.Select(b =>
+                {
+                    BlogPost blogPost;
+                    if (b.Id != null)
+                    {
+                        blogPost = DatabaseManager.Instance.BlogPost.Where(bb => bb.Id == b.Id).First();
+                        return blogPost;
+                    }
+                    else
+                    {
+                        blogPost = _convertToBlogPost(b);
+                        return blogPost;
+                    }
+                }).ToList();
+            }
+
+            if (tag != null)
+            {
+                Tag updatedTag = _convertToTag(tagDTO);
+                DatabaseManager.Instance.Entry(tag).CurrentValues.SetValues(updatedTag);
+                if (newBlogPosts != null)
+                {
+                    tag.BlogPosts = newBlogPosts;
+                };
+                PropertyEntry property = DatabaseManager.Instance.Entry(tag).Property("Created");
+
+                if (property != null)
+                {
+                    DatabaseManager.Instance.Entry(tag).Property("Created").IsModified = false;
+                }
+                await DatabaseManager.Instance.SaveChangesAsync();
+                return _convertToTagDTO(tag);
+            }
+            return null;
+        }
+
+        public async Task<bool> Delete(int id)
+        {
+            Tag tag = await DatabaseManager.Instance.Tag.FindAsync(id);
+            if (tag != null)
+            {
+                tag.Deleted = true;
+                await DatabaseManager.Instance.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

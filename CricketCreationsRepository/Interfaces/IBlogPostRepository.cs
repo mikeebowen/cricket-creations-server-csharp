@@ -10,5 +10,6 @@ namespace CricketCreationsRepository.Interfaces
 {
     public interface IBlogPostRepository : IRepository<BlogPostDTO>
     {
+        public abstract Task<BlogPostDTO> Create(BlogPostDTO blogPostDTO, int userId);
     }
 }

@@ -39,17 +39,17 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<TagController>
-        [Authorize, HttpPost("{userId}")]
-        public async Task<ActionResult<ResponseBody<Tag>>> Post([FromBody] JsonElement json, int userId)
+        [Authorize, HttpPost]
+        public async Task<ActionResult<ResponseBody<Tag>>> Post([FromBody] TagData data)
         {
-            
-            return await _tagService.Create(JsonConvert.SerializeObject(new { Name = tagData.Name}), tagData.BlogPostId, tagData.UserId);
+            return await _tagService.Create(JsonConvert.SerializeObject(new { Name = data.Name }), data.BlogPostId, data.UserId);
         }
 
         // PUT api/<TagController>/5
-        [Authorize, HttpPatch("{id}")]
-        public void Patch(int id, [FromBody] string value)
+        [Authorize, HttpPatch]
+        public async Task<ActionResult<ResponseBody<Tag>>> Patch([FromBody] JsonDocument json)
         {
+            return await _tagService.Update(json.RootElement.ToString());
         }
 
         // DELETE api/<TagController>/5
