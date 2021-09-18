@@ -24,9 +24,9 @@ namespace CricketCreations.Controllers
         }
         // GET: api/<TagController>
         [HttpGet]
-        public async Task<ActionResult<ResponseBody<List<Tag>>>> GetAll()
+        public async Task<ActionResult<ResponseBody<List<Tag>>>> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count)
         {
-            return await _tagService.Read(null, null);
+            return await _tagService.Read(page, count);
         }
 
         // GET api/<TagController>/5

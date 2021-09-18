@@ -29,7 +29,8 @@ namespace CricketCreationsRepository.Repositories
         private static IMapper blogPostMapper = config2.CreateMapper();
         public async Task<List<TagDTO>> Read()
         {
-            List<Tag> tags = await DatabaseManager.Instance.Tag.Where(t => t.Deleted == false).Include(x => x.BlogPosts).ToListAsync();
+            List<Tag> tags = await DatabaseManager.Instance.Tag.Where(t => t.Deleted == false).ToListAsync();
+
             List<TagDTO> tagDTOs = tags.Select(t => _convertToTagDTO(t)).ToList();
             return tagDTOs;
         }
