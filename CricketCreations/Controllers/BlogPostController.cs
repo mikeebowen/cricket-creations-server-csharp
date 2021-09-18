@@ -14,8 +14,8 @@ namespace CricketCreations.Controllers
     [Route("api/[controller]"), ApiController]
     public class BlogPostController : ControllerBase
     {
-        IApiService<BlogPost> _blogPostService;
-        public BlogPostController(IApiService<BlogPost> blogPostService)
+        IBlogPostService _blogPostService;
+        public BlogPostController(IBlogPostService blogPostService)
         {
             _blogPostService = blogPostService;
         }

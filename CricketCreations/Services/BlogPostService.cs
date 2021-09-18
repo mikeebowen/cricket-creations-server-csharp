@@ -16,7 +16,7 @@ using CricketCreationsRepository.Models;
 
 namespace CricketCreations.Services
 {
-    public class BlogPostService : IApiService<BlogPost>
+    public class BlogPostService : IBlogPostService
     {
         private IBlogPostRepository _blogPostRepository;
         public BlogPostService(IBlogPostRepository blogPostRepository)

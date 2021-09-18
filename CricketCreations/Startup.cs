@@ -50,8 +50,10 @@ namespace CricketCreations
             services.AddSingleton(typeof(IApiService<>), typeof(ControllerService<>));
             services.AddSingleton<IBlogPostRepository, BlogPostRepository>();
             services.AddSingleton<ITagRepository, TagRepository>();
-            services.AddSingleton(typeof(IApiService<BlogPost>), typeof(BlogPostService));
-            services.AddSingleton(typeof(IApiService<Tag>), typeof(TagService));
+            //services.AddSingleton(typeof(IApiService<BlogPost>), typeof(BlogPostService));
+            //services.AddSingleton(typeof(IApiService<Tag>), typeof(TagService));
+            services.AddSingleton<IBlogPostService, BlogPostService>();
+            services.AddSingleton<ITagService, TagService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

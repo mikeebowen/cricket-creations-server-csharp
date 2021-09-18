@@ -11,10 +11,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using CricketCreationsRepository.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace CricketCreations.Services
 {
-    public class TagService : IApiService<Tag>
+    public class TagService : ITagService
     {
         ITagRepository _tagRepository;
 
@@ -33,9 +34,27 @@ namespace CricketCreations.Services
         });
         private static IMapper mapper = config.CreateMapper();
 
-        public Task<ActionResult<ResponseBody<Tag>>> Create(JsonElement json, int userId)
+        public async Task<ActionResult<ResponseBody<Tag>>> Create(string json, int blogPostId, int userId)
         {
-            throw new NotImplementedException();
+            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<TagDTO>();
+            ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(json);
+
+            if (errors.Count == 0)
+            {
+                TagDTO tagDTO = JsonConvert.DeserializeObject<TagDTO>(json);
+                TagDTO createdTagDTO = await _tagRepository.Create(tagDTO, blogPostId, userId);
+                Tag tag = ConvertToTag(createdTagDTO);
+                return new ResponseBody<Tag>(tag, typeof(Tag).Name.ToString(), null);
+            }
+            else
+            {
+                List<ErrorObject> errs = new List<ErrorObject>();
+                errors.ToList().ForEach(e =>
+                {
+                    errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
+                });
+                return new BadRequestObjectResult(errs);
+            }
         }
 
         public Task<ActionResult<bool>> Delete(int id)

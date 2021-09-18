@@ -11,7 +11,6 @@ namespace CricketCreations.Interfaces
 {
     public interface IApiService<T>
     {
-        public abstract Task<ActionResult<ResponseBody<T>>> Create(JsonElement json, int userId);
         public abstract Task<ActionResult<ResponseBody<T>>> Read(int id);
         public abstract Task<ActionResult<ResponseBody<List<T>>>> Read(string page, string count);
         public abstract Task<ActionResult<ResponseBody<List<T>>>> Read(string page, string count, string userId);

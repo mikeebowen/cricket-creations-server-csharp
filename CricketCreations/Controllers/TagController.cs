@@ -3,6 +3,8 @@ using CricketCreations.Models;
 using CricketCreations.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +18,9 @@ namespace CricketCreations.Controllers
     [Route("api/[controller]"), ApiController]
     public class TagController : ControllerBase
     {
-        IApiService<Tag> _tagService;
+        ITagService _tagService;
 
-        public TagController(IApiService<Tag> tagService)
+        public TagController(ITagService tagService)
         {
             _tagService = tagService;
         }
@@ -40,7 +42,8 @@ namespace CricketCreations.Controllers
         [Authorize, HttpPost("{userId}")]
         public async Task<ActionResult<ResponseBody<Tag>>> Post([FromBody] JsonElement json, int userId)
         {
-            return await _tagService.Create(json, userId);
+            
+            return await _tagService.Create(JsonConvert.SerializeObject(new { Name = tagData.Name}), tagData.BlogPostId, tagData.UserId);
         }
 
         // PUT api/<TagController>/5
@@ -54,10 +57,10 @@ namespace CricketCreations.Controllers
         public void Delete(int id)
         {
         }
-
-        private class TagPostBody
+        public class TagData
         {
             public string Name { get; set; }
+            public int UserId { get; set; }
             public int BlogPostId { get; set; }
         }
     }
