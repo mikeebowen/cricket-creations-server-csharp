@@ -42,9 +42,10 @@ namespace CricketCreations.Services
         {
             throw new NotImplementedException();
         }
-        public Task<ActionResult<ResponseBody<BlogPost>>> Read(int id)
+        public async Task<ActionResult<ResponseBody<Tag>>> Read(int id)
         {
-            throw new NotImplementedException();
+            TagDTO tagDTO = await _tagRepository.Read(id);
+            return new ResponseBody<Tag>(ConvertToTag(tagDTO), typeof(Tag).Name.ToString(), null);
         }
 
         public async Task<ActionResult<ResponseBody<List<Tag>>>> Read(string page, string count)

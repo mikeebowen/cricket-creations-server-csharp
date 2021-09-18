@@ -20,15 +20,16 @@ namespace CricketCreationsRepository.Repositories
         private static MapperConfiguration config = new MapperConfiguration(c =>
         {
             c.CreateMap<BlogPost, BlogPostDTO>()
-            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagRepository.ConvertToTagDTO(t)))).MaxDepth(1)
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => _convertToTagDTO(t))))
             .ForMember(dest => dest.User, opt => opt.Ignore())
             .ReverseMap()
-            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagRepository.ConvertToTag(t))));
-            //.ForMember(dest => dest.Tags, opt => opt.Ignore())
-            //.ForMember(dest => dest.User, opt => opt.Ignore());
-            // c.CreateMap<Tag, TagDTO>().ReverseMap();
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => _convertToTag(t))));
         });
+        private static MapperConfiguration tagConfig = new MapperConfiguration(context =>
+            context.CreateMap<Tag, TagDTO>().ForMember(t => t.BlogPosts, options => options.Ignore()).ReverseMap()
+        );
         private static IMapper mapper = config.CreateMapper();
+        private static IMapper tagMapper = tagConfig.CreateMapper();
         public async Task<List<BlogPostDTO>> Read()
         {
             List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost.Where(x => !x.Deleted && x.Published).Include(b => b.Tags).ToListAsync();
@@ -36,15 +37,27 @@ namespace CricketCreationsRepository.Repositories
         }
         public async Task<List<BlogPostDTO>> Read(int page, int count)
         {
-            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost.Where(b => b.Deleted == false && b.Published == true).Skip((page - 1) * count).Take(count).ToListAsync();
+            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost
+                                        .Where(b => b.Deleted == false && b.Published == true)
+                                        .OrderByDescending(s => s.LastUpdated)
+                                        .Skip((page - 1) * count).Take(count)
+                                        .Include(b => b.Tags)
+                                        .ToListAsync();
+
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
         }
         public async Task<List<BlogPostDTO>> Read(int page, int count, int id)
         {
             User user = await DatabaseManager.Instance.User.FindAsync(id);
-            List<BlogPost> blogPosts = user.BlogPosts.Where(b => !b.Deleted && b.Published).OrderByDescending(s => s.LastUpdated).Skip((page - 1) * count).Take(count).ToList();
+            List<BlogPost> blogPosts = user.BlogPosts
+                                        .Where(b => !b.Deleted && b.Published)
+                                        .OrderByDescending(s => s.LastUpdated)
+                                        .Skip((page - 1) * count)
+                                        .Take(count)
+                                        .ToList();
+
             return blogPosts.Select(b => ConvertToBlogPostDTO(b)).ToList();
-    }
+        }
         public async Task<BlogPostDTO> Read(int id)
         {
             BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
@@ -52,7 +65,7 @@ namespace CricketCreationsRepository.Repositories
         }
         public async Task<BlogPostDTO> Create(BlogPostDTO blogPostDTO, int userId)
         {
-            BlogPost blogPost = ConvertToBlogPost(blogPostDTO);
+            BlogPost blogPost = _convertToBlogPost(blogPostDTO);
 
             User user = await DatabaseManager.Instance.User.FirstAsync(u => u.Id == userId);
             user.BlogPosts.Add(blogPost);
@@ -75,7 +88,7 @@ namespace CricketCreationsRepository.Repositories
                 }
                 else
                 {
-                    tag = TagRepository.ConvertToTag(t);
+                    tag = _convertToTag(t);
                     return tag;
                 }
             }).ToList();
@@ -117,10 +130,18 @@ namespace CricketCreationsRepository.Repositories
 
             return blogPostDTO;
         }
-        public static BlogPost ConvertToBlogPost(BlogPostDTO blogPostDTO)
+        private BlogPost _convertToBlogPost(BlogPostDTO blogPostDTO)
         {
             BlogPost blogPost = mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
             return blogPost;
+        }
+        private static Tag _convertToTag(TagDTO t)
+        {
+            return tagMapper.Map<TagDTO, Tag>(t);
+        }
+        private static TagDTO _convertToTagDTO(Tag t)
+        {
+            return tagMapper.Map<Tag, TagDTO>(t);
         }
     }
 }
