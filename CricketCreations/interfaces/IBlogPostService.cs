@@ -10,6 +10,6 @@ namespace CricketCreations.Interfaces
 {
     public interface IBlogPostService : IApiService<BlogPost>
     {
-        public abstract Task<ActionResult<ResponseBody<BlogPost>>> Create(JsonElement json, int userId);
+        public abstract Task<IActionResult> Create(JsonElement json, int userId);
     }
 }

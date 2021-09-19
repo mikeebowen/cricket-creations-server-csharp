@@ -34,7 +34,7 @@ namespace CricketCreations.Services
         });
         private static IMapper mapper = config.CreateMapper();
 
-        public async Task<ActionResult<ResponseBody<Tag>>> Create(string json, int blogPostId, int userId)
+        public async Task<IActionResult> Create(string json, int blogPostId, int userId)
         {
             NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<TagDTO>();
             ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(json);
@@ -44,7 +44,8 @@ namespace CricketCreations.Services
                 TagDTO tagDTO = JsonConvert.DeserializeObject<TagDTO>(json);
                 TagDTO createdTagDTO = await _tagRepository.Create(tagDTO, blogPostId, userId);
                 Tag tag = ConvertToTag(createdTagDTO);
-                return new ResponseBody<Tag>(tag, typeof(Tag).Name.ToString(), null);
+                //return new ResponseBody<Tag>(tag, typeof(Tag).Name.ToString(), null);
+                return new CreatedResult($"api/tag/{tag.Id}", tag);
             }
             else
             {
@@ -57,21 +58,41 @@ namespace CricketCreations.Services
             }
         }
 
-        public async Task<ActionResult<bool>> Delete(int id)
-        {
-            return await _tagRepository.Delete(id);
-        }
-        public async Task<ActionResult<ResponseBody<Tag>>> Read(int id)
-        {
-            TagDTO tagDTO = await _tagRepository.Read(id);
-            return new ResponseBody<Tag>(ConvertToTag(tagDTO), typeof(Tag).Name.ToString(), null);
-        }
-
-        public async Task<ActionResult<ResponseBody<List<Tag>>>> Read(string page, string count)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                ResponseBody<List<Tag>> response;
+                if (await _tagRepository.Delete(id))
+                {
+                    return new StatusCodeResult(StatusCodes.Status204NoContent);
+                }
+                else
+                {
+                    return new NotFoundResult();
+                }
+            }
+            catch(Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+        public async Task<IActionResult> Read(int id)
+        {
+            try
+            {
+                TagDTO tagDTO = await _tagRepository.Read(id);
+                return new OkObjectResult(new ResponseBody<Tag>(ConvertToTag(tagDTO), typeof(Tag).Name.ToString(), null));
+            }
+            catch(Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        public async Task<IActionResult> Read(string page, string count)
+        {
+            try
+            {
                 List<Tag> tags;
                 bool validPage = int.TryParse(page, out int pg);
                 bool validCount = int.TryParse(count, out int cnt);
@@ -93,8 +114,7 @@ namespace CricketCreations.Services
                     List<TagDTO> tagDTOs = await _tagRepository.Read();
                     tags = tagDTOs.Select(t => ConvertToTag(t)).ToList();
                 }
-                response = new ResponseBody<List<Tag>>(tags, typeof(Tag).Name.ToString(), tagCount);
-                return response;
+                return new OkObjectResult(new OkObjectResult(new ResponseBody<List<Tag>>(tags, typeof(Tag).Name.ToString(), tagCount)));
             }
             catch (Exception ex)
             {
@@ -102,33 +122,38 @@ namespace CricketCreations.Services
             }
         }
 
-        public Task<ActionResult<ResponseBody<List<Tag>>>> Read(string page, string count, string userId)
+        public async Task<IActionResult> Read(string page, string count, string userId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ActionResult<ResponseBody<Tag>>> Update(string jsonString)
+        public async Task<IActionResult> Update(string jsonString)
         {
-            
-
-            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<TagDTO>();
-            ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
-
-            if (errors.Count == 0)
+            try
             {
-                TagDTO tagDTO = JsonConvert.DeserializeObject<TagDTO>(jsonString);
-                TagDTO updatedTagDTO = await _tagRepository.Update(tagDTO);
-                Tag tag = ConvertToTag(updatedTagDTO);
-                return new ResponseBody<Tag>(tag, typeof(Tag).Name.ToString(), null);
-            }
-            else
-            {
-                List<ErrorObject> errs = new List<ErrorObject>();
-                errors.ToList().ForEach(e =>
+                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<TagDTO>();
+                ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
+
+                if (errors.Count == 0)
                 {
-                    errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
-                });
-                return new BadRequestObjectResult(errs);
+                    TagDTO tagDTO = JsonConvert.DeserializeObject<TagDTO>(jsonString);
+                    TagDTO updatedTagDTO = await _tagRepository.Update(tagDTO);
+                    Tag tag = ConvertToTag(updatedTagDTO);
+                    return new OkObjectResult(new ResponseBody<Tag>(tag, typeof(Tag).Name.ToString(), null));
+                }
+                else
+                {
+                    List<ErrorObject> errs = new List<ErrorObject>();
+                    errors.ToList().ForEach(e =>
+                    {
+                        errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
+                    });
+                    return new BadRequestObjectResult(errs);
+                }
+            }
+            catch(Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
         public static TagDTO ConvertToTagDTO(Tag tag)
@@ -147,61 +172,5 @@ namespace CricketCreations.Services
             }
             return mapper.Map<TagDTO, Tag>(tagDTO);
         }
-        //public async Task<List<TagService>> GetAll(int? id)
-        //{
-        //    List<TagRepository> tagDTOs = await TagRepository.GetAll();
-        //    List<TagService> tags = tagDTOs.Select(td => ConvertToTag(td)).ToList();
-        //    return tags;
-        //}
-        //public async Task<TagService> Create(TagService tag, int userId)
-        //{
-        //    TagRepository tagDTO = ConvertToTagDTO(tag);
-        //    ICollection<BlogPostDTO> blogPostDTOs = tag.BlogPosts.Select(b => mapper.Map<BlogPost, BlogPostDTO>(b)).ToList();
-        //    tagDTO.BlogPosts = blogPostDTOs;
-        //    var newTagDTO = await TagRepository.Create(tagDTO);
-        //    return ConvertToTag(newTagDTO);
-        //}
-        //public static TagRepository ConvertToTagDTO(TagService tag)
-        //{
-        //    if (tag == null)
-        //    {
-        //        return null;
-        //    }
-        //    return mapper.Map<TagService, TagRepository>(tag);
-        //}
-        //public static TagService ConvertToTag(TagRepository tagDTO)
-        //{
-        //    if (tagDTO == null)
-        //    {
-        //        return null;
-        //    }
-        //    return mapper.Map<TagRepository, TagService>(tagDTO);
-        //}
-
-        //public Task<TagService> GetById(int id, bool? include)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public async Task<int> GetCount()
-        //{
-        //    return await TagRepository.GetCount();
-        //}
-
-        //public async Task<List<TagService>> GetRange(int page, int count, int? id)
-        //{
-        //    List<TagRepository> tagDTOs = await TagRepository.GetRange(page, count);
-        //    return tagDTOs.Select(t => ConvertToTag(t)).ToList();
-        //}
-
-        //public Task<TagService> Update(TagService t)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<bool> Delete(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

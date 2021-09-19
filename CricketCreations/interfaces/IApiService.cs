@@ -11,10 +11,10 @@ namespace CricketCreations.Interfaces
 {
     public interface IApiService<T>
     {
-        public abstract Task<ActionResult<ResponseBody<T>>> Read(int id);
-        public abstract Task<ActionResult<ResponseBody<List<T>>>> Read(string page, string count);
-        public abstract Task<ActionResult<ResponseBody<List<T>>>> Read(string page, string count, string userId);
-        public abstract Task<ActionResult<ResponseBody<T>>> Update(string jsonString);
-        public abstract Task<ActionResult<bool>> Delete(int id);
+        public abstract Task<IActionResult> Read(int id);
+        public abstract Task<IActionResult> Read(string page, string count);
+        public abstract Task<IActionResult> Read(string page, string count, string userId);
+        public abstract Task<IActionResult> Update(string jsonString);
+        public abstract Task<IActionResult> Delete(int id);
     }
 }

@@ -26,36 +26,37 @@ namespace CricketCreations.Controllers
         }
         // GET: api/<TagController>
         [HttpGet]
-        public async Task<ActionResult<ResponseBody<List<Tag>>>> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count)
+        public async Task<IActionResult> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count)
         {
             return await _tagService.Read(page, count);
         }
 
         // GET api/<TagController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResponseBody<Tag>>> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
             return await _tagService.Read(id);
         }
 
         // POST api/<TagController>
-        [Authorize, HttpPost]
-        public async Task<ActionResult<ResponseBody<Tag>>> Post([FromBody] TagData data)
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] TagData data)
         {
             return await _tagService.Create(JsonConvert.SerializeObject(new { Name = data.Name }), data.BlogPostId, data.UserId);
         }
 
         // PUT api/<TagController>/5
         [Authorize, HttpPatch]
-        public async Task<ActionResult<ResponseBody<Tag>>> Patch([FromBody] JsonDocument json)
+        public async Task<IActionResult> Patch([FromBody] JsonDocument json)
         {
             return await _tagService.Update(json.RootElement.ToString());
         }
 
         // DELETE api/<TagController>/5
         [Authorize, HttpDelete("{id}")]
-        public void Delete(int id)
+        public Task<IActionResult> Delete(int id)
         {
+            return _tagService.Delete(id);
         }
         public class TagData
         {

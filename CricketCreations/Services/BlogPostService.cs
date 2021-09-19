@@ -35,7 +35,7 @@ namespace CricketCreations.Services
         });
         private static IMapper mapper = config.CreateMapper();
 
-        public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Read(string page, string count)
+        public async Task<IActionResult> Read(string page, string count)
         {
             try
             {
@@ -60,15 +60,15 @@ namespace CricketCreations.Services
                 {
                     return new StatusCodeResult(StatusCodes.Status406NotAcceptable);
                 }
-                response = new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount);
-                return response;
+                //response = new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount);
+                return new OkObjectResult(new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount));
             }
             catch (Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
-        public async Task<ActionResult<ResponseBody<List<BlogPost>>>> Read(string page, string count, string userId)
+        public async Task<IActionResult> Read(string page, string count, string userId)
         {
             try
             {
@@ -86,8 +86,7 @@ namespace CricketCreations.Services
                 }
                 List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.Read(pg, cnt, id);
                 blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
-                response = new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount);
-                return response;
+                return new OkObjectResult(new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount));
             }
             catch (Exception ex)
             {
@@ -95,7 +94,7 @@ namespace CricketCreations.Services
             }
         }
 
-        public async Task<ActionResult<ResponseBody<BlogPost>>> Read(int id)
+        public async Task<IActionResult> Read(int id)
         {
             try
             {
@@ -103,8 +102,7 @@ namespace CricketCreations.Services
                 BlogPost element = ConvertToBlogPost(blogPostDTO);
                 if (element != null)
                 {
-                    ResponseBody<BlogPost> response = new ResponseBody<BlogPost>(element, typeof(BlogPost).Name.ToString(), null);
-                    return response;
+                    return new OkObjectResult(new ResponseBody<BlogPost>(element, typeof(BlogPost).Name.ToString(), null));
                 }
                 else
                 {
@@ -117,56 +115,84 @@ namespace CricketCreations.Services
             }
         }
 
-        public async Task<ActionResult<ResponseBody<BlogPost>>> Create(JsonElement json, int userId)
+        public async Task<IActionResult> Create(JsonElement json, int userId)
         {
-            string jsonString = json.ToString();
-            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPostDTO>();
-            ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
+            try
+            {
+                string jsonString = json.ToString();
+                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPostDTO>();
+                ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
 
-            if (errors.Count == 0)
-            {
-                BlogPostDTO blogPostDTO = JsonConvert.DeserializeObject<BlogPostDTO>(jsonString);
-                BlogPostDTO createdBlogPostDTO = await _blogPostRepository.Create(blogPostDTO, userId);
-                BlogPost blog = ConvertToBlogPost(createdBlogPostDTO);
-                return new ResponseBody<BlogPost>(blog, typeof(BlogPost).Name.ToString(), null);
-            }
-            else
-            {
-                List<ErrorObject> errs = new List<ErrorObject>();
-                errors.ToList().ForEach(e =>
+                if (errors.Count == 0)
                 {
-                    errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
-                });
-                return new BadRequestObjectResult(errs);
+                    BlogPostDTO blogPostDTO = JsonConvert.DeserializeObject<BlogPostDTO>(jsonString);
+                    BlogPostDTO createdBlogPostDTO = await _blogPostRepository.Create(blogPostDTO, userId);
+                    BlogPost blog = ConvertToBlogPost(createdBlogPostDTO);
+                    return new CreatedResult($"api/blogpost/{blog.Id}", blog);
+                }
+                else
+                {
+                    List<ErrorObject> errs = new List<ErrorObject>();
+                    errors.ToList().ForEach(e =>
+                    {
+                        errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
+                    });
+                    return new BadRequestObjectResult(errs);
+                }
+            }
+            catch(Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
-        public async Task<ActionResult<ResponseBody<BlogPost>>> Update(string jsonString)
+        public async Task<IActionResult> Update(string jsonString)
         {
-            NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPostDTO>();
-            ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
+            try
+            {
+                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPostDTO>();
+                ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
 
-            if (errors.Count == 0)
-            {
-                BlogPostDTO blogPostDTO = JsonConvert.DeserializeObject<BlogPostDTO>(jsonString);
-                BlogPostDTO updatedBlogPostDTO = await _blogPostRepository.Update(blogPostDTO);
-                BlogPost blogPost = ConvertToBlogPost(updatedBlogPostDTO);
-                return new ResponseBody<BlogPost>(blogPost, typeof(BlogPost).Name.ToString(), null);
-            }
-            else
-            {
-                List<ErrorObject> errs = new List<ErrorObject>();
-                errors.ToList().ForEach(e =>
+                if (errors.Count == 0)
                 {
-                    errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
-                });
-                return new BadRequestObjectResult(errs);
+                    BlogPostDTO blogPostDTO = JsonConvert.DeserializeObject<BlogPostDTO>(jsonString);
+                    BlogPostDTO updatedBlogPostDTO = await _blogPostRepository.Update(blogPostDTO);
+                    BlogPost blogPost = ConvertToBlogPost(updatedBlogPostDTO);
+                    return new OkObjectResult(new ResponseBody<BlogPost>(blogPost, typeof(BlogPost).Name.ToString(), null));
+                }
+                else
+                {
+                    List<ErrorObject> errs = new List<ErrorObject>();
+                    errors.ToList().ForEach(e =>
+                    {
+                        errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
+                    });
+                    return new BadRequestObjectResult(errs);
+                }
+            }
+            catch(Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
-        public async Task<ActionResult<bool>> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return new ActionResult<bool>(await _blogPostRepository.Delete(id));
+            try
+            {
+                if (await _blogPostRepository.Delete(id))
+                {
+                    return new StatusCodeResult(StatusCodes.Status204NoContent);
+                }
+                else
+                {
+                    return new NotFoundResult();
+                }
+            }
+            catch(Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
         public static BlogPost ConvertToBlogPost(BlogPostDTO blogPostDTO)
         {
