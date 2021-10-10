@@ -37,7 +37,13 @@ namespace CricketCreationsRepository.Repositories
         }
         public async Task<TagDTO> Read(int tagId)
         {
-            Tag tag = await DatabaseManager.Instance.Tag.Where(tag => tag.Id == tagId).Include(t => t.BlogPosts).FirstAsync();
+            Tag tag = await DatabaseManager.Instance.Tag.Where(tag => tag.Id == tagId).Include(t => t.BlogPosts).AsNoTracking().FirstAsync();
+            tag.BlogPosts = tag.BlogPosts.Select(b => new BlogPost()
+            {
+                Id = b.Id,
+                LastUpdated = b.LastUpdated,
+                Title = b.Title
+            }).ToList() ;
             return _convertToTagDTO(tag);
         }
         public async Task<List<TagDTO>> Read(int page, int count)

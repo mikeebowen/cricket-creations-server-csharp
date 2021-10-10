@@ -19,21 +19,12 @@ namespace CricketCreations.Services
     public class BlogPostService : IBlogPostService
     {
         private IBlogPostRepository _blogPostRepository;
-        public BlogPostService(IBlogPostRepository blogPostRepository)
+        private IMapper _mapper;
+        public BlogPostService(IBlogPostRepository blogPostRepository, IMapper mapper)
         {
             _blogPostRepository = blogPostRepository;
+            _mapper = mapper;
         }
-        private static MapperConfiguration config = new MapperConfiguration(c =>
-        {
-            c.CreateMap<BlogPost, BlogPostDTO>()
-            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagService.ConvertToTagDTO(t))));
-
-            c.CreateMap<BlogPostDTO, BlogPost>()
-            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => TagService.ConvertToTag(t))));
-
-            // c.CreateMap<Tag, TagDTO>().ReverseMap();
-        });
-        private static IMapper mapper = config.CreateMapper();
 
         public async Task<IActionResult> Read(string page, string count)
         {
@@ -194,22 +185,22 @@ namespace CricketCreations.Services
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
-        public static BlogPost ConvertToBlogPost(BlogPostDTO blogPostDTO)
+        public BlogPost ConvertToBlogPost(BlogPostDTO blogPostDTO)
         {
             if (blogPostDTO == null)
             {
                 return null;
             }
-            BlogPost blogPost = mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
+            BlogPost blogPost = _mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
             return blogPost;
         }
-        public static BlogPostDTO ConvertToBlogPostDTO(BlogPost blogPost)
+        public BlogPostDTO ConvertToBlogPostDTO(BlogPost blogPost)
         {
             if (blogPost == null)
             {
                 return null;
             }
-            BlogPostDTO blogPostDTO = mapper.Map<BlogPost, BlogPostDTO>(blogPost);
+            BlogPostDTO blogPostDTO = _mapper.Map<BlogPost, BlogPostDTO>(blogPost);
             return blogPostDTO;
         }
     }

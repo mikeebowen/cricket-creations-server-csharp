@@ -23,6 +23,8 @@ using CricketCreationsRepository.Interfaces;
 using CricketCreationsRepository.Repositories;
 using CricketCreations.Models;
 using CricketCreationsRepository.Models;
+using AutoMapper;
+using CricketCreations.Profiles;
 
 namespace CricketCreations
 {
@@ -46,6 +48,7 @@ namespace CricketCreations
             {
                 configuration.RootPath = "ClientApp";
             });
+            services.AddAutoMapper(typeof(Startup).Assembly);
             //services.AddSingleton(typeof(IControllerService<>), typeof(ControllerService<>));
             services.AddSingleton(typeof(IApiService<>), typeof(ControllerService<>));
             services.AddSingleton<IBlogPostRepository, BlogPostRepository>();

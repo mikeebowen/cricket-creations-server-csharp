@@ -17,22 +17,14 @@ namespace CricketCreations.Services
 {
     public class TagService : ITagService
     {
-        ITagRepository _tagRepository;
+        private ITagRepository _tagRepository;
+        private readonly IMapper _mapper;
 
-        public TagService(ITagRepository tagRepository)
+        public TagService(ITagRepository tagRepository, IMapper mapper)
         {
             _tagRepository = tagRepository;
+            _mapper = mapper;
         }
-        private static MapperConfiguration config = new MapperConfiguration(config =>
-        {
-            //config.CreateMap<BlogPost, BlogPostRepository>().ReverseMap();
-            config
-            .CreateMap<TagDTO, Tag>()
-            .ForMember(t => t.BlogPosts, option => option.MapFrom(t => t.BlogPosts.Select(b => BlogPostService.ConvertToBlogPost(b))))
-            .ReverseMap()
-            .ForMember(t => t.BlogPosts, option => option.MapFrom(t => t.BlogPosts.Select(b => BlogPostService.ConvertToBlogPostDTO(b))));
-        });
-        private static IMapper mapper = config.CreateMapper();
 
         public async Task<IActionResult> Create(string json, int blogPostId, int userId)
         {
@@ -156,21 +148,21 @@ namespace CricketCreations.Services
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
-        public static TagDTO ConvertToTagDTO(Tag tag)
+        public TagDTO ConvertToTagDTO(Tag tag)
         {
             if (tag == null)
             {
                 return null;
             }
-            return mapper.Map<Tag, TagDTO>(tag);
+            return _mapper.Map<Tag, TagDTO>(tag);
         }
-        public static Tag ConvertToTag(TagDTO tagDTO)
+        public Tag ConvertToTag(TagDTO tagDTO)
         {
             if (tagDTO == null)
             {
                 return null;
             }
-            return mapper.Map<TagDTO, Tag>(tagDTO);
+            return _mapper.Map<TagDTO, Tag>(tagDTO);
         }
     }
 }
