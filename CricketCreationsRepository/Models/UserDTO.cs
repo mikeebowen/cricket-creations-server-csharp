@@ -2,10 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+using CricketCreationsRepository.Repositories;
 
 namespace CricketCreationsRepository.Models
 {
@@ -37,7 +35,7 @@ namespace CricketCreationsRepository.Models
                 {
                     rng.GetBytes(Salt);
                 }
-                _password = _hashString(value, Salt);
+                _password = UserRepository.HashPassword(value, Salt);
             }
         }
         [Required]
@@ -50,7 +48,7 @@ namespace CricketCreationsRepository.Models
             }
             set
             {
-                _refreshToken = _hashString(value ?? "", Salt);
+                _refreshToken = UserRepository.HashPassword(value ?? "", Salt);
             }
         }
         public DateTime RefreshTokenExpiration { get; set; }
@@ -67,15 +65,6 @@ namespace CricketCreationsRepository.Models
         {
             Administrator,
             User
-        }
-        private static string _hashString(string pw, byte[] salt)
-        {
-            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            password: pw,
-            salt: salt,
-            prf: KeyDerivationPrf.HMACSHA1,
-            iterationCount: 10000,
-            numBytesRequested: 256 / 8));
         }
     }
 }

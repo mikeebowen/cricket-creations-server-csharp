@@ -21,6 +21,7 @@ namespace CricketCreations.Services
         Administrator,
         User
     }
+
     public class UserService : IUserService
     {
         private IUserRepository _userRepository;
@@ -39,6 +40,12 @@ namespace CricketCreations.Services
         public async Task<User> GetUser(int id)
         {
             UserDTO userDTO = await _userRepository.GetUser(id);
+            return _mapper.Map<User>(userDTO);
+        }
+
+        public async Task<User> CheckPassword(string userName, string password)
+        {
+            UserDTO userDTO = await _userRepository.CheckPassword(userName, password);
             return _mapper.Map<User>(userDTO);
         }
     }

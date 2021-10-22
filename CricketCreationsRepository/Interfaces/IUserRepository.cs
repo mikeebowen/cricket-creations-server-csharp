@@ -12,5 +12,6 @@ namespace CricketCreationsRepository.Interfaces
     public interface IUserRepository
     {
         public abstract Task<UserDTO> GetUser(int id);
+        public abstract Task<UserDTO> CheckPassword(string userName, string password);
     }
 }

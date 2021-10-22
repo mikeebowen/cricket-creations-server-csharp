@@ -1,4 +1,5 @@
 ﻿using CricketCreations.Interfaces;
+using CricketCreations.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,6 +21,7 @@ namespace CricketCreations.Controllers
         {
             _userService = userService;
         }
+
         // GET: api/<UserController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -36,6 +38,25 @@ namespace CricketCreations.Controllers
                 return new OkObjectResult(await _userService.GetUser(id));
             }
             catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] CheckPasswordRequest checkPasswordRequest)
+        { 
+            try
+            {
+                User user = await _userService.CheckPassword(checkPasswordRequest.UserName, checkPasswordRequest.Password);
+
+                if (user == null)
+                {
+                    return new UnauthorizedObjectResult("Login failed");
+                }
+
+                return new OkObjectResult(user);
+            }
+            catch(Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
