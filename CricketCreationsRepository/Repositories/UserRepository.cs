@@ -86,5 +86,20 @@ namespace CricketCreationsRepository.Repositories
             iterationCount: 10000,
             numBytesRequested: 256 / 8));
         }
+
+        public async Task<UserDTO> CheckRefreshToken(int id, string token)
+        {
+            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            int dateDiff = DateTime.Compare(user.RefreshTokenExpiration, DateTime.Now);
+
+            if (user != null && HashPassword(token, user.Salt) == user.RefreshToken && dateDiff > 0)
+            {
+                return _mapper.Map<UserDTO>(user);
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

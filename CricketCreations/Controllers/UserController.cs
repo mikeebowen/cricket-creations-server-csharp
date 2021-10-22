@@ -47,13 +47,32 @@ namespace CricketCreations.Controllers
         { 
             try
             {
-                var res = await _userService.CheckPassword(checkPasswordRequest.UserName, checkPasswordRequest.Password);
+                AuthenticationResponse res = await _userService.CheckPassword(checkPasswordRequest.UserName, checkPasswordRequest.Password);
 
                 if (res == null)
                 {
                     return new UnauthorizedObjectResult("Login failed");
                 }
 
+                return new OkObjectResult(res);
+            }
+            catch(Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] CheckRefreshTokenRequest request)
+        {
+            try
+            {
+                AuthenticationResponse res = await _userService.CheckRefreshToken(request.Id, request.RefreshToken);
+
+                if (res == null)
+                {
+                    return new UnauthorizedObjectResult("Token authentication failed");
+                }
                 return new OkObjectResult(res);
             }
             catch(Exception ex)

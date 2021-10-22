@@ -11,6 +11,7 @@ namespace CricketCreations.Interfaces
     public interface IUserService
     {
         public abstract Task<User> GetUser(int id);
-        public abstract Task<Object> CheckPassword(string userName, string password);
+        public abstract Task<AuthenticationResponse> CheckPassword(string userName, string password);
+        public abstract Task<AuthenticationResponse> CheckRefreshToken(int id, string refreshToken);
     }
 }
