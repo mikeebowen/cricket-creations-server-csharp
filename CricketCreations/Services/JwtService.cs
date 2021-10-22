@@ -7,24 +7,26 @@ using Microsoft.Extensions.Configuration;
 using CricketCreations.Services;
 using CricketCreationsRepository.Repositories;
 using System.Security.Cryptography;
+using CricketCreations.Models;
+using CricketCreations.Interfaces;
 
 namespace CricketCreations.Services
 {
-    public class JwtService
+    public class JwtService : IJwtService
     {
-        private readonly string secret;
-        private readonly string expDate;
+        private readonly string _secret;
+        private readonly string _expDate;
 
-        public JwtService(IConfiguration config)
+        public JwtService()
         {
-            secret = Environment.GetEnvironmentVariable("JWT_SECRET");
-            expDate = Environment.GetEnvironmentVariable("TOKEN_EXPIRATION_IN_MINUTES");
+            _secret = Environment.GetEnvironmentVariable("JWT_SECRET");
+            _expDate = Environment.GetEnvironmentVariable("TOKEN_EXPIRATION_IN_MINUTES");
         }
 
-        public string GenerateSecurityToken(UserService user)
+        public string GenerateSecurityToken(User user)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            byte[] key = Encoding.ASCII.GetBytes(secret);
+            byte[] key = Encoding.ASCII.GetBytes(_secret);
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -37,7 +39,7 @@ namespace CricketCreations.Services
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Role, user.Role.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(double.Parse(expDate)),
+                Expires = DateTime.UtcNow.AddMinutes(double.Parse(_expDate)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
