@@ -47,14 +47,14 @@ namespace CricketCreations.Controllers
         { 
             try
             {
-                User user = await _userService.CheckPassword(checkPasswordRequest.UserName, checkPasswordRequest.Password);
+                var res = await _userService.CheckPassword(checkPasswordRequest.UserName, checkPasswordRequest.Password);
 
-                if (user == null)
+                if (res == null)
                 {
                     return new UnauthorizedObjectResult("Login failed");
                 }
 
-                return new OkObjectResult(user);
+                return new OkObjectResult(res);
             }
             catch(Exception ex)
             {

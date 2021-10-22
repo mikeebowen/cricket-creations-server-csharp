@@ -53,6 +53,30 @@ namespace CricketCreationsRepository.Repositories
             return null;
         }
 
+        public async Task<UserDTO> Update(UserDTO userDTO)
+        {
+            User user = await DatabaseManager.Instance.User.FindAsync(userDTO.Id);
+            if (user != null)
+            {
+                User updatedUser = _mapper.Map<User>(userDTO);
+                PropertyInfo[] propertyInfos = user.GetType().GetProperties();
+                foreach (PropertyInfo property in propertyInfos)
+                {
+                    var val = property.GetValue(updatedUser);
+                    if (val != null)
+                    {
+                        if (!(property.Name != "Id" && int.TryParse(val.ToString(), out int res) && res < 1) && property.Name != "Created" && property.Name != "Salt")
+                        {
+                            property.SetValue(user, val);
+                        }
+                    }
+                }
+                await DatabaseManager.Instance.SaveChangesAsync();
+                return _mapper.Map<UserDTO>(user);
+            }
+            return null;
+        }
+
         public static string HashPassword(string password, byte[] salt)
         {
             return Convert.ToBase64String(KeyDerivation.Pbkdf2(

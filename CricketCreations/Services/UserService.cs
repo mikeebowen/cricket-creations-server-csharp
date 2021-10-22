@@ -43,10 +43,26 @@ namespace CricketCreations.Services
             return _mapper.Map<User>(userDTO);
         }
 
-        public async Task<User> CheckPassword(string userName, string password)
+        public async Task<dynamic> CheckPassword(string userName, string password)
         {
             UserDTO userDTO = await _userRepository.CheckPassword(userName, password);
-            return _mapper.Map<User>(userDTO);
+            if (userDTO == null)
+            {
+                return null;
+            }
+            User user = _mapper.Map<User>(userDTO);
+            string token = _jwtService.GenerateSecurityToken(user);
+            string refreshToken = _jwtService.GenerateRefreshToken();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiration = DateTime.Now.AddDays(7);
+            UserDTO updatedUserDTO = _mapper.Map<UserDTO>(user);
+            await _userRepository.Update(updatedUserDTO);
+
+            return new
+            {
+                token = token,
+                refreshToken = refreshToken
+            };
         }
     }
 }

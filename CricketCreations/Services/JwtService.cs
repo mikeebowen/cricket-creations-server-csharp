@@ -3,9 +3,6 @@ using System.Text;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Extensions.Configuration;
-using CricketCreations.Services;
-using CricketCreationsRepository.Repositories;
 using System.Security.Cryptography;
 using CricketCreations.Models;
 using CricketCreations.Interfaces;
@@ -50,7 +47,7 @@ namespace CricketCreations.Services
         }
         public string GenerateRefreshToken()
         {
-            byte[] randomNumber = new byte[32];
+            byte[] randomNumber = new byte[255];
             using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(randomNumber);
