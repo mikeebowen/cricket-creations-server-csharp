@@ -124,6 +124,13 @@ namespace CricketCreationsRepository.Repositories
         {
             return await DatabaseManager.Instance.BlogPost.Where(b => b.Deleted == false).CountAsync();
         }
+
+        public async Task<int> GetCount(int id)
+        {
+            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            return user.BlogPosts.Where(b => b.Deleted == false).Count();
+        }
+
         public static BlogPostDTO ConvertToBlogPostDTO(BlogPost blogPost)
         {
             BlogPostDTO blogPostDTO = mapper.Map<BlogPost, BlogPostDTO>(blogPost);

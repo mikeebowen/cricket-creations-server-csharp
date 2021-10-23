@@ -11,6 +11,6 @@ namespace CricketCreations.Interfaces
 {
     public interface ITagService : IApiService<Tag>
     {
-        public abstract Task<IActionResult> Create(string json, int blogPostId, int userId);
+        public abstract Task<Tag> Create(Tag tag, int blogPostId, int userId);
     }
 }

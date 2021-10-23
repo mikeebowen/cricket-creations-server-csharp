@@ -8,6 +8,7 @@ namespace CricketCreationsDatabase.Models
 {
     public class Page : BaseEntity
     {
+        public bool Published { get; set; }
         public bool Deleted { get; set; }
         public User User { get; set; }
         public string Title { get; set; }
@@ -17,6 +18,7 @@ namespace CricketCreationsDatabase.Models
         public Page()
         {
             this.Deleted = false;
+            this.Published = false;
         }
     }
 }

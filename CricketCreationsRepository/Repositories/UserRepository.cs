@@ -101,5 +101,12 @@ namespace CricketCreationsRepository.Repositories
                 return null;
             }
         }
+
+        public async Task<bool> IsValidId(int id)
+        {
+            User user = await DatabaseManager.Instance.User.FindAsync(id);
+
+            return user != null;
+        }
     }
 }

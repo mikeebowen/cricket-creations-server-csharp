@@ -1,7 +1,9 @@
 ﻿using CricketCreations.Interfaces;
+
 using CricketCreations.Models;
 using CricketCreations.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,44 +21,118 @@ namespace CricketCreations.Controllers
     public class TagController : ControllerBase
     {
         ITagService _tagService;
+        IUserService _userService;
 
-        public TagController(ITagService tagService)
+        public TagController(ITagService tagService, IUserService userService)
         {
             _tagService = tagService;
+            _userService = userService;
         }
         // GET: api/<TagController>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count)
+        public async Task<IActionResult> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userId")] string userId)
         {
-            return await _tagService.Read(page, count);
+            try
+            {
+                bool validPage = int.TryParse(page, out int pg);
+                bool validCount = int.TryParse(count, out int cnt);
+                bool validIdInt = int.TryParse(userId, out int id);
+                int blogPostCount = userId != null && validIdInt ? await _tagService.GetCount(id) : await _tagService.GetCount();
+                bool inRange = blogPostCount - (pg * cnt) >= ((cnt * -1) + 1);
+
+                if (!validPage || !validCount || !validIdInt || (blogPostCount > 0 && !inRange) || (userId != null && (!validIdInt || !(await _userService.IsValidId(id)))))
+                {
+                    return new StatusCodeResult(StatusCodes.Status406NotAcceptable);
+                }
+
+                List<Tag> tags;
+                if (userId == null)
+                {
+                    tags = await _tagService.Read(pg, cnt);
+                }
+                else
+                {
+                    tags = await _tagService.Read(pg, cnt, id);
+                }
+
+                if (tags.Count == 0)
+                {
+                    return new OkObjectResult(new ResponseBody<List<Tag>>(new List<Tag>(), typeof(Tag).Name.ToString(), blogPostCount));
+                }
+
+                return new OkObjectResult(new ResponseBody<List<Tag>>(tags, typeof(Tag).Name.ToString(), blogPostCount));
+
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // GET api/<TagController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            return await _tagService.Read(id);
+            try
+            {
+                Tag tag = await _tagService.Read(id);
+                return new OkObjectResult(new ResponseBody<Tag>(tag, typeof(Tag).Name.ToString(), null));
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // POST api/<TagController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] TagData data)
         {
-            return await _tagService.Create(JsonConvert.SerializeObject(new { Name = data.Name }), data.BlogPostId, data.UserId);
+            try
+            {
+                Tag newTag = await _tagService.Create(new Tag() { Name = data.Name }, data.BlogPostId, data.UserId);
+                return new CreatedResult($"api/tag/{newTag.Id}", newTag);
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // PUT api/<TagController>/5
         [Authorize, HttpPatch]
-        public async Task<IActionResult> Patch([FromBody] JsonDocument json)
+        public async Task<IActionResult> Patch([FromBody] Tag tag)
         {
-            return await _tagService.Update(json.RootElement.ToString());
+            try
+            {
+                Tag updatedTag = await _tagService.Update(tag);
+                return new OkObjectResult(new ResponseBody<Tag>(updatedTag, typeof(Tag).Name.ToString(), null));
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // DELETE api/<TagController>/5
         [Authorize, HttpDelete("{id}")]
-        public Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return _tagService.Delete(id);
+            try
+            {
+                if (await _tagService.Delete(id))
+                {
+                    return new StatusCodeResult(StatusCodes.Status204NoContent);
+                }
+                else
+                {
+                    return new NotFoundResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
         public class TagData
         {

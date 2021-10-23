@@ -72,6 +72,12 @@ namespace CricketCreationsRepository.Repositories
         {
             return await DatabaseManager.Instance.Tag.Where(t => t.Deleted == false).CountAsync();
         }
+
+        public async Task<int> GetCount(int id)
+        {
+            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            return user.Tags.Where(t => t.Deleted == false).Count();
+        }
         private TagDTO _convertToTagDTO(Tag tag)
         {
             return mapper.Map<Tag, TagDTO>(tag);
@@ -91,7 +97,8 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<List<TagDTO>> Read(int page, int count, int id)
         {
-            List<Tag> tags = await DatabaseManager.Instance.Tag.Where(t => t.Id == id && t.Deleted == false).Skip((page - 1) * count).Take(count).ToListAsync();
+            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            List<Tag> tags = user.Tags.Where(t => t.Deleted == false).Skip((page - 1) * count).Take(count).ToList();
             return tags.Select(b => _convertToTagDTO(b)).ToList();
         }
 

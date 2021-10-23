@@ -2,6 +2,7 @@
 using CricketCreations.Models;
 using CricketCreations.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,45 +17,91 @@ namespace CricketCreations.Controllers
     [Route("api/[controller]"), ApiController]
     public class PageController : ControllerBase
     {
-        IControllerService<PageService> _page;
+        IPageService _pageService;
 
-        public PageController(IControllerService<PageService> page)
+        public PageController(IPageService pageService)
         {
-            _page = page;
+            _pageService = pageService;
         }
         // GET: api/<PageController>
         [HttpGet]
-        public async Task<ActionResult<ResponseBody<List<PageService>>>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _page.Get(null, null, null);
+            try
+            {
+                List<Page> pages = await _pageService.Read();
+                return new OkObjectResult(new ResponseBody<List<Page>>(pages, typeof(Page).Name.ToString(), pages.Count()));
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // GET api/<PageController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResponseBody<PageService>>> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return await _page.GetById(id, null);
+            try
+            {
+                Page page = await _pageService.Read(id);
+                return new OkObjectResult(new ResponseBody<Page>(page, typeof(Page).Name.ToString(), await _pageService.GetCount()));
+            }
+            catch(Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // POST api/<PageController>
         [Authorize, HttpPost("{userId}")]
-        public async Task<ActionResult<ResponseBody<PageService>>> Post([FromBody] JsonElement json, int userId)
+        public async Task<IActionResult> Post([FromBody] Page page, int userId)
         {
-            return await _page.Post(json, userId);
+            try
+            {
+                Page createdPage = await _pageService.Create(page, userId);
+                return new CreatedResult($"api/page/{createdPage.Id}", createdPage);
+            }
+            catch(Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // PUT api/<PageController>/5
         [Authorize, HttpPatch()]
-        public async Task<ActionResult<ResponseBody<PageService>>> Patch([FromBody] JsonElement json, int userId)
+        public async Task<IActionResult> Patch([FromBody] Page page, int userId)
         {
-            return await _page.Patch(json.ToString());
+            try
+            {
+                Page updatedPage = await _pageService.Update(page);
+                return new OkObjectResult(new ResponseBody<Page>(updatedPage, typeof(Page).Name.ToString(), null));
+            }
+            catch(Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // DELETE api/<PageController>/5
         [Authorize, HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return await _page.Delete(id);
+            try
+            {
+                if (await _pageService.Delete(id))
+                {
+                    return new StatusCodeResult(StatusCodes.Status204NoContent);
+                }
+                else
+                {
+                    return new NotFoundResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

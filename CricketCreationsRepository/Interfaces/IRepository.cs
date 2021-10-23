@@ -15,5 +15,6 @@ namespace CricketCreationsRepository.Interfaces
         public abstract Task<T> Update(T t);
         public abstract Task<bool> Delete(int id);
         public abstract Task<int> GetCount();
+        public abstract Task<int> GetCount(int id);
     }
 }

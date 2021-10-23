@@ -13,5 +13,6 @@ namespace CricketCreations.Interfaces
         public abstract Task<User> GetUser(int id);
         public abstract Task<AuthenticationResponse> CheckPassword(string userName, string password);
         public abstract Task<AuthenticationResponse> CheckRefreshToken(int id, string refreshToken);
+        public abstract Task<bool> IsValidId(int id);
     }
 }

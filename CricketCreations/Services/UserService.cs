@@ -90,5 +90,29 @@ namespace CricketCreations.Services
                 RefreshToken = newRefreshToken
             };
         }
+
+        public async Task<bool> IsValidId(int id)
+        {
+            return await _userRepository.IsValidId(id);
+        }
+
+        private UserDTO _convertToUserDTO(User user)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+            return _mapper.Map<UserDTO>(user);
+        }
+
+        private User _convertToUser(UserDTO userDTO)
+        {
+            if (userDTO == null)
+            {
+                return null;
+            }
+            return _mapper.Map<User>(userDTO);
+        }
+
     }
 }

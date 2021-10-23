@@ -26,182 +26,69 @@ namespace CricketCreations.Services
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Read(string page, string count)
+        public async Task<List<BlogPost>> Read(int page, int count)
         {
-            try
-            {
-                ResponseBody<List<BlogPost>> response;
-                List<BlogPost> blogPosts;
-                bool validPage = int.TryParse(page, out int pg);
-                bool validCount = int.TryParse(count, out int cnt);
-                int blogPostCount = await _blogPostRepository.GetCount();
-                bool inRange = blogPostCount - (pg * cnt) >= ((cnt * -1) + 1);
-
-                if (blogPostCount > 0 && !inRange)
-                {
-                    return new StatusCodeResult(StatusCodes.Status406NotAcceptable);
-                }
-
-                if (validPage && validCount)
-                {
-                    List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.Read(pg, cnt);
-                    blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
-                }
-                else
-                {
-                    return new StatusCodeResult(StatusCodes.Status406NotAcceptable);
-                }
-                //response = new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount);
-                return new OkObjectResult(new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount));
-            }
-            catch (Exception ex)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
-        }
-        public async Task<IActionResult> Read(string page, string count, string userId)
-        {
-            try
-            {
-                ResponseBody<List<BlogPost>> response;
-                List<BlogPost> blogPosts;
-                bool validId = int.TryParse(userId, out int id);
-                bool validPage = int.TryParse(page, out int pg);
-                bool validCount = int.TryParse(count, out int cnt);
-                int blogPostCount = await _blogPostRepository.GetCount();
-                bool inRange = blogPostCount - (pg * cnt) >= ((cnt * -1) + 1);
-
-                if ((blogPostCount > 0 && !inRange) || !validId || !validCount)
-                {
-                    return new StatusCodeResult(StatusCodes.Status406NotAcceptable);
-                }
-                List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.Read(pg, cnt, id);
-                blogPosts = blogPostDTOs.Select(b => ConvertToBlogPost(b)).ToList();
-                return new OkObjectResult(new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount));
-            }
-            catch (Exception ex)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
+            List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.Read(page, count);
+            return blogPostDTOs.Select(b => _convertToBlogPost(b)).ToList();
         }
 
-        public async Task<IActionResult> Read(int id)
+        public async Task<List<BlogPost>> Read(int page, int count, int userId)
         {
-            try
-            {
-                BlogPostDTO blogPostDTO = await _blogPostRepository.Read(id);
-                BlogPost element = ConvertToBlogPost(blogPostDTO);
-                if (element != null)
-                {
-                    return new OkObjectResult(new ResponseBody<BlogPost>(element, typeof(BlogPost).Name.ToString(), null));
-                }
-                else
-                {
-                    return new NotFoundResult();
-                }
-            }
-            catch (Exception ex)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
+            List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.Read(page, count, userId);
+            return blogPostDTOs.Select(b => _convertToBlogPost(b)).ToList();
         }
 
-        public async Task<IActionResult> Create(JsonElement json, int userId)
+        public async Task<BlogPost> Read(int id)
         {
-            try
-            {
-                string jsonString = json.ToString();
-                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPostDTO>();
-                ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
-
-                if (errors.Count == 0)
-                {
-                    BlogPostDTO blogPostDTO = JsonConvert.DeserializeObject<BlogPostDTO>(jsonString);
-                    BlogPostDTO createdBlogPostDTO = await _blogPostRepository.Create(blogPostDTO, userId);
-                    BlogPost blog = ConvertToBlogPost(createdBlogPostDTO);
-                    return new CreatedResult($"api/blogpost/{blog.Id}", blog);
-                }
-                else
-                {
-                    List<ErrorObject> errs = new List<ErrorObject>();
-                    errors.ToList().ForEach(e =>
-                    {
-                        errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
-                    });
-                    return new BadRequestObjectResult(errs);
-                }
-            }
-            catch(Exception ex)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
+            BlogPostDTO blogPostDTO = await _blogPostRepository.Read(id);
+            return _convertToBlogPost(blogPostDTO);
         }
 
-        public async Task<IActionResult> Update(string jsonString)
+        public async Task<BlogPost> Create(BlogPost blogPost, int userId)
         {
-            try
-            {
-                NJsonSchema.JsonSchema jsonSchema = NJsonSchema.JsonSchema.FromType<BlogPostDTO>();
-                ICollection<NJsonSchema.Validation.ValidationError> errors = jsonSchema.Validate(jsonString);
-
-                if (errors.Count == 0)
-                {
-                    BlogPostDTO blogPostDTO = JsonConvert.DeserializeObject<BlogPostDTO>(jsonString);
-                    BlogPostDTO updatedBlogPostDTO = await _blogPostRepository.Update(blogPostDTO);
-                    BlogPost blogPost = ConvertToBlogPost(updatedBlogPostDTO);
-                    return new OkObjectResult(new ResponseBody<BlogPost>(blogPost, typeof(BlogPost).Name.ToString(), null));
-                }
-                else
-                {
-                    List<ErrorObject> errs = new List<ErrorObject>();
-                    errors.ToList().ForEach(e =>
-                    {
-                        errs.Add(new ErrorObject() { Message = e.Kind.ToString(), Property = e.Property });
-                    });
-                    return new BadRequestObjectResult(errs);
-                }
-            }
-            catch(Exception ex)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
+            BlogPostDTO blogPostDTO = _convertToBlogPostDTO(blogPost);
+            BlogPostDTO createdBlogPostDTO = await _blogPostRepository.Create(blogPostDTO, userId);
+            return _convertToBlogPost(createdBlogPostDTO);
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<BlogPost> Update(BlogPost blogPost)
         {
-            try
-            {
-                if (await _blogPostRepository.Delete(id))
-                {
-                    return new StatusCodeResult(StatusCodes.Status204NoContent);
-                }
-                else
-                {
-                    return new NotFoundResult();
-                }
-            }
-            catch(Exception ex)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
+            BlogPostDTO blogPostDTO = _convertToBlogPostDTO(blogPost);
+            BlogPostDTO updatedBlotPostDTO = await _blogPostRepository.Update(blogPostDTO);
+            return _convertToBlogPost(blogPostDTO);
         }
-        public BlogPost ConvertToBlogPost(BlogPostDTO blogPostDTO)
+
+        public async Task<bool> Delete(int id)
+        {
+            return await _blogPostRepository.Delete(id);
+        }
+        private BlogPost _convertToBlogPost(BlogPostDTO blogPostDTO)
         {
             if (blogPostDTO == null)
             {
                 return null;
             }
-            BlogPost blogPost = _mapper.Map<BlogPostDTO, BlogPost>(blogPostDTO);
+            BlogPost blogPost =_convertToBlogPost(blogPostDTO);
             return blogPost;
         }
-        public BlogPostDTO ConvertToBlogPostDTO(BlogPost blogPost)
+        private BlogPostDTO _convertToBlogPostDTO(BlogPost blogPost)
         {
             if (blogPost == null)
             {
                 return null;
             }
-            BlogPostDTO blogPostDTO = _mapper.Map<BlogPost, BlogPostDTO>(blogPost);
+            BlogPostDTO blogPostDTO = _convertToBlogPostDTO(blogPost);
             return blogPostDTO;
+        }
+
+        public async Task<int> GetCount()
+        {
+            return await _blogPostRepository.GetCount();
+        }
+
+        public async Task<int> GetCount(int id)
+        {
+            return await _blogPostRepository.GetCount(id);
         }
     }
 }
