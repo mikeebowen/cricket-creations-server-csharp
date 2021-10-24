@@ -40,19 +40,19 @@ namespace CricketCreations.Controllers
                 int blogPostCount = userId != null && validIdInt ? await _tagService.GetCount(id) : await _tagService.GetCount();
                 bool inRange = blogPostCount - (pg * cnt) >= ((cnt * -1) + 1);
 
-                if (!validPage || !validCount || !validIdInt || (blogPostCount > 0 && !inRange) || (userId != null && (!validIdInt || !(await _userService.IsValidId(id)))))
+                if ((page == null || !validPage) || (count == null || !validCount) || (blogPostCount > 0 && !inRange) || (userId != null && (!validIdInt || !(await _userService.IsValidId(id)))))
                 {
                     return new StatusCodeResult(StatusCodes.Status406NotAcceptable);
                 }
 
                 List<Tag> tags;
-                if (userId == null)
+                if (userId != null && page != null && count != null)
                 {
-                    tags = await _tagService.Read(pg, cnt);
+                    tags = await _tagService.Read(pg, cnt, id);
                 }
                 else
                 {
-                    tags = await _tagService.Read(pg, cnt, id);
+                    tags = await _tagService.Read(pg, cnt);
                 }
 
                 if (tags.Count == 0)

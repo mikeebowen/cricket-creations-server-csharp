@@ -21,7 +21,7 @@ namespace CricketCreations.Services
             _pageRepository = pageRepository;
         }
         
-        private static MapperConfiguration _config = new MapperConfiguration(c => c.CreateMap<PageService, PageRepository>().ReverseMap());
+        private static MapperConfiguration _config = new MapperConfiguration(c => c.CreateMap<Page, PageDTO>().ReverseMap());
         private static IMapper _mapper = _config.CreateMapper();
 
         public async Task<List<Page>> Read()
@@ -49,12 +49,14 @@ namespace CricketCreations.Services
         {
             PageDTO pageDTO = _convertToPageDTO(page);
             PageDTO updatedPageDTO = await _pageRepository.Update(pageDTO);
-            return _convertToPage(pageDTO);
+            return _convertToPage(updatedPageDTO);
         }
 
-        public Task<Page> Create(Page t, int userId)
+        public async Task<Page> Create(Page page, int userId)
         {
-            throw new NotImplementedException();
+            PageDTO pageDTO = _convertToPageDTO(page);
+            PageDTO updatedPageDTO = await _pageRepository.Create(pageDTO, userId);
+            return _convertToPage(updatedPageDTO);
         }
 
         public async Task<bool> Delete(int id)

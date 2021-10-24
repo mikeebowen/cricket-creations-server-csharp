@@ -64,9 +64,7 @@ namespace CricketCreationsRepository.Repositories
 
             DatabaseManager.Instance.Tag.Add(newTag);
             await DatabaseManager.Instance.SaveChangesAsync();
-            TagDTO tagDTO1 = _convertToTagDTO(newTag);
-            tagDTO1.BlogPosts = new List<BlogPostDTO>();
-            return tagDTO1;
+            return _convertToTagDTO(newTag);
         }
         public async Task<int> GetCount()
         {

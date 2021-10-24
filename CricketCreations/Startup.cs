@@ -1,30 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using VueCliMiddleware;
-using System.Runtime.CompilerServices;
-using CricketCreationsRepository;
 using CricketCreations.Middleware;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using CricketCreationsDatabase;
-using Microsoft.EntityFrameworkCore;
 using CricketCreations.Interfaces;
 using CricketCreations.Services;
 using CricketCreationsRepository.Interfaces;
 using CricketCreationsRepository.Repositories;
-using CricketCreations.Models;
-using CricketCreationsRepository.Models;
-using AutoMapper;
-using CricketCreations.Profiles;
 
 namespace CricketCreations
 {

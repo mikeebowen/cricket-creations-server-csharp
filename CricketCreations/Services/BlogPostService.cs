@@ -68,8 +68,7 @@ namespace CricketCreations.Services
             {
                 return null;
             }
-            BlogPost blogPost =_convertToBlogPost(blogPostDTO);
-            return blogPost;
+            return _mapper.Map<BlogPost>(blogPostDTO);
         }
         private BlogPostDTO _convertToBlogPostDTO(BlogPost blogPost)
         {
@@ -77,8 +76,7 @@ namespace CricketCreations.Services
             {
                 return null;
             }
-            BlogPostDTO blogPostDTO = _convertToBlogPostDTO(blogPost);
-            return blogPostDTO;
+            return _mapper.Map<BlogPostDTO>(blogPost);
         }
 
         public async Task<int> GetCount()
