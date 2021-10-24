@@ -26,8 +26,8 @@ namespace CricketCreationsRepository.Repositories
         );
 
 
-        private static IMapper mapper = config.CreateMapper();
-        private static IMapper blogPostMapper = config2.CreateMapper();
+        private static IMapper _mapper = config.CreateMapper();
+        private static IMapper _blogPostMapper = config2.CreateMapper();
         public async Task<List<TagDTO>> Read()
         {
             List<Tag> tags = await DatabaseManager.Instance.Tag.Where(t => t.Deleted == false).ToListAsync();
@@ -43,7 +43,7 @@ namespace CricketCreationsRepository.Repositories
                 Id = b.Id,
                 LastUpdated = b.LastUpdated,
                 Title = b.Title
-            }).ToList() ;
+            }).ToList();
             return _convertToTagDTO(tag);
         }
         public async Task<List<TagDTO>> Read(int page, int count)
@@ -78,19 +78,35 @@ namespace CricketCreationsRepository.Repositories
         }
         private TagDTO _convertToTagDTO(Tag tag)
         {
-            return mapper.Map<Tag, TagDTO>(tag);
+            if (tag == null)
+            {
+                return null;
+            }
+            return _mapper.Map<TagDTO>(tag);
         }
         private Tag _convertToTag(TagDTO tagDTO)
         {
-            return mapper.Map<TagDTO, Tag>(tagDTO);
+            if (tagDTO == null)
+            {
+                return null;
+            }
+            return _mapper.Map<Tag>(tagDTO);
         }
-        private static BlogPost _convertToBlogPost(BlogPostDTO b)
+        private static BlogPost _convertToBlogPost(BlogPostDTO blogPostDTO)
         {
-            return blogPostMapper.Map<BlogPostDTO, BlogPost>(b);
+            if (blogPostDTO == null)
+            {
+                return null;
+            }
+            return _blogPostMapper.Map<BlogPost>(blogPostDTO);
         }
-        private static BlogPostDTO _convertToBlogPostDTO(BlogPost b)
+        private static BlogPostDTO _convertToBlogPostDTO(BlogPost blogPost)
         {
-            return blogPostMapper.Map<BlogPost, BlogPostDTO>(b);
+            if (blogPost == null)
+            {
+                return null;
+            }
+            return _blogPostMapper.Map<BlogPostDTO>(blogPost);
         }
 
         public async Task<List<TagDTO>> Read(int page, int count, int id)
