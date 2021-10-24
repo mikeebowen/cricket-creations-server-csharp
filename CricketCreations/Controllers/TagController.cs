@@ -1,16 +1,12 @@
 ﻿using CricketCreations.Interfaces;
-
+using CricketCreations.Middleware;
 using CricketCreations.Models;
-using CricketCreations.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -134,11 +130,28 @@ namespace CricketCreations.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
-        public class TagData
+        public class TagData : IValidatableObject
         {
+            [Required]
             public string Name { get; set; }
+            [Required]
             public int UserId { get; set; }
+            [Required]
             public int BlogPostId { get; set; }
+
+            public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+            {
+                List<ValidationResult> validationResults = new List<ValidationResult>();
+                if (UserId == 0)
+                {
+                    validationResults.Add(new ValidationResult("The UserId field is required"));
+                }
+                if (BlogPostId == 0)
+                {
+                    validationResults.Add(new ValidationResult("The BlogPostId field is required"));
+                }
+                return validationResults;
+            }
         }
     }
 }
