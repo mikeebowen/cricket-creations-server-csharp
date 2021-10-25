@@ -12,7 +12,6 @@ namespace CricketCreations.Models
     {
         [Key]
         public int Id { get; set; }
-        public byte[] Salt { get; set; }
         public string RefreshToken { get; set; }
         public DateTime RefreshTokenExpiration { get; set; }
         [Required]

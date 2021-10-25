@@ -39,7 +39,7 @@ namespace CricketCreationsRepository.Models
             }
         }
         [Required]
-        public byte[] Salt { get; set; }
+        public byte[] Salt { get; set; } = new byte[128 / 8];
         public string RefreshToken
         {
             get

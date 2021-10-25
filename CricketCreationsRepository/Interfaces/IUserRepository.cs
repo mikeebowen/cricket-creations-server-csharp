@@ -13,6 +13,7 @@ namespace CricketCreationsRepository.Interfaces
     {
         public abstract Task<UserDTO> GetUser(int id);
         public abstract Task<UserDTO> CheckPassword(string userName, string password);
+        public abstract Task<UserDTO> Create(UserDTO userDTO);
         public abstract Task<UserDTO> Update(UserDTO userDTO);
         public abstract Task<UserDTO> CheckRefreshToken(int id, string token);
         public abstract Task<bool> IsValidId(int id);

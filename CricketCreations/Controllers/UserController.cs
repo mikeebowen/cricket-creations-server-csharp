@@ -2,6 +2,7 @@
 using CricketCreations.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +45,7 @@ namespace CricketCreations.Controllers
         }
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] CheckPasswordRequest checkPasswordRequest)
-        { 
+        {
             try
             {
                 AuthenticationResponse res = await _userService.CheckPassword(checkPasswordRequest.UserName, checkPasswordRequest.Password);
@@ -56,7 +57,7 @@ namespace CricketCreations.Controllers
 
                 return new OkObjectResult(res);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
@@ -75,7 +76,7 @@ namespace CricketCreations.Controllers
                 }
                 return new OkObjectResult(res);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
@@ -83,8 +84,21 @@ namespace CricketCreations.Controllers
 
         // POST api/<UserController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] NewUser newUser)
         {
+            try
+            {
+                User createdUser = await _userService.Create(newUser);
+                return new CreatedResult($"api/tag/{createdUser.Id}", createdUser);
+            }
+            catch (DbUpdateException ex)
+            {
+                return new ObjectResult(new { Errors = new[] { new { Message = ex.Message } } }) { StatusCode = StatusCodes.Status303SeeOther };
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // PUT api/<UserController>/5
