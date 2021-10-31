@@ -53,6 +53,21 @@ namespace CricketCreationsRepository.Repositories
             return null;
         }
 
+        public async Task<UserDTO> CheckRefreshToken(int id, string token)
+        {
+            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            int dateDiff = DateTime.Compare(user.RefreshTokenExpiration, DateTime.Now);
+
+            if (user != null && HashPassword(token, user.Salt) == user.RefreshToken && dateDiff > 0)
+            {
+                return _convertToUserDTO(user);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public async Task<UserDTO> Update(UserDTO userDTO)
         {
             User user = await DatabaseManager.Instance.User.FindAsync(userDTO.Id);
@@ -77,31 +92,6 @@ namespace CricketCreationsRepository.Repositories
             return null;
         }
 
-        public static string HashPassword(string password, byte[] salt)
-        {
-            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            password: password,
-            salt: salt,
-            prf: KeyDerivationPrf.HMACSHA1,
-            iterationCount: 10000,
-            numBytesRequested: 256 / 8));
-        }
-
-        public async Task<UserDTO> CheckRefreshToken(int id, string token)
-        {
-            User user = await DatabaseManager.Instance.User.FindAsync(id);
-            int dateDiff = DateTime.Compare(user.RefreshTokenExpiration, DateTime.Now);
-
-            if (user != null && HashPassword(token, user.Salt) == user.RefreshToken && dateDiff > 0)
-            {
-                return _convertToUserDTO(user);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         public async Task<bool> IsValidId(int id)
         {
             User user = await DatabaseManager.Instance.User.FindAsync(id);
@@ -111,17 +101,6 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<UserDTO> Create(UserDTO userDTO)
         {
-            List<User> existingEmail = await DatabaseManager.Instance.User.Where(u => u.Email == userDTO.Email).ToListAsync();
-            List<User> existingUsername = await DatabaseManager.Instance.User.Where(u => u.UserName == userDTO.UserName).ToListAsync();
-
-            if (existingEmail.Count() > 0)
-            {
-                throw new DbUpdateException($"{userDTO.Email} account already exists");
-            }
-            if (existingUsername.Count() > 0)
-            {
-                throw new DbUpdateException($"{userDTO.UserName} already exists");
-            }
             User user = _convertToUser(userDTO);
             User newUser = DatabaseManager.Instance.User.Add(user).Entity;
             await DatabaseManager.Instance.SaveChangesAsync();
@@ -143,6 +122,24 @@ namespace CricketCreationsRepository.Repositories
                 return null;
             }
             return _mapper.Map<UserDTO>(user);
+        }
+        public static string HashPassword(string password, byte[] salt)
+        {
+            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: password,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA1,
+            iterationCount: 10000,
+            numBytesRequested: 256 / 8));
+        }
+        private static byte[] _getSalt()
+        {
+            byte[] bytes = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(bytes);
+                return bytes;
+            }
         }
     }
 }

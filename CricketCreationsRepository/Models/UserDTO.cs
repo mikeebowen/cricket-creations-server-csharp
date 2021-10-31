@@ -30,16 +30,12 @@ namespace CricketCreationsRepository.Models
             }
             set
             {
-                Salt = new byte[128 / 8];
-                using (var rng = RandomNumberGenerator.Create())
-                {
-                    rng.GetBytes(Salt);
-                }
+                Salt = _getSalt();
                 _password = UserRepository.HashPassword(value, Salt);
             }
         }
         [Required]
-        public byte[] Salt { get; set; } = new byte[128 / 8];
+        public byte[] Salt { get; set; }
         public string RefreshToken
         {
             get
@@ -48,7 +44,10 @@ namespace CricketCreationsRepository.Models
             }
             set
             {
-                _refreshToken = UserRepository.HashPassword(value ?? "", Salt);
+                if (value != null)
+                {
+                    _refreshToken = UserRepository.HashPassword(value, Salt);
+                }
             }
         }
         public DateTime RefreshTokenExpiration { get; set; }
@@ -60,6 +59,16 @@ namespace CricketCreationsRepository.Models
         public RoleTypes Role { get; set; }
         public List<BlogPostDTO> BlogPosts { get; set; }
         public List<TagDTO> Tags { get; set; }
+
+        private static byte[] _getSalt()
+        {
+            byte[] bytes = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(bytes);
+            }
+            return bytes;
+        }
 
         public enum RoleTypes
         {

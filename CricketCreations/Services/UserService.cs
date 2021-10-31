@@ -34,7 +34,7 @@ namespace CricketCreations.Services
         }
         private static MapperConfiguration _config = new MapperConfiguration(config =>
         {
-            config.CreateMap<User, UserDTO>().ReverseMap();
+            config.CreateMap<User, UserDTO>().ForMember(dest => dest.Salt, options => options.Ignore()).ReverseMap();
             config.CreateMap<UserDTO, NewUser>().ReverseMap();
         });
         private static IMapper _mapper = _config.CreateMapper();
@@ -51,19 +51,7 @@ namespace CricketCreations.Services
             {
                 return null;
             }
-            User user = _convertToUser(userDTO);
-            string token = _jwtService.GenerateSecurityToken(user);
-            string refreshToken = _jwtService.GenerateRefreshToken();
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiration = DateTime.Now.AddDays(7);
-            UserDTO updatedUserDTO =_convertToUserDTO(user);
-            await _userRepository.Update(updatedUserDTO);
-
-            return new AuthenticationResponse()
-            {
-                Token = token,
-                RefreshToken = refreshToken
-            };
+            return await _generateTokens(userDTO);
         }
 
         public async Task<AuthenticationResponse> CheckRefreshToken(int id, string refreshToken)
@@ -74,29 +62,21 @@ namespace CricketCreations.Services
             {
                 return null;
             }
-
-            User user = _convertToUser(userDTO);
-
-            string token = _jwtService.GenerateSecurityToken(user);
-            string newRefreshToken = _jwtService.GenerateRefreshToken();
-
-            user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiration = DateTime.Now.AddDays(7);
-            UserDTO userDTO1 =_convertToUserDTO(user);
-            await _userRepository.Update(userDTO1);
-
-            return new AuthenticationResponse()
-            {
-                Token = token,
-                RefreshToken = newRefreshToken
-            };
+            return await _generateTokens(userDTO);
         }
 
-        public async Task<User> Create(NewUser newUser)
+        public async Task<AuthenticationResponse> Create(NewUser newUser)
         {
             UserDTO userDTO = _convertToUserDTO(newUser);
             UserDTO newUserDTO = await _userRepository.Create(userDTO);
-            return _convertToUser(newUserDTO);
+
+            if (newUserDTO == null)
+            {
+                return null;
+            }
+
+            UserDTO updateUserDTO = await _userRepository.Update(newUserDTO);
+            return await _generateTokens(updateUserDTO);
         }
 
         public async Task<bool> IsValidId(int id)
@@ -113,7 +93,7 @@ namespace CricketCreations.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        private UserDTO _convertToUserDTO(NewUser newUser)
+        private static UserDTO _convertToUserDTO(NewUser newUser)
         {
             if (newUser == null)
             {
@@ -122,13 +102,27 @@ namespace CricketCreations.Services
             return _mapper.Map<UserDTO>(newUser);
         }
 
-        private User _convertToUser(UserDTO userDTO)
+        private static User _convertToUser(UserDTO userDTO)
         {
             if (userDTO == null)
             {
                 return null;
             }
             return _mapper.Map<User>(userDTO);
+        }
+        private async Task<AuthenticationResponse> _generateTokens(UserDTO userDTO)
+        {
+            string token = _jwtService.GenerateSecurityToken(userDTO);
+            string refreshToken = _jwtService.GenerateRefreshToken();
+            userDTO.RefreshToken = refreshToken;
+            userDTO.RefreshTokenExpiration = DateTime.Now.AddDays(7);
+            await _userRepository.Update(userDTO);
+
+            return new AuthenticationResponse()
+            {
+                Token = token,
+                RefreshToken = refreshToken
+            };
         }
     }
 }

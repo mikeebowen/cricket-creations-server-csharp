@@ -88,12 +88,12 @@ namespace CricketCreations.Controllers
         {
             try
             {
-                User createdUser = await _userService.Create(newUser);
-                return new CreatedResult($"api/tag/{createdUser.Id}", createdUser);
+                AuthenticationResponse authenticationResponse = await _userService.Create(newUser);
+                return new OkObjectResult(authenticationResponse);
             }
             catch (DbUpdateException ex)
             {
-                return new ObjectResult(new { Errors = new[] { new { Message = ex.Message } } }) { StatusCode = StatusCodes.Status303SeeOther };
+                return new ObjectResult(new { Errors = new[] { new { Message = ex.InnerException?.Message != null ? ex.InnerException.Message : ex.Message } } }) { StatusCode = StatusCodes.Status303SeeOther };
             }
             catch (Exception ex)
             {

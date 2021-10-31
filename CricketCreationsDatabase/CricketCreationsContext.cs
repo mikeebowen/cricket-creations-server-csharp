@@ -60,6 +60,7 @@ namespace CricketCreationsDatabase
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(u => u.UserName).IsUnique();
             modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
             modelBuilder.Entity<User>().HasMany(u => u.Pages);
             modelBuilder.Entity<User>().HasMany(u => u.Tags);

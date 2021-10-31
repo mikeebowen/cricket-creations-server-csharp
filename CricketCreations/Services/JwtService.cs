@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using CricketCreations.Models;
 using CricketCreations.Interfaces;
+using CricketCreationsRepository.Models;
 
 namespace CricketCreations.Services
 {
@@ -20,7 +21,7 @@ namespace CricketCreations.Services
             _expDate = Environment.GetEnvironmentVariable("TOKEN_EXPIRATION_IN_MINUTES");
         }
 
-        public string GenerateSecurityToken(User user)
+        public string GenerateSecurityToken(UserDTO userDTO)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             byte[] key = Encoding.ASCII.GetBytes(_secret);
@@ -28,13 +29,13 @@ namespace CricketCreations.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Surname, user.Surname),
-                    new Claim(ClaimTypes.GivenName, user.Name),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim("avatar", user.Avatar ?? ""),
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Role, user.Role.ToString())
+                    new Claim(ClaimTypes.Email, userDTO.Email),
+                    new Claim(ClaimTypes.Surname, userDTO.Surname),
+                    new Claim(ClaimTypes.GivenName, userDTO.Name),
+                    new Claim(ClaimTypes.NameIdentifier, userDTO.Id.ToString()),
+                    new Claim("avatar", userDTO.Avatar ?? ""),
+                    new Claim(ClaimTypes.Name, userDTO.UserName),
+                    new Claim(ClaimTypes.Role, userDTO.Role.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(_expDate)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
