@@ -51,11 +51,11 @@ namespace CricketCreations.Services
             return _convertToBlogPost(createdBlogPostDTO);
         }
 
-        public async Task<BlogPost> Update(BlogPost blogPost)
+        public async Task<BlogPost> Update(BlogPost blogPost, int userId)
         {
             BlogPostDTO blogPostDTO = _convertToBlogPostDTO(blogPost);
-            BlogPostDTO updatedBlotPostDTO = await _blogPostRepository.Update(blogPostDTO);
-            return _convertToBlogPost(blogPostDTO);
+            BlogPostDTO updatedBlotPostDTO = await _blogPostRepository.Update(blogPostDTO, userId);
+            return _convertToBlogPost(updatedBlotPostDTO);
         }
 
         public async Task<bool> Delete(int id)

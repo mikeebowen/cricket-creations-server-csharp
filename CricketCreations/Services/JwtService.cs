@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using CricketCreations.Models;
 using CricketCreations.Interfaces;
 using CricketCreationsRepository.Models;
+using System.Collections.Generic;
 
 namespace CricketCreations.Services
 {
@@ -29,6 +30,7 @@ namespace CricketCreations.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
+                    new Claim("Id", userDTO.Id.ToString()),
                     new Claim(ClaimTypes.Email, userDTO.Email),
                     new Claim(ClaimTypes.Surname, userDTO.Surname),
                     new Claim(ClaimTypes.GivenName, userDTO.Name),

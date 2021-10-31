@@ -116,8 +116,10 @@ namespace CricketCreationsRepository.Repositories
             return tags.Select(b => _convertToTagDTO(b)).ToList();
         }
 
-        public async Task<TagDTO> Update(TagDTO tagDTO)
+        public async Task<TagDTO> Update(TagDTO tagDTO, int userId)
         {
+            User user = await DatabaseManager.Instance.User.FindAsync(userId);
+
             Tag tag = await DatabaseManager.Instance.Tag.Where(tag => tag.Id == tagDTO.Id).Include(t => t.BlogPosts).FirstAsync();
             List<BlogPost> newBlogPosts = null;
             if (tagDTO.BlogPosts != null)
@@ -138,7 +140,7 @@ namespace CricketCreationsRepository.Repositories
                 }).ToList();
             }
 
-            if (tag != null)
+            if (tag != null && (user.Role == Role.Administrator || tag.User.Id == userId))
             {
                 Tag updatedTag = _convertToTag(tagDTO);
                 DatabaseManager.Instance.Entry(tag).CurrentValues.SetValues(updatedTag);

@@ -45,10 +45,10 @@ namespace CricketCreations.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Page> Update(Page page)
+        public async Task<Page> Update(Page page, int userId)
         {
             PageDTO pageDTO = _convertToPageDTO(page);
-            PageDTO updatedPageDTO = await _pageRepository.Update(pageDTO);
+            PageDTO updatedPageDTO = await _pageRepository.Update(pageDTO, userId);
             return _convertToPage(updatedPageDTO);
         }
 

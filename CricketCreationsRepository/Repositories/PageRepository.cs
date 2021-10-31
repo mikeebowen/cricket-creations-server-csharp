@@ -66,22 +66,27 @@ namespace CricketCreationsRepository.Repositories
             return _convertToPageDTO(page);
         }
 
-        public async Task<PageDTO> Update(PageDTO pageDTO)
+        public async Task<PageDTO> Update(PageDTO pageDTO, int userId)
         {
-            Page page = await DatabaseManager.Instance.Page.FindAsync(pageDTO.Id);
-
-            if (page != null)
+            User user = await DatabaseManager.Instance.User.FindAsync(userId);
+            if (user != null && user.Role == Role.Administrator)
             {
-                Page updatedPage = _convertToPage(pageDTO);
-                DatabaseManager.Instance.Entry(page).CurrentValues.SetValues(updatedPage);
-                PropertyEntry propertyEntry = DatabaseManager.Instance.Entry(page).Property("Created");
 
-                if (propertyEntry != null)
+                Page page = await DatabaseManager.Instance.Page.FindAsync(pageDTO.Id);
+
+                if (page != null)
                 {
-                    DatabaseManager.Instance.Entry(page).Property("Created").IsModified = false;
+                    Page updatedPage = _convertToPage(pageDTO);
+                    DatabaseManager.Instance.Entry(page).CurrentValues.SetValues(updatedPage);
+                    PropertyEntry propertyEntry = DatabaseManager.Instance.Entry(page).Property("Created");
+
+                    if (propertyEntry != null)
+                    {
+                        DatabaseManager.Instance.Entry(page).Property("Created").IsModified = false;
+                    }
+                    await DatabaseManager.Instance.SaveChangesAsync();
+                    return _convertToPageDTO(page);
                 }
-                await DatabaseManager.Instance.SaveChangesAsync();
-                return _convertToPageDTO(page);
             }
             return null;
         }

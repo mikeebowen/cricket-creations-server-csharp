@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -69,12 +70,26 @@ namespace CricketCreations.Controllers
         }
 
         // PUT api/<PageController>/5
-        [Authorize, HttpPatch()]
-        public async Task<IActionResult> Patch([FromBody] Page page, int userId)
+        [Authorize, HttpPatch]
+        public async Task<IActionResult> Patch([FromBody] Page page)
         {
             try
             {
-                Page updatedPage = await _pageService.Update(page);
+                List<Claim> claims = User.Claims.ToList();
+                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+                bool isInt = int.TryParse(idStr, out int id);
+
+                if (!isInt)
+                {
+                    return new BadRequestResult();
+                }
+
+                Page updatedPage = await _pageService.Update(page, id);
+
+                if (updatedPage == null)
+                {
+                    return new BadRequestResult();
+                }
                 return new OkObjectResult(new ResponseBody<Page>(updatedPage, typeof(Page).Name.ToString(), null));
             }
             catch(Exception ex)

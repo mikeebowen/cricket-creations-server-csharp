@@ -75,9 +75,13 @@ namespace CricketCreationsRepository.Repositories
             await DatabaseManager.Instance.SaveChangesAsync();
             return _convertToBlogPostDTO(blog.Entity);
         }
-        public async Task<BlogPostDTO> Update(BlogPostDTO blogPostDto)
+        public async Task<BlogPostDTO> Update(BlogPostDTO blogPostDto, int userId)
         {
-            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.Where(bp => bp.Id == blogPostDto.Id).Include(b => b.Tags).FirstAsync();
+            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.Where(bp => bp.Id == blogPostDto.Id).Include(b => b.Tags).FirstOrDefaultAsync();
+            if (blogPost == null)
+            {
+                return null;
+            }
             List<Tag> newTags = blogPostDto.Tags.Select(t =>
             {
                 Tag tag;

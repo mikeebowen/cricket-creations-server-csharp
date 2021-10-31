@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CricketCreations.Interfaces;
@@ -87,27 +89,52 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<BlogPostController>
-        [Authorize, HttpPost("{userId}")]
-        public async Task<IActionResult> Post([FromBody] BlogPost blogPost, int userId)
+        [Authorize, HttpPost]
+        public async Task<IActionResult> Post([FromBody] BlogPost blogPost)
         {
             try
             {
-                BlogPost createdBlogPost = await _blogPostService.Create(blogPost, userId);
+                List<Claim> claims = User.Claims.ToList();
+                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+                bool isInt = int.TryParse(idStr, out int id);
+
+                if (!isInt)
+                {
+                    return new BadRequestResult();
+                }
+
+                BlogPost createdBlogPost = await _blogPostService.Create(blogPost, id);
                 return new CreatedResult($"api/blogpost/{createdBlogPost.Id}", createdBlogPost);
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status200OK);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         // PATCH api/<BlogPostController>/5
-        [Authorize, HttpPatch()]
+        [Authorize, HttpPatch]
         public async Task<IActionResult> Patch([FromBody] BlogPost blogPost)
         {
             try
             {
-                BlogPost updatedBlogPost = await _blogPostService.Update(blogPost);
+                List<Claim> claims = User.Claims.ToList();
+                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+                bool isInt = int.TryParse(idStr, out int id);
+
+                if (!isInt)
+                {
+                    return new BadRequestResult();
+                }
+
+
+                BlogPost updatedBlogPost = await _blogPostService.Update(blogPost, id);
+
+                if (updatedBlogPost == null)
+                {
+                    return new BadRequestResult();
+                }
+
                 return new OkObjectResult(new ResponseBody<BlogPost>(updatedBlogPost, typeof(BlogPost).Name.ToString(), null));
             }
             catch (Exception ex)

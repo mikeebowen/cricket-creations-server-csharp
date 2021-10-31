@@ -55,10 +55,10 @@ namespace CricketCreations.Services
             return tagDTOs.Select(t =>_convertToTag(t)).ToList();
         }
 
-        public async Task<Tag> Update(Tag tag)
+        public async Task<Tag> Update(Tag tag, int userId)
         {
             TagDTO tagDTO = _convertToTagDTO(tag);
-            TagDTO updatedTagDTO = await _tagRepository.Update(tagDTO);
+            TagDTO updatedTagDTO = await _tagRepository.Update(tagDTO, userId);
             return _convertToTag(updatedTagDTO);
         }
         private TagDTO _convertToTagDTO(Tag tag)

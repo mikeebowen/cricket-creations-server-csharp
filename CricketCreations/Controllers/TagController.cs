@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -101,7 +103,22 @@ namespace CricketCreations.Controllers
         {
             try
             {
-                Tag updatedTag = await _tagService.Update(tag);
+                List<Claim> claims = User.Claims.ToList();
+                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+                bool isInt = int.TryParse(idStr, out int id);
+
+                if (!isInt)
+                {
+                    return new BadRequestResult();
+                }
+
+                Tag updatedTag = await _tagService.Update(tag, id);
+
+                if (updatedTag == null)
+                {
+                    return new BadRequestResult();
+                }
+
                 return new OkObjectResult(new ResponseBody<Tag>(updatedTag, typeof(Tag).Name.ToString(), null));
             }
             catch (Exception ex)
