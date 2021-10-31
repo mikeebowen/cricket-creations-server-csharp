@@ -34,7 +34,11 @@ namespace CricketCreations.Services
         }
         private static MapperConfiguration _config = new MapperConfiguration(config =>
         {
-            config.CreateMap<User, UserDTO>().ForMember(dest => dest.Salt, options => options.Ignore()).ReverseMap();
+            config.CreateMap<User, UserDTO>()
+                .ForMember(dest => dest.Salt, options => options.Ignore())
+                .ReverseMap()
+                .ForMember(dest => dest.Token, options => options.Ignore()
+            );
             config.CreateMap<UserDTO, NewUser>().ReverseMap();
         });
         private static IMapper _mapper = _config.CreateMapper();
@@ -44,14 +48,19 @@ namespace CricketCreations.Services
             return _convertToUser(userDTO);
         }
 
-        public async Task<AuthenticationResponse> CheckPassword(string userName, string password)
+        public async Task<User> CheckPassword(string userName, string password)
         {
             UserDTO userDTO = await _userRepository.CheckPassword(userName, password);
             if (userDTO == null)
             {
                 return null;
             }
-            return await _generateTokens(userDTO);
+            AuthenticationResponse authenticationResponse = await _generateTokens(userDTO);
+            User user = _convertToUser(userDTO);
+            user.RefreshToken = authenticationResponse.RefreshToken;
+            user.RefreshTokenExpiration = userDTO.RefreshTokenExpiration;
+            user.Token = authenticationResponse.Token;
+            return user;
         }
 
         public async Task<AuthenticationResponse> CheckRefreshToken(int id, string refreshToken)
@@ -65,7 +74,7 @@ namespace CricketCreations.Services
             return await _generateTokens(userDTO);
         }
 
-        public async Task<AuthenticationResponse> Create(NewUser newUser)
+        public async Task<User> Create(NewUser newUser)
         {
             UserDTO userDTO = _convertToUserDTO(newUser);
             UserDTO newUserDTO = await _userRepository.Create(userDTO);
@@ -75,8 +84,13 @@ namespace CricketCreations.Services
                 return null;
             }
 
-            UserDTO updateUserDTO = await _userRepository.Update(newUserDTO);
-            return await _generateTokens(updateUserDTO);
+            UserDTO updatedUserDTO = await _userRepository.Update(newUserDTO);
+            AuthenticationResponse authenticationResponse = await _generateTokens(updatedUserDTO);
+            User user = _convertToUser(updatedUserDTO);
+            user.RefreshToken = authenticationResponse.RefreshToken;
+            user.RefreshTokenExpiration = updatedUserDTO.RefreshTokenExpiration;
+            user.Token = authenticationResponse.Token;
+            return user;
         }
 
         public async Task<bool> IsValidId(int id)

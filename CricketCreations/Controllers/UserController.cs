@@ -48,14 +48,14 @@ namespace CricketCreations.Controllers
         {
             try
             {
-                AuthenticationResponse res = await _userService.CheckPassword(checkPasswordRequest.UserName, checkPasswordRequest.Password);
+                User user = await _userService.CheckPassword(checkPasswordRequest.UserName, checkPasswordRequest.Password);
 
-                if (res == null)
+                if (user == null)
                 {
                     return new UnauthorizedObjectResult("Login failed");
                 }
 
-                return new OkObjectResult(res);
+                return new OkObjectResult(user);
             }
             catch (Exception ex)
             {
@@ -88,8 +88,8 @@ namespace CricketCreations.Controllers
         {
             try
             {
-                AuthenticationResponse authenticationResponse = await _userService.Create(newUser);
-                return new OkObjectResult(authenticationResponse);
+                User createdUser = await _userService.Create(newUser);
+                return new CreatedResult($"api/tag/{createdUser.Id}", createdUser);
             }
             catch (DbUpdateException ex)
             {
