@@ -26,6 +26,7 @@ namespace CricketCreationsRepository.Repositories
             c.CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
                 .ForMember(dest => dest.Tags, opt => opt.Ignore())
+                .ForMember(dest => dest.Password, opt => opt.Ignore())
                 .ReverseMap()
                 .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
                 .ForMember(dest => dest.Tags, opt => opt.Ignore());
