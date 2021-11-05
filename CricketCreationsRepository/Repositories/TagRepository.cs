@@ -22,7 +22,7 @@ namespace CricketCreationsRepository.Repositories
                 .ForMember(dest => dest.BlogPosts, opt => opt.MapFrom(tag => tag.BlogPosts.Select(b => _convertToBlogPost(b))))
         );
         private static MapperConfiguration config2 = new MapperConfiguration(config =>
-            config.CreateMap<BlogPost, BlogPostDTO>().ForMember(dest => dest.Tags, opt => opt.Ignore()).ForMember(dest => dest.User, opt => opt.Ignore()).ReverseMap()
+            config.CreateMap<BlogPost, BlogPostDTO>().ForMember(dest => dest.Tags, opt => opt.Ignore()).ReverseMap()
         );
 
 

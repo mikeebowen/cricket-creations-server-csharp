@@ -102,6 +102,7 @@ namespace CricketCreationsDatabase.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Published = table.Column<bool>(type: "bit", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -145,29 +146,9 @@ namespace CricketCreationsDatabase.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "BlogPost",
-                columns: new[] { "Id", "Content", "Created", "Deleted", "Image", "LastUpdated", "Published", "Title", "UserId" },
-                values: new object[,]
-                {
-                    { 1, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.", new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6260), false, null, new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6274), true, "enim neque volutpat ac tincidunt", null },
-                    { 2, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.", new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6660), false, null, new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6668), true, "volutpat odio facilisis mauris sit", null },
-                    { 3, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.", new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6672), false, null, new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6674), true, "maecenas volutpat blandit aliquam etiam", null },
-                    { 4, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.", new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6677), false, null, new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6679), true, "viverra mauris in aliquam sem", null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Page",
-                columns: new[] { "Id", "Content", "Created", "Deleted", "Heading", "LastUpdated", "Title", "UserId" },
-                values: new object[,]
-                {
-                    { 1, "Bacon ipsum dolor amet strip steak bresaola chislic, bacon short loin kevin andouille brisket corned beef. Turducken spare ribs pork chop frankfurter, bresaola kielbasa meatball meatloaf pork chislic shoulder short loin leberkas. Frankfurter kevin bacon leberkas ham drumstick shankle flank t-bone biltong shank meatball pork chop bresaola turducken. Frankfurter bacon cupim, hamburger doner pork chop ribeye beef.", new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7788), false, "The About Page", new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7798), "About", null },
-                    { 2, "Fish tacos with cabbage slaw and a side of chips and guac. CARNITAS!! These tacos are lit 🔥. Can you put some peppers and onions on that? Black or pinto beans? Give me all the tacos, immediately. How bout a gosh darn quesadilla? Black or pinto beans? It’s taco time all the time. Um, Tabasco? No thanks, do you have any Cholula? It’s a wonderful morning for breakfast tacos. How do you feel about hard shelled tacos? Make it a double there pal. I’d have to say, those tacos are on fleek", new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7802), false, "The Taco Page", new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7804), "Taco", null }
-                });
-
-            migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "AvatarId", "Created", "Deleted", "Email", "LastUpdated", "Name", "Password", "RefreshToken", "RefreshTokenExpiration", "Role", "Salt", "Surname", "UserName" },
-                values: new object[] { 1, null, new DateTime(2021, 8, 3, 13, 42, 33, 258, DateTimeKind.Local).AddTicks(4955), false, "michael@example.com", new DateTime(2021, 8, 3, 13, 42, 33, 260, DateTimeKind.Local).AddTicks(5840), "Michael", "n6Y+XMmYlhlrUEEdyopjJkApVSsmvEX3O55oJl3wyxw=", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, new byte[] { 214, 78, 130, 150, 19, 180, 152, 139, 237, 207, 168, 49, 90, 171, 165, 137 }, "Test", "tacocat" });
+                values: new object[] { 1, null, new DateTime(2021, 11, 5, 14, 46, 21, 991, DateTimeKind.Local).AddTicks(6336), false, "michael@example.com", new DateTime(2021, 11, 5, 14, 46, 21, 993, DateTimeKind.Local).AddTicks(6506), "Michael", "cyxM6rKT3spodYTbCuIV9AOJJRRCsGORkAqEr8iX7VU=", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, new byte[] { 76, 32, 78, 224, 52, 252, 176, 60, 35, 206, 201, 142, 196, 46, 195, 188 }, "Test", "tacocat" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BlogPost_UserId",
@@ -203,6 +184,12 @@ namespace CricketCreationsDatabase.Migrations
                 name: "IX_User_Email",
                 table: "User",
                 column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_UserName",
+                table: "User",
+                column: "UserName",
                 unique: true);
 
             migrationBuilder.AddForeignKey(

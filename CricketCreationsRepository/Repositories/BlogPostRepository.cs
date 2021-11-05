@@ -21,9 +21,9 @@ namespace CricketCreationsRepository.Repositories
         {
             c.CreateMap<BlogPost, BlogPostDTO>()
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => _convertToTagDTO(t))))
-            .ForMember(dest => dest.User, opt => opt.Ignore())
             .ReverseMap()
-            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => _convertToTag(t))));
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => _convertToTag(t))))
+            .ForMember(dest => dest.Created, opt => opt.Ignore());
         });
         private static MapperConfiguration tagConfig = new MapperConfiguration(context =>
             context.CreateMap<Tag, TagDTO>().ForMember(t => t.BlogPosts, options => options.Ignore()).ReverseMap()
@@ -48,13 +48,13 @@ namespace CricketCreationsRepository.Repositories
         }
         public async Task<List<BlogPostDTO>> Read(int page, int count, int id)
         {
-            User user = await DatabaseManager.Instance.User.FindAsync(id);
-            List<BlogPost> blogPosts = user.BlogPosts
-                                        .Where(b => !b.Deleted && b.Published)
+            //User user = await DatabaseManager.Instance.User.FindAsync(id);
+            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost
+                                        .Where(b => !b.Deleted && b.Published && b.User.Id == id)
                                         .OrderByDescending(s => s.LastUpdated)
                                         .Skip((page - 1) * count)
                                         .Take(count)
-                                        .ToList();
+                                        .ToListAsync();
 
             return blogPosts.Select(b => _convertToBlogPostDTO(b)).ToList();
         }
@@ -97,21 +97,17 @@ namespace CricketCreationsRepository.Repositories
                 }
             }).ToList();
 
-            if (blogPost != null)
+            BlogPost updatedBlogPost = _convertToBlogPost(blogPostDto);
+            PropertyEntry createdProperty = DatabaseManager.Instance.Entry(blogPost).Property("Created");
+            updatedBlogPost.Id = blogPost.Id; 
+            DatabaseManager.Instance.Entry(blogPost).CurrentValues.SetValues(updatedBlogPost);
+            if (createdProperty != null)
             {
-                BlogPost updatedBlogPost = _convertToBlogPost(blogPostDto);
-                DatabaseManager.Instance.Entry(blogPost).CurrentValues.SetValues(updatedBlogPost);
-                blogPost.Tags = newTags;
-                PropertyEntry property = DatabaseManager.Instance.Entry(blogPost).Property("Created");
-
-                if (property != null)
-                {
-                    DatabaseManager.Instance.Entry(blogPost).Property("Created").IsModified = false;
-                }
-                await DatabaseManager.Instance.SaveChangesAsync();
-                return _convertToBlogPostDTO(blogPost);
+                DatabaseManager.Instance.Entry(blogPost).Property("Created").IsModified = false;
             }
-            return null;
+            blogPost.Tags = newTags;
+            await DatabaseManager.Instance.SaveChangesAsync();
+            return _convertToBlogPostDTO(blogPost);
         }
         public async Task<bool> Delete(int id)
         {

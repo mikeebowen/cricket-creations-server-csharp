@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CricketCreationsDatabase.Migrations
 {
     [DbContext(typeof(CricketCreationsContext))]
-    [Migration("20210803204233_InitialCreate")]
+    [Migration("20211105214622_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,7 +18,7 @@ namespace CricketCreationsDatabase.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.8")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("BlogPostTag", b =>
@@ -72,48 +72,6 @@ namespace CricketCreationsDatabase.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("BlogPost");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6260),
-                            Deleted = false,
-                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6274),
-                            Published = true,
-                            Title = "enim neque volutpat ac tincidunt"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6660),
-                            Deleted = false,
-                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6668),
-                            Published = true,
-                            Title = "volutpat odio facilisis mauris sit"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6672),
-                            Deleted = false,
-                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6674),
-                            Published = true,
-                            Title = "maecenas volutpat blandit aliquam etiam"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Lobortis scelerisque fermentum dui faucibus in. Faucibus ornare suspendisse sed nisi lacus sed viverra. Vulputate enim nulla aliquet porttitor lacus. Ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel. Dignissim enim sit amet venenatis urna. Consequat id porta nibh venenatis cras sed felis eget velit. Amet cursus sit amet dictum sit amet justo. Sit amet risus nullam eget felis eget nunc lobortis mattis. Dui sapien eget mi proin sed libero. Ullamcorper malesuada proin libero nunc consequat interdum. Nunc consequat interdum varius sit amet mattis vulputate enim. Lacus vestibulum sed arcu non odio. Ullamcorper a lacus vestibulum sed arcu non. Duis at tellus at urna. Donec massa sapien faucibus et molestie ac feugiat sed lectus. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam.",
-                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6677),
-                            Deleted = false,
-                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(6679),
-                            Published = true,
-                            Title = "viverra mauris in aliquam sem"
-                        });
                 });
 
             modelBuilder.Entity("CricketCreationsDatabase.Models.Image", b =>
@@ -176,6 +134,9 @@ namespace CricketCreationsDatabase.Migrations
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Published")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -187,28 +148,6 @@ namespace CricketCreationsDatabase.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Page");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Content = "Bacon ipsum dolor amet strip steak bresaola chislic, bacon short loin kevin andouille brisket corned beef. Turducken spare ribs pork chop frankfurter, bresaola kielbasa meatball meatloaf pork chislic shoulder short loin leberkas. Frankfurter kevin bacon leberkas ham drumstick shankle flank t-bone biltong shank meatball pork chop bresaola turducken. Frankfurter bacon cupim, hamburger doner pork chop ribeye beef.",
-                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7788),
-                            Deleted = false,
-                            Heading = "The About Page",
-                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7798),
-                            Title = "About"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Content = "Fish tacos with cabbage slaw and a side of chips and guac. CARNITAS!! These tacos are lit 🔥. Can you put some peppers and onions on that? Black or pinto beans? Give me all the tacos, immediately. How bout a gosh darn quesadilla? Black or pinto beans? It’s taco time all the time. Um, Tabasco? No thanks, do you have any Cholula? It’s a wonderful morning for breakfast tacos. How do you feel about hard shelled tacos? Make it a double there pal. I’d have to say, those tacos are on fleek",
-                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7802),
-                            Deleted = false,
-                            Heading = "The Taco Page",
-                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 261, DateTimeKind.Local).AddTicks(7804),
-                            Title = "Taco"
-                        });
                 });
 
             modelBuilder.Entity("CricketCreationsDatabase.Models.Tag", b =>
@@ -303,21 +242,24 @@ namespace CricketCreationsDatabase.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
                     b.ToTable("User");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2021, 8, 3, 13, 42, 33, 258, DateTimeKind.Local).AddTicks(4955),
+                            Created = new DateTime(2021, 11, 5, 14, 46, 21, 991, DateTimeKind.Local).AddTicks(6336),
                             Deleted = false,
                             Email = "michael@example.com",
-                            LastUpdated = new DateTime(2021, 8, 3, 13, 42, 33, 260, DateTimeKind.Local).AddTicks(5840),
+                            LastUpdated = new DateTime(2021, 11, 5, 14, 46, 21, 993, DateTimeKind.Local).AddTicks(6506),
                             Name = "Michael",
-                            Password = "n6Y+XMmYlhlrUEEdyopjJkApVSsmvEX3O55oJl3wyxw=",
+                            Password = "cyxM6rKT3spodYTbCuIV9AOJJRRCsGORkAqEr8iX7VU=",
                             RefreshTokenExpiration = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = 0,
-                            Salt = new byte[] { 214, 78, 130, 150, 19, 180, 152, 139, 237, 207, 168, 49, 90, 171, 165, 137 },
+                            Salt = new byte[] { 76, 32, 78, 224, 52, 252, 176, 60, 35, 206, 201, 142, 196, 46, 195, 188 },
                             Surname = "Test",
                             UserName = "tacocat"
                         });

@@ -17,7 +17,6 @@ namespace CricketCreationsRepository.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public string Image { get; set; }
-        public UserRepository User { get; set; }
         public bool Published { get; set; } = false;
         public List<TagDTO> Tags { get; set; } = new List<TagDTO>();
     }
