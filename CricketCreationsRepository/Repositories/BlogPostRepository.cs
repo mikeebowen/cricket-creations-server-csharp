@@ -48,9 +48,19 @@ namespace CricketCreationsRepository.Repositories
         }
         public async Task<List<BlogPostDTO>> Read(int page, int count, int id)
         {
-            //User user = await DatabaseManager.Instance.User.FindAsync(id);
             List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost
                                         .Where(b => !b.Deleted && b.Published && b.User.Id == id)
+                                        .OrderByDescending(s => s.LastUpdated)
+                                        .Skip((page - 1) * count)
+                                        .Take(count)
+                                        .ToListAsync();
+
+            return blogPosts.Select(b => _convertToBlogPostDTO(b)).ToList();
+        }
+        public async Task<List<BlogPostDTO>> AdminRead(int page, int count, int id)
+        {
+            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost
+                                        .Where(b => !b.Deleted && b.User.Id == id)
                                         .OrderByDescending(s => s.LastUpdated)
                                         .Skip((page - 1) * count)
                                         .Take(count)
@@ -78,10 +88,13 @@ namespace CricketCreationsRepository.Repositories
         public async Task<BlogPostDTO> Update(BlogPostDTO blogPostDto, int userId)
         {
             BlogPost blogPost = await DatabaseManager.Instance.BlogPost.Where(bp => bp.Id == blogPostDto.Id).Include(b => b.Tags).FirstOrDefaultAsync();
-            if (blogPost == null)
+            User user = await DatabaseManager.Instance.User.FindAsync(userId);
+
+            if (blogPost == null || user == null)
             {
                 return null;
             }
+
             List<Tag> newTags = blogPostDto.Tags.Select(t =>
             {
                 Tag tag;
@@ -93,19 +106,23 @@ namespace CricketCreationsRepository.Repositories
                 else
                 {
                     tag = _convertToTag(t);
+                    tag.User = user;
                     return tag;
                 }
             }).ToList();
 
             BlogPost updatedBlogPost = _convertToBlogPost(blogPostDto);
             PropertyEntry createdProperty = DatabaseManager.Instance.Entry(blogPost).Property("Created");
-            updatedBlogPost.Id = blogPost.Id; 
+            updatedBlogPost.Id = blogPost.Id;
             DatabaseManager.Instance.Entry(blogPost).CurrentValues.SetValues(updatedBlogPost);
             if (createdProperty != null)
             {
                 DatabaseManager.Instance.Entry(blogPost).Property("Created").IsModified = false;
             }
             blogPost.Tags = newTags;
+            user.Tags = user.Tags ?? new List<Tag>();
+            user.Tags.AddRange(newTags);
+
             await DatabaseManager.Instance.SaveChangesAsync();
             return _convertToBlogPostDTO(blogPost);
         }
@@ -128,7 +145,12 @@ namespace CricketCreationsRepository.Repositories
         public async Task<int> GetCount(int id)
         {
             User user = await DatabaseManager.Instance.User.FindAsync(id);
-            return user.BlogPosts.Where(b => b.Deleted == false).Count();
+            if (user.BlogPosts == null)
+            {
+                user.BlogPosts = new List<BlogPost>();
+            }
+            IEnumerable<BlogPost> blogPosts = user.BlogPosts.Where(b => b.Deleted == false);
+            return blogPosts.Count();
         }
 
         private static BlogPostDTO _convertToBlogPostDTO(BlogPost blogPost)

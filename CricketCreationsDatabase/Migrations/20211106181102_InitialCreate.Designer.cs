@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CricketCreationsDatabase.Migrations
 {
     [DbContext(typeof(CricketCreationsContext))]
-    [Migration("20211105214622_InitialCreate")]
+    [Migration("20211106181102_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -251,15 +251,15 @@ namespace CricketCreationsDatabase.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2021, 11, 5, 14, 46, 21, 991, DateTimeKind.Local).AddTicks(6336),
+                            Created = new DateTime(2021, 11, 6, 11, 11, 1, 593, DateTimeKind.Local).AddTicks(3946),
                             Deleted = false,
                             Email = "michael@example.com",
-                            LastUpdated = new DateTime(2021, 11, 5, 14, 46, 21, 993, DateTimeKind.Local).AddTicks(6506),
+                            LastUpdated = new DateTime(2021, 11, 6, 11, 11, 1, 595, DateTimeKind.Local).AddTicks(5694),
                             Name = "Michael",
-                            Password = "cyxM6rKT3spodYTbCuIV9AOJJRRCsGORkAqEr8iX7VU=",
+                            Password = "aaAEi/c8V9kFgYWp5I5de6cTfwTU+a34zemdmwa7SHw=",
                             RefreshTokenExpiration = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Role = 0,
-                            Salt = new byte[] { 76, 32, 78, 224, 52, 252, 176, 60, 35, 206, 201, 142, 196, 46, 195, 188 },
+                            Salt = new byte[] { 1, 40, 20, 114, 201, 14, 135, 9, 248, 79, 231, 103, 245, 22, 165, 113 },
                             Surname = "Test",
                             UserName = "tacocat"
                         });

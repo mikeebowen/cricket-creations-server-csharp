@@ -148,7 +148,7 @@ namespace CricketCreationsDatabase.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "AvatarId", "Created", "Deleted", "Email", "LastUpdated", "Name", "Password", "RefreshToken", "RefreshTokenExpiration", "Role", "Salt", "Surname", "UserName" },
-                values: new object[] { 1, null, new DateTime(2021, 11, 5, 14, 46, 21, 991, DateTimeKind.Local).AddTicks(6336), false, "michael@example.com", new DateTime(2021, 11, 5, 14, 46, 21, 993, DateTimeKind.Local).AddTicks(6506), "Michael", "cyxM6rKT3spodYTbCuIV9AOJJRRCsGORkAqEr8iX7VU=", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, new byte[] { 76, 32, 78, 224, 52, 252, 176, 60, 35, 206, 201, 142, 196, 46, 195, 188 }, "Test", "tacocat" });
+                values: new object[] { 1, null, new DateTime(2021, 11, 6, 11, 11, 1, 593, DateTimeKind.Local).AddTicks(3946), false, "michael@example.com", new DateTime(2021, 11, 6, 11, 11, 1, 595, DateTimeKind.Local).AddTicks(5694), "Michael", "aaAEi/c8V9kFgYWp5I5de6cTfwTU+a34zemdmwa7SHw=", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, new byte[] { 1, 40, 20, 114, 201, 14, 135, 9, 248, 79, 231, 103, 245, 22, 165, 113 }, "Test", "tacocat" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BlogPost_UserId",

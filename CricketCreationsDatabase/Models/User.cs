@@ -21,7 +21,7 @@ namespace CricketCreationsDatabase.Models
         public byte[] Salt { get; set; }
         public string RefreshToken { get; set; }
         public DateTime RefreshTokenExpiration { get; set; }
-        public bool Deleted { get; set; }
+        public bool Deleted { get; set; } = false;
         [Required, MaxLength(200)]
         public string Name { get; set; }
         [Required, MaxLength(200)]
@@ -37,14 +37,5 @@ namespace CricketCreationsDatabase.Models
         public List<Page> Pages { get; set; }
         public List<Image> Images { get; set; }
         public Image Avatar { get; set; }
-
-        public User()
-        {
-            this.Deleted = false;
-            this.BlogPosts = new List<BlogPost>();
-            this.Tags = new List<Tag>();
-            this.Pages = new List<Page>();
-            this.Images = new List<Image>();
-        }
     }
 }

@@ -8,15 +8,9 @@ namespace CricketCreationsDatabase.Models
 {
     public class Tag : BaseEntity
     {
-        public bool Deleted { get; set; }
+        public bool Deleted { get; set; } = false;
         public User User { get; set; }
         public string Name { get; set; }
         public List<BlogPost> BlogPosts { get; set; }
-
-        public Tag()
-        {
-            this.Deleted = false;
-            this.BlogPosts = new List<BlogPost>();
-        }
     }
 }

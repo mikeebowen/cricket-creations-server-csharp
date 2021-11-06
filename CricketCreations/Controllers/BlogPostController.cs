@@ -36,6 +36,9 @@ namespace CricketCreations.Controllers
                 bool validIdInt = int.TryParse(userId, out int id);
                 int blogPostCount = userId != null && validIdInt ? await _blogPostService.GetCount(id) : await _blogPostService.GetCount();
                 bool inRange = blogPostCount - (pg * cnt) >= ((cnt * -1) + 1);
+                List<Claim> claims = User.Claims.ToList();
+                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+                bool isIntAdminId = int.TryParse(idStr, out int adminUserId);
 
                 if ((page == null || !validPage) || (count == null || !validCount) || (blogPostCount > 0 && !inRange) || (userId != null && (!validIdInt || !(await _userService.IsValidId(id)))))
                 {
@@ -43,9 +46,13 @@ namespace CricketCreations.Controllers
                 }
 
                 List<BlogPost> blogPosts;
-                if (userId != null && page != null && count != null)
+                if (validIdInt && !isIntAdminId)
                 {
                     blogPosts = await _blogPostService.Read(pg, cnt, id);
+                }
+                else if (isIntAdminId)
+                {
+                    blogPosts = await _blogPostService.AdminRead(pg, cnt, adminUserId);
                 }
                 else
                 {

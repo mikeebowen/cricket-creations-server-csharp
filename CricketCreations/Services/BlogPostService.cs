@@ -38,6 +38,12 @@ namespace CricketCreations.Services
             return blogPostDTOs.Select(b => _convertToBlogPost(b)).ToList();
         }
 
+        public async Task<List<BlogPost>> AdminRead(int page, int count, int userId)
+        {
+            List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.AdminRead(page, count, userId);
+            return blogPostDTOs.Select(b => _convertToBlogPost(b)).ToList();
+        }
+
         public async Task<BlogPost> Read(int id)
         {
             BlogPostDTO blogPostDTO = await _blogPostRepository.Read(id);

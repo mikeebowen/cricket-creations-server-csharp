@@ -62,7 +62,7 @@ namespace CricketCreationsDatabase
         {
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<User>().HasIndex(u => u.UserName).IsUnique();
-            //modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
+            modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
             modelBuilder.Entity<User>().HasMany(u => u.Pages);
             modelBuilder.Entity<User>().HasMany(u => u.Tags);
             modelBuilder.Entity<User>().HasMany(u => u.Images);
@@ -111,7 +111,12 @@ public static class ModelBuilderExtensions
                 UserName = "tacocat",
                 Role = Role.Administrator,
                 Password = password,
-                Salt = salt
+                Salt = salt,
+                BlogPosts = new List<BlogPost>(),
+                Tags = new List<Tag>(),
+                Pages = new List<Page>(),
+                Images = new List<Image>()
+
             }
         );
         //modelBuilder.Entity<BlogPost>().HasData(

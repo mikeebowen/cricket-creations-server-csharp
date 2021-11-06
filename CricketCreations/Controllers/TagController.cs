@@ -88,7 +88,16 @@ namespace CricketCreations.Controllers
         {
             try
             {
-                Tag newTag = await _tagService.Create(new Tag() { Name = data.Name }, data.BlogPostId, data.UserId);
+                List<Claim> claims = User.Claims.ToList();
+                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+                bool isInt = int.TryParse(idStr, out int id);
+
+                if (!isInt)
+                {
+                    return new BadRequestResult();
+                }
+
+                Tag newTag = await _tagService.Create(new Tag() { Name = data.Name }, data.BlogPostId, id);
                 return new CreatedResult($"api/tag/{newTag.Id}", newTag);
             }
             catch (Exception ex)

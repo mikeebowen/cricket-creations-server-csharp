@@ -13,15 +13,8 @@ namespace CricketCreationsDatabase.Models
         public string Image { get; set; }
         public User User { get; set; }
 
-        public bool Published { get; set; }
-        public bool Deleted { get; set; }
+        public bool Published { get; set; } = false;
+        public bool Deleted { get; set; } = false;
         public List<Tag> Tags { get; set; }
-
-        public BlogPost()
-        {
-            this.Published = false;
-            this.Deleted = false;
-            this.Tags = new List<Tag>();
-        }
     }
 }

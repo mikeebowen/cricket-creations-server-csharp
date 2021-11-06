@@ -103,6 +103,10 @@ namespace CricketCreationsRepository.Repositories
         public async Task<UserDTO> Create(UserDTO userDTO)
         {
             User user = _convertToUser(userDTO);
+            user.BlogPosts = new List<BlogPost>();
+            user.Tags = new List<Tag>();
+            user.Images = new List<Image>();
+
             User newUser = DatabaseManager.Instance.User.Add(user).Entity;
             await DatabaseManager.Instance.SaveChangesAsync();
             return _convertToUserDTO(newUser);
