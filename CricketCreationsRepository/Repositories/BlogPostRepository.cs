@@ -100,7 +100,7 @@ namespace CricketCreationsRepository.Repositories
                 Tag tag;
                 if (t.Id != null)
                 {
-                    tag = DatabaseManager.Instance.Tag.Where(tt => tt.Id == t.Id).FirstOrDefault();
+                    tag = DatabaseManager.Instance.Tag.Find(t.Id);
                     return tag;
                 }
                 else

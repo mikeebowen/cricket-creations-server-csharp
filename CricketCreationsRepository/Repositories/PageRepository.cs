@@ -113,6 +113,7 @@ namespace CricketCreationsRepository.Repositories
         {
             Page page = _convertToPage(pageDTO);
             User user = await DatabaseManager.Instance.User.FindAsync(userId);
+            user.Pages = user.Pages ?? new List<Page>();
             user.Pages.Add(page);
             page.User = user;
 

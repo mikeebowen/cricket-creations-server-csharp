@@ -55,11 +55,20 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<PageController>
-        [Authorize, HttpPost("{userId}")]
-        public async Task<IActionResult> Post([FromBody] Page page, int userId)
+        [Authorize, HttpPost]
+        public async Task<IActionResult> Post([FromBody] Page page)
         {
             try
             {
+                List<Claim> claims = User.Claims.ToList();
+                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+                bool isInt = int.TryParse(idStr, out int userId);
+
+                if (!isInt)
+                {
+                    return new BadRequestResult();
+                }
+
                 Page createdPage = await _pageService.Create(page, userId);
                 return new CreatedResult($"api/page/{createdPage.Id}", createdPage);
             }
