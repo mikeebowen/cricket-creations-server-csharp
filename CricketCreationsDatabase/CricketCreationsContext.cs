@@ -76,6 +76,7 @@ namespace CricketCreationsDatabase
             modelBuilder.Entity<Tag>().HasOne(t => t.User).WithMany(u => u.Tags);
 
             modelBuilder.Entity<Page>().HasOne(p => p.User).WithMany(u => u.Pages);
+            modelBuilder.Entity<Page>().HasIndex(p => p.Heading).IsUnique();
 
             modelBuilder.Entity<Image>().HasOne(i => i.User).WithMany(u => u.Images);
 
