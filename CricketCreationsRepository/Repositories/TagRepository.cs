@@ -15,6 +15,13 @@ namespace CricketCreationsRepository.Repositories
 {
     public class TagRepository : ITagRepository
     {
+        private IDatabaseManager _databaseManager;
+
+        public TagRepository(IDatabaseManager databaseManager)
+        {
+            _databaseManager = databaseManager;
+        }
+
         private static MapperConfiguration config = new MapperConfiguration(config =>
         config.CreateMap<Tag, TagDTO>()
                 .ForMember(dest => dest.BlogPosts, opt => opt.MapFrom(tag => tag.BlogPosts.Select(b => _convertToBlogPostDTO(b))))
@@ -30,14 +37,14 @@ namespace CricketCreationsRepository.Repositories
         private static IMapper _blogPostMapper = config2.CreateMapper();
         public async Task<List<TagDTO>> Read()
         {
-            List<Tag> tags = await DatabaseManager.Instance.Tag.Where(t => t.Deleted == false).ToListAsync();
+            List<Tag> tags = await _databaseManager.Instance.Tag.Where(t => t.Deleted == false).ToListAsync();
 
             List<TagDTO> tagDTOs = tags.Select(t => _convertToTagDTO(t)).ToList();
             return tagDTOs;
         }
         public async Task<TagDTO> Read(int tagId)
         {
-            Tag tag = await DatabaseManager.Instance.Tag.Where(tag => tag.Id == tagId).Include(t => t.BlogPosts).AsNoTracking().FirstAsync();
+            Tag tag = await _databaseManager.Instance.Tag.Where(tag => tag.Id == tagId).Include(t => t.BlogPosts).AsNoTracking().FirstAsync();
             tag.BlogPosts = tag.BlogPosts.Select(b => new BlogPost()
             {
                 Id = b.Id,
@@ -48,13 +55,13 @@ namespace CricketCreationsRepository.Repositories
         }
         public async Task<List<TagDTO>> Read(int page, int count)
         {
-            List<Tag> tags = await DatabaseManager.Instance.Tag.Skip((page - 1) * count).Take(count).ToListAsync();
+            List<Tag> tags = await _databaseManager.Instance.Tag.Skip((page - 1) * count).Take(count).ToListAsync();
             return tags.Select(b => _convertToTagDTO(b)).ToList();
         }
         public async Task<TagDTO> Create(TagDTO tagDTO, int blogPostId, int userId)
         {
-            User user = await DatabaseManager.Instance.User.FindAsync(userId);
-            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(blogPostId);
+            User user = await _databaseManager.Instance.User.FindAsync(userId);
+            BlogPost blogPost = await _databaseManager.Instance.BlogPost.FindAsync(blogPostId);
             Tag newTag = _convertToTag(tagDTO);
 
             blogPost.Tags.Add(newTag);
@@ -62,18 +69,18 @@ namespace CricketCreationsRepository.Repositories
             newTag.User = user;
             newTag.BlogPosts.Add(blogPost);
 
-            DatabaseManager.Instance.Tag.Add(newTag);
-            await DatabaseManager.Instance.SaveChangesAsync();
+            _databaseManager.Instance.Tag.Add(newTag);
+            await _databaseManager.Instance.SaveChangesAsync();
             return _convertToTagDTO(newTag);
         }
         public async Task<int> GetCount()
         {
-            return await DatabaseManager.Instance.Tag.Where(t => t.Deleted == false).CountAsync();
+            return await _databaseManager.Instance.Tag.Where(t => t.Deleted == false).CountAsync();
         }
 
         public async Task<int> GetCount(int id)
         {
-            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            User user = await _databaseManager.Instance.User.FindAsync(id);
             return user.Tags.Where(t => t.Deleted == false).Count();
         }
         private TagDTO _convertToTagDTO(Tag tag)
@@ -111,16 +118,16 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<List<TagDTO>> Read(int page, int count, int id)
         {
-            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            User user = await _databaseManager.Instance.User.FindAsync(id);
             List<Tag> tags = user.Tags.Where(t => t.Deleted == false).Skip((page - 1) * count).Take(count).ToList();
             return tags.Select(b => _convertToTagDTO(b)).ToList();
         }
 
         public async Task<TagDTO> Update(TagDTO tagDTO, int userId)
         {
-            User user = await DatabaseManager.Instance.User.FindAsync(userId);
+            User user = await _databaseManager.Instance.User.FindAsync(userId);
 
-            Tag tag = await DatabaseManager.Instance.Tag.Where(tag => tag.Id == tagDTO.Id).Include(t => t.BlogPosts).FirstAsync();
+            Tag tag = await _databaseManager.Instance.Tag.Where(tag => tag.Id == tagDTO.Id).Include(t => t.BlogPosts).FirstAsync();
             List<BlogPost> newBlogPosts = null;
             if (tagDTO.BlogPosts != null)
             {
@@ -129,7 +136,7 @@ namespace CricketCreationsRepository.Repositories
                     BlogPost blogPost;
                     if (b.Id != null)
                     {
-                        blogPost = DatabaseManager.Instance.BlogPost.Where(bb => bb.Id == b.Id).First();
+                        blogPost = _databaseManager.Instance.BlogPost.Where(bb => bb.Id == b.Id).First();
                         return blogPost;
                     }
                     else
@@ -143,18 +150,18 @@ namespace CricketCreationsRepository.Repositories
             if (tag != null && (user.Role == Role.Administrator || tag.User.Id == userId))
             {
                 Tag updatedTag = _convertToTag(tagDTO);
-                DatabaseManager.Instance.Entry(tag).CurrentValues.SetValues(updatedTag);
+                _databaseManager.Instance.Entry(tag).CurrentValues.SetValues(updatedTag);
                 if (newBlogPosts != null)
                 {
                     tag.BlogPosts = newBlogPosts;
                 };
-                PropertyEntry property = DatabaseManager.Instance.Entry(tag).Property("Created");
+                PropertyEntry property = _databaseManager.Instance.Entry(tag).Property("Created");
 
                 if (property != null)
                 {
-                    DatabaseManager.Instance.Entry(tag).Property("Created").IsModified = false;
+                    _databaseManager.Instance.Entry(tag).Property("Created").IsModified = false;
                 }
-                await DatabaseManager.Instance.SaveChangesAsync();
+                await _databaseManager.Instance.SaveChangesAsync();
                 return _convertToTagDTO(tag);
             }
             return null;
@@ -162,11 +169,11 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<bool> Delete(int id)
         {
-            Tag tag = await DatabaseManager.Instance.Tag.FindAsync(id);
+            Tag tag = await _databaseManager.Instance.Tag.FindAsync(id);
             if (tag != null)
             {
                 tag.Deleted = true;
-                await DatabaseManager.Instance.SaveChangesAsync();
+                await _databaseManager.Instance.SaveChangesAsync();
                 return true;
             }
             return false;

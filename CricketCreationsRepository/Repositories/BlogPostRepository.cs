@@ -17,6 +17,12 @@ namespace CricketCreationsRepository.Repositories
 {
     public class BlogPostRepository : IBlogPostRepository
     {
+        private IDatabaseManager _databaseManager;
+
+        public BlogPostRepository(IDatabaseManager databaseManager)
+        {
+            _databaseManager = databaseManager;
+        }
         private static MapperConfiguration config = new MapperConfiguration(c =>
         {
             c.CreateMap<BlogPost, BlogPostDTO>()
@@ -32,12 +38,12 @@ namespace CricketCreationsRepository.Repositories
         private static IMapper _tagMapper = tagConfig.CreateMapper();
         public async Task<List<BlogPostDTO>> Read()
         {
-            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost.Where(x => !x.Deleted && x.Published).Include(b => b.Tags).ToListAsync();
+            List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost.Where(x => !x.Deleted && x.Published).Include(b => b.Tags).ToListAsync();
             return blogPosts.Select(b => _convertToBlogPostDTO(b)).ToList();
         }
         public async Task<List<BlogPostDTO>> Read(int page, int count)
         {
-            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost
+            List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost
                                         .Where(b => b.Deleted == false && b.Published == true)
                                         .OrderByDescending(s => s.LastUpdated)
                                         .Skip((page - 1) * count).Take(count)
@@ -48,7 +54,7 @@ namespace CricketCreationsRepository.Repositories
         }
         public async Task<List<BlogPostDTO>> Read(int page, int count, int id)
         {
-            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost
+            List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost
                                         .Where(b => !b.Deleted && b.Published && b.User.Id == id)
                                         .OrderByDescending(s => s.LastUpdated)
                                         .Skip((page - 1) * count)
@@ -59,7 +65,7 @@ namespace CricketCreationsRepository.Repositories
         }
         public async Task<List<BlogPostDTO>> AdminRead(int page, int count, int id)
         {
-            List<BlogPost> blogPosts = await DatabaseManager.Instance.BlogPost
+            List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost
                                         .Where(b => !b.Deleted && b.User.Id == id)
                                         .OrderByDescending(s => s.LastUpdated)
                                         .Skip((page - 1) * count)
@@ -70,25 +76,25 @@ namespace CricketCreationsRepository.Repositories
         }
         public async Task<BlogPostDTO> Read(int id)
         {
-            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
+            BlogPost blogPost = await _databaseManager.Instance.BlogPost.FindAsync(id);
             return _convertToBlogPostDTO(blogPost);
         }
         public async Task<BlogPostDTO> Create(BlogPostDTO blogPostDTO, int userId)
         {
             BlogPost blogPost = _convertToBlogPost(blogPostDTO);
 
-            User user = await DatabaseManager.Instance.User.FirstAsync(u => u.Id == userId);
+            User user = await _databaseManager.Instance.User.FirstAsync(u => u.Id == userId);
             user.BlogPosts.Add(blogPost);
             blogPost.User = user;
 
-            var blog = await DatabaseManager.Instance.BlogPost.AddAsync(blogPost);
-            await DatabaseManager.Instance.SaveChangesAsync();
+            var blog = await _databaseManager.Instance.BlogPost.AddAsync(blogPost);
+            await _databaseManager.Instance.SaveChangesAsync();
             return _convertToBlogPostDTO(blog.Entity);
         }
         public async Task<BlogPostDTO> Update(BlogPostDTO blogPostDto, int userId)
         {
-            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.Where(bp => bp.Id == blogPostDto.Id).Include(b => b.Tags).FirstOrDefaultAsync();
-            User user = await DatabaseManager.Instance.User.FindAsync(userId);
+            BlogPost blogPost = await _databaseManager.Instance.BlogPost.Where(bp => bp.Id == blogPostDto.Id).Include(b => b.Tags).FirstOrDefaultAsync();
+            User user = await _databaseManager.Instance.User.FindAsync(userId);
 
             if (blogPost == null || user == null)
             {
@@ -100,7 +106,7 @@ namespace CricketCreationsRepository.Repositories
                 Tag tag;
                 if (t.Id != null)
                 {
-                    tag = DatabaseManager.Instance.Tag.Find(t.Id);
+                    tag = _databaseManager.Instance.Tag.Find(t.Id);
                     return tag;
                 }
                 else
@@ -112,39 +118,39 @@ namespace CricketCreationsRepository.Repositories
             }).ToList();
 
             BlogPost updatedBlogPost = _convertToBlogPost(blogPostDto);
-            PropertyEntry createdProperty = DatabaseManager.Instance.Entry(blogPost).Property("Created");
+            PropertyEntry createdProperty = _databaseManager.Instance.Entry(blogPost).Property("Created");
             updatedBlogPost.Id = blogPost.Id;
-            DatabaseManager.Instance.Entry(blogPost).CurrentValues.SetValues(updatedBlogPost);
+            _databaseManager.Instance.Entry(blogPost).CurrentValues.SetValues(updatedBlogPost);
             if (createdProperty != null)
             {
-                DatabaseManager.Instance.Entry(blogPost).Property("Created").IsModified = false;
+                _databaseManager.Instance.Entry(blogPost).Property("Created").IsModified = false;
             }
             blogPost.Tags = newTags;
             user.Tags = user.Tags ?? new List<Tag>();
             user.Tags.AddRange(newTags);
 
-            await DatabaseManager.Instance.SaveChangesAsync();
+            await _databaseManager.Instance.SaveChangesAsync();
             return _convertToBlogPostDTO(blogPost);
         }
         public async Task<bool> Delete(int id)
         {
-            BlogPost blogPost = await DatabaseManager.Instance.BlogPost.FindAsync(id);
+            BlogPost blogPost = await _databaseManager.Instance.BlogPost.FindAsync(id);
             if (blogPost != null)
             {
                 blogPost.Deleted = true;
-                await DatabaseManager.Instance.SaveChangesAsync();
+                await _databaseManager.Instance.SaveChangesAsync();
                 return true;
             }
             return false;
         }
         public async Task<int> GetCount()
         {
-            return await DatabaseManager.Instance.BlogPost.Where(b => b.Deleted == false).CountAsync();
+            return await _databaseManager.Instance.BlogPost.Where(b => b.Deleted == false).CountAsync();
         }
 
         public async Task<int> GetCount(int id)
         {
-            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            User user = await _databaseManager.Instance.User.FindAsync(id);
             if (user.BlogPosts == null)
             {
                 user.BlogPosts = new List<BlogPost>();

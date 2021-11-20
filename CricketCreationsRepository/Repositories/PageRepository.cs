@@ -16,16 +16,23 @@ namespace CricketCreationsRepository.Repositories
 {
     public class PageRepository : IPageRepository
     {
+        private IDatabaseManager _databaseManager;
+
+        public PageRepository(IDatabaseManager databaseManager)
+        {
+            _databaseManager = databaseManager;
+        }
+
         private static MapperConfiguration _config = new MapperConfiguration(c => c.CreateMap<Page, PageDTO>().ReverseMap());
         private static IMapper _mapper = _config.CreateMapper();
 
         public async Task<bool> Delete(int id)
         {
-            Page page = await DatabaseManager.Instance.Page.FindAsync(id);
+            Page page = await _databaseManager.Instance.Page.FindAsync(id);
             if (page != null)
             {
                 page.Deleted = true;
-                await DatabaseManager.Instance.SaveChangesAsync();
+                await _databaseManager.Instance.SaveChangesAsync();
                 return true;
             }
             return false;
@@ -33,7 +40,7 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<int> GetCount()
         {
-            return await DatabaseManager.Instance.Page.Where(p => p.Deleted == false).CountAsync();
+            return await _databaseManager.Instance.Page.Where(p => p.Deleted == false).CountAsync();
         }
 
         public Task<int> GetCount(int id)
@@ -43,48 +50,48 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<List<PageDTO>> Read()
         {
-            List<Page> pages = await DatabaseManager.Instance.Page.Where(p => p.Deleted == false).ToListAsync();
+            List<Page> pages = await _databaseManager.Instance.Page.Where(p => p.Deleted == false).ToListAsync();
             List<PageDTO> pageDTOs = pages.Select(p => _convertToPageDTO(p)).ToList();
             return pageDTOs;
         }
 
         public async Task<List<PageDTO>> Read(int page, int count)
         {
-            List<Page> pages = await DatabaseManager.Instance.Page.Skip((page - 1) * count).Take(count).ToListAsync();
+            List<Page> pages = await _databaseManager.Instance.Page.Skip((page - 1) * count).Take(count).ToListAsync();
             return pages.Select(p => _convertToPageDTO(p)).ToList();
         }
 
         public async Task<List<PageDTO>> Read(int page, int count, int id)
         {
-            List<Page> pages = await DatabaseManager.Instance.Page.Where(p => p.User.Id == id && p.Published).Skip((page - 1) * count).Take(count).ToListAsync();
+            List<Page> pages = await _databaseManager.Instance.Page.Where(p => p.User.Id == id && p.Published).Skip((page - 1) * count).Take(count).ToListAsync();
             return pages.Select(p => _convertToPageDTO(p)).ToList();
         }
 
         public async Task<PageDTO> Read(int id)
         {
-            Page page = await DatabaseManager.Instance.Page.FindAsync(id);
+            Page page = await _databaseManager.Instance.Page.FindAsync(id);
             return _convertToPageDTO(page);
         }
 
         public async Task<PageDTO> Update(PageDTO pageDTO, int userId)
         {
-            User user = await DatabaseManager.Instance.User.FindAsync(userId);
+            User user = await _databaseManager.Instance.User.FindAsync(userId);
             if (user != null && user.Role == Role.Administrator)
             {
 
-                Page page = await DatabaseManager.Instance.Page.FindAsync(pageDTO.Id);
+                Page page = await _databaseManager.Instance.Page.FindAsync(pageDTO.Id);
 
                 if (page != null)
                 {
                     Page updatedPage = _convertToPage(pageDTO);
-                    DatabaseManager.Instance.Entry(page).CurrentValues.SetValues(updatedPage);
-                    PropertyEntry propertyEntry = DatabaseManager.Instance.Entry(page).Property("Created");
+                    _databaseManager.Instance.Entry(page).CurrentValues.SetValues(updatedPage);
+                    PropertyEntry propertyEntry = _databaseManager.Instance.Entry(page).Property("Created");
 
                     if (propertyEntry != null)
                     {
-                        DatabaseManager.Instance.Entry(page).Property("Created").IsModified = false;
+                        _databaseManager.Instance.Entry(page).Property("Created").IsModified = false;
                     }
-                    await DatabaseManager.Instance.SaveChangesAsync();
+                    await _databaseManager.Instance.SaveChangesAsync();
                     return _convertToPageDTO(page);
                 }
             }
@@ -112,13 +119,13 @@ namespace CricketCreationsRepository.Repositories
         public async Task<PageDTO> Create(PageDTO pageDTO, int userId)
         {
             Page page = _convertToPage(pageDTO);
-            User user = await DatabaseManager.Instance.User.FindAsync(userId);
+            User user = await _databaseManager.Instance.User.FindAsync(userId);
             user.Pages = user.Pages ?? new List<Page>();
             user.Pages.Add(page);
             page.User = user;
 
-            DatabaseManager.Instance.Page.Add(page);
-            await DatabaseManager.Instance.SaveChangesAsync();
+            _databaseManager.Instance.Page.Add(page);
+            await _databaseManager.Instance.SaveChangesAsync();
             return _convertToPageDTO(page);
         }
     }

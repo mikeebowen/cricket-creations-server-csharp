@@ -9,6 +9,7 @@ using CricketCreations.Interfaces;
 using CricketCreations.Services;
 using CricketCreationsRepository.Interfaces;
 using CricketCreationsRepository.Repositories;
+using CricketCreationsRepository;
 
 namespace CricketCreations
 {
@@ -42,6 +43,7 @@ namespace CricketCreations
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IJwtService, JwtService>();
             services.AddSingleton<IPageService, PageService>();
+            services.AddTransient<IDatabaseManager, DatabaseManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

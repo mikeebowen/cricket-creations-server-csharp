@@ -4,15 +4,16 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using CricketCreationsDatabase;
+using CricketCreationsRepository.Interfaces;
 
 namespace CricketCreationsRepository
 {
-    public class DatabaseManager
+    public class DatabaseManager : IDatabaseManager
     {
-        static DatabaseManager()
+        public DatabaseManager()
         {
             Instance = new CricketCreationsContext();
         }
-        public static CricketCreationsContext Instance { get; private set; }
+        public CricketCreationsContext Instance { get; set; }
     }
 }

@@ -21,6 +21,13 @@ namespace CricketCreationsRepository.Repositories
 {
     public class UserRepository : IUserRepository
     {
+        private IDatabaseManager _databaseManager;
+
+        public UserRepository(IDatabaseManager databaseManager)
+        {
+            _databaseManager = databaseManager;
+        }
+
         private static MapperConfiguration config = new MapperConfiguration(c =>
         {
             c.CreateMap<User, UserDTO>()
@@ -35,13 +42,13 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<UserDTO> GetUser(int id)
         {
-            User user = await DatabaseManager.Instance.User.Where(u => u.Id == id).FirstOrDefaultAsync();
+            User user = await _databaseManager.Instance.User.Where(u => u.Id == id).FirstOrDefaultAsync();
             return _convertToUserDTO(user);
         }
 
         public async Task<UserDTO> CheckPassword(string userName, string password)
         {
-            User user = await DatabaseManager.Instance.User.Where(u => u.Email == userName || u.UserName == userName).FirstOrDefaultAsync();
+            User user = await _databaseManager.Instance.User.Where(u => u.Email == userName || u.UserName == userName).FirstOrDefaultAsync();
 
             if (user == null)
             {
@@ -56,7 +63,7 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<UserDTO> CheckRefreshToken(int id, string token)
         {
-            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            User user = await _databaseManager.Instance.User.FindAsync(id);
             int dateDiff = DateTime.Compare(user.RefreshTokenExpiration, DateTime.Now);
 
             if (user != null && HashPassword(token, user.Salt) == user.RefreshToken && dateDiff > 0)
@@ -71,7 +78,7 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<UserDTO> Update(UserDTO userDTO)
         {
-            User user = await DatabaseManager.Instance.User.FindAsync(userDTO.Id);
+            User user = await _databaseManager.Instance.User.FindAsync(userDTO.Id);
             if (user != null)
             {
                 User updatedUser = _convertToUser(userDTO);
@@ -87,7 +94,7 @@ namespace CricketCreationsRepository.Repositories
                         }
                     }
                 }
-                await DatabaseManager.Instance.SaveChangesAsync();
+                await _databaseManager.Instance.SaveChangesAsync();
                 return _convertToUserDTO(user);
             }
             return null;
@@ -95,7 +102,7 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<bool> IsValidId(int id)
         {
-            User user = await DatabaseManager.Instance.User.FindAsync(id);
+            User user = await _databaseManager.Instance.User.FindAsync(id);
 
             return user != null;
         }
@@ -107,8 +114,8 @@ namespace CricketCreationsRepository.Repositories
             user.Tags = new List<Tag>();
             user.Images = new List<Image>();
 
-            User newUser = DatabaseManager.Instance.User.Add(user).Entity;
-            await DatabaseManager.Instance.SaveChangesAsync();
+            User newUser = _databaseManager.Instance.User.Add(user).Entity;
+            await _databaseManager.Instance.SaveChangesAsync();
             return _convertToUserDTO(newUser);
         }
 
