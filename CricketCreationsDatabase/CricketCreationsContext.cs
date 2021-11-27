@@ -57,7 +57,6 @@ namespace CricketCreationsDatabase
         public DbSet<BlogPost> BlogPost { get; set; }
         public DbSet<Tag> Tag { get; set; }
         public DbSet<Page> Page { get; set; }
-        public DbSet<Image> Image { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
@@ -65,8 +64,6 @@ namespace CricketCreationsDatabase
             modelBuilder.Entity<User>().HasMany(u => u.BlogPosts);
             modelBuilder.Entity<User>().HasMany(u => u.Pages);
             modelBuilder.Entity<User>().HasMany(u => u.Tags);
-            modelBuilder.Entity<User>().HasMany(u => u.Images);
-            modelBuilder.Entity<User>().HasOne(u => u.Avatar);
             modelBuilder.Entity<User>().Property(u => u.Role).HasConversion<int>();
 
             modelBuilder.Entity<BlogPost>().HasMany(b => b.Tags);
@@ -77,8 +74,6 @@ namespace CricketCreationsDatabase
 
             modelBuilder.Entity<Page>().HasOne(p => p.User).WithMany(u => u.Pages);
             modelBuilder.Entity<Page>().HasIndex(p => p.Heading).IsUnique();
-
-            modelBuilder.Entity<Image>().HasOne(i => i.User).WithMany(u => u.Images);
 
             modelBuilder.Seed();
         }
@@ -116,7 +111,6 @@ public static class ModelBuilderExtensions
                 BlogPosts = new List<BlogPost>(),
                 Tags = new List<Tag>(),
                 Pages = new List<Page>(),
-                Images = new List<Image>()
 
             }
         );

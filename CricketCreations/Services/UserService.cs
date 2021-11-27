@@ -138,5 +138,14 @@ namespace CricketCreations.Services
                 RefreshToken = refreshToken
             };
         }
+
+        public async Task<User> Update(User user)
+        {
+            UserDTO updatedUserDTO = _convertToUserDTO(user);
+
+            UserDTO userDTO = await _userRepository.Update(updatedUserDTO);
+
+            return _convertToUser(userDTO);
+        }
     }
 }

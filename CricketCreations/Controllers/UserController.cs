@@ -1,11 +1,13 @@
 ﻿using CricketCreations.Interfaces;
 using CricketCreations.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -89,7 +91,7 @@ namespace CricketCreations.Controllers
             try
             {
                 User createdUser = await _userService.Create(newUser);
-                return new CreatedResult($"api/tag/{createdUser.Id}", createdUser);
+                return new CreatedResult($"api/user/{createdUser.Id}", createdUser);
             }
             catch (DbUpdateException ex)
             {
@@ -102,9 +104,40 @@ namespace CricketCreations.Controllers
         }
 
         // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [Authorize, HttpPatch]
+        public async Task<IActionResult> Patch([FromBody] User user)
         {
+            try
+            {
+                List<Claim> claims = User.Claims.ToList();
+                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+                bool isInt = int.TryParse(idStr, out int id);
+
+                if (!isInt)
+                {
+                    return new BadRequestResult();
+                }
+
+                user.Id = id;
+
+                User newUser = await _userService.Update(user);
+                if (newUser != null)
+                {
+                    return new StatusCodeResult(StatusCodes.Status204NoContent);
+                }
+                else
+                {
+                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                return new ObjectResult(new { Errors = new[] { new { Message = ex.InnerException?.Message != null ? ex.InnerException.Message : ex.Message } } }) { StatusCode = StatusCodes.Status303SeeOther };
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // DELETE api/<UserController>/5

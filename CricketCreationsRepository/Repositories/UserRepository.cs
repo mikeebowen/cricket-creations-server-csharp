@@ -112,7 +112,6 @@ namespace CricketCreationsRepository.Repositories
             User user = _convertToUser(userDTO);
             user.BlogPosts = new List<BlogPost>();
             user.Tags = new List<Tag>();
-            user.Images = new List<Image>();
 
             User newUser = _databaseManager.Instance.User.Add(user).Entity;
             await _databaseManager.Instance.SaveChangesAsync();
