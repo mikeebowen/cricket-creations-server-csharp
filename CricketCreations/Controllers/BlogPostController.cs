@@ -35,7 +35,7 @@ namespace CricketCreations.Controllers
                 bool validCount = int.TryParse(count, out int cnt);
                 bool validIdInt = int.TryParse(userId, out int id);
                 int blogPostCount = userId != null && validIdInt ? await _blogPostService.GetCount(id) : await _blogPostService.GetCount();
-                bool inRange = blogPostCount - (pg * cnt) >= ((cnt * -1) + 1);
+                bool inRange = Math.Abs(blogPostCount - (pg * cnt) - ((cnt * -1) + 1)) >= 1;
                 List<Claim> claims = User.Claims.ToList();
                 string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
                 bool isIntAdminId = int.TryParse(idStr, out int adminUserId);
