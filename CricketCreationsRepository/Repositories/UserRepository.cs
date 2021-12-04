@@ -143,14 +143,5 @@ namespace CricketCreationsRepository.Repositories
             iterationCount: 10000,
             numBytesRequested: 256 / 8));
         }
-        private static byte[] _getSalt()
-        {
-            byte[] bytes = new byte[128 / 8];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(bytes);
-                return bytes;
-            }
-        }
     }
 }

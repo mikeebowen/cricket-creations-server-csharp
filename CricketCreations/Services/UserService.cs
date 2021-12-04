@@ -135,7 +135,8 @@ namespace CricketCreations.Services
             return new AuthenticationResponse()
             {
                 Token = token,
-                RefreshToken = refreshToken
+                RefreshToken = refreshToken,
+                Avatar = userDTO.Avatar,
             };
         }
 

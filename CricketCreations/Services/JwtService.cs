@@ -35,7 +35,7 @@ namespace CricketCreations.Services
                     new Claim(ClaimTypes.Surname, userDTO.Surname),
                     new Claim(ClaimTypes.GivenName, userDTO.Name),
                     new Claim(ClaimTypes.NameIdentifier, userDTO.Id.ToString()),
-                    new Claim("avatar", userDTO.Avatar ?? ""),
+                    //new Claim("avatar", userDTO.Avatar ?? ""),
                     new Claim(ClaimTypes.Name, userDTO.UserName),
                     new Claim(ClaimTypes.Role, userDTO.Role.ToString())
                 }),

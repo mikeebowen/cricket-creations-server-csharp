@@ -33,7 +33,7 @@ namespace CricketCreations.Controllers
         }
 
         // GET api/<UserController>/5
-        [HttpGet("{id}")]
+        [Authorize, HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             try
