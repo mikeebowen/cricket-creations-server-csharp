@@ -23,5 +23,6 @@ namespace CricketCreations.Models
         //[Required]
         //[MaxLength(200)]
         public string Password { get; set; }
+        public string Avatar { get; set; }
     }
 }

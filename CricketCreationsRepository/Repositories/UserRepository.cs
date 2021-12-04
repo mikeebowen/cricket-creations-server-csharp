@@ -88,7 +88,7 @@ namespace CricketCreationsRepository.Repositories
                     var val = property.GetValue(updatedUser);
                     if (val != null)
                     {
-                        if (!(property.Name != "Id" && int.TryParse(val.ToString(), out int res) && res < 1) && property.Name != "Created" && property.Name != "Salt")
+                        if (!(property.Name != "Id" && int.TryParse(val.ToString(), out int res) && res < 1) && property.Name != "Created")
                         {
                             property.SetValue(user, val);
                         }

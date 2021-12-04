@@ -105,7 +105,7 @@ namespace CricketCreations.Controllers
 
         // PUT api/<UserController>/5
         [Authorize, HttpPatch]
-        public async Task<IActionResult> Patch([FromBody] User user)
+        public async Task<IActionResult> Patch([FromBody] NewUser user)
         {
             try
             {
@@ -118,9 +118,7 @@ namespace CricketCreations.Controllers
                     return new BadRequestResult();
                 }
 
-                user.Id = id;
-
-                User newUser = await _userService.Update(user);
+                User newUser = await _userService.Update(user, id);
                 if (newUser != null)
                 {
                     return new StatusCodeResult(StatusCodes.Status204NoContent);
