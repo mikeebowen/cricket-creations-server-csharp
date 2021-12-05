@@ -85,10 +85,7 @@ namespace CricketCreationsRepository.Repositories
                 user.Password = userDTO.Password ?? user.Password;
                 user.Salt = userDTO.Salt ?? user.Salt;
                 user.RefreshToken = userDTO.RefreshToken ?? user.RefreshToken;
-                if (userDTO.RefreshToken != null)
-                {
                 user.RefreshTokenExpiration = userDTO.RefreshTokenExpiration;
-                }
                 user.Name = userDTO.Name ?? user.Name;
                 user.Surname = userDTO.Surname ?? user.Surname;
                 user.Email = userDTO.Email ?? user.Email;

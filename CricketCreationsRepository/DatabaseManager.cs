@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using CricketCreationsDatabase;
 using CricketCreationsRepository.Interfaces;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq;
 
 namespace CricketCreationsRepository
 {
@@ -13,7 +15,19 @@ namespace CricketCreationsRepository
         public DatabaseManager()
         {
             Instance = new CricketCreationsContext();
+
+            Instance.SaveChangesFailed += _handleFailedSave;
         }
         public CricketCreationsContext Instance { get; set; }
+
+        private void _handleFailedSave(object sender, SaveChangesFailedEventArgs saveChangesFailedEventArgs)
+        {
+            List<EntityEntry> changedEntries = Instance.ChangeTracker.Entries().Where(e => e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted).ToList();
+
+            foreach (EntityEntry entry in changedEntries)
+            {
+                entry.State = EntityState.Detached;
+            }
+        }
     }
 }
