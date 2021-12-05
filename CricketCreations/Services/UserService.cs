@@ -79,17 +79,17 @@ namespace CricketCreations.Services
         {
             UserDTO userDTO = _convertToUserDTO(newUser);
             UserDTO newUserDTO = await _userRepository.Create(userDTO);
+            newUserDTO.Password = newUser.Password;
 
             if (newUserDTO == null)
             {
                 return null;
             }
 
-            UserDTO updatedUserDTO = await _userRepository.Update(newUserDTO);
-            AuthenticationResponse authenticationResponse = await _generateTokens(updatedUserDTO);
-            User user = _convertToUser(updatedUserDTO);
+            AuthenticationResponse authenticationResponse = await _generateTokens(newUserDTO);
+            User user = _convertToUser(newUserDTO);
             user.RefreshToken = authenticationResponse.RefreshToken;
-            user.RefreshTokenExpiration = updatedUserDTO.RefreshTokenExpiration;
+            user.RefreshTokenExpiration = newUserDTO.RefreshTokenExpiration;
             user.Token = authenticationResponse.Token;
             return user;
         }
@@ -114,7 +114,9 @@ namespace CricketCreations.Services
             {
                 return null;
             }
-            return _mapper.Map<UserDTO>(newUser);
+            UserDTO userDTO = _mapper.Map<UserDTO>(newUser);
+            userDTO.Password = newUser.Password;
+            return userDTO;
         }
 
         private static User _convertToUser(UserDTO userDTO)

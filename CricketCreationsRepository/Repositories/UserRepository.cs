@@ -36,7 +36,8 @@ namespace CricketCreationsRepository.Repositories
                 .ForMember(dest => dest.Password, opt => opt.Ignore())
                 .ReverseMap()
                 .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
-                .ForMember(dest => dest.Tags, opt => opt.Ignore());
+                .ForMember(dest => dest.Tags, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         });
         private static IMapper _mapper = config.CreateMapper();
 
@@ -81,19 +82,21 @@ namespace CricketCreationsRepository.Repositories
             User user = await _databaseManager.Instance.User.FindAsync(userDTO.Id);
             if (user != null)
             {
-                User updatedUser = _convertToUser(userDTO);
-                PropertyInfo[] propertyInfos = user.GetType().GetProperties();
-                foreach (PropertyInfo property in propertyInfos)
+                user.Password = userDTO.Password ?? user.Password;
+                user.Salt = userDTO.Salt ?? user.Salt;
+                user.RefreshToken = userDTO.RefreshToken ?? user.RefreshToken;
+                if (userDTO.RefreshToken != null)
                 {
-                    var val = property.GetValue(updatedUser);
-                    if (val != null)
-                    {
-                        if (!(property.Name != "Id" && int.TryParse(val.ToString(), out int res) && res < 1) && property.Name != "Created")
-                        {
-                            property.SetValue(user, val);
-                        }
-                    }
+                user.RefreshTokenExpiration = userDTO.RefreshTokenExpiration;
                 }
+                user.Name = userDTO.Name ?? user.Name;
+                user.Surname = userDTO.Surname ?? user.Surname;
+                user.Email = userDTO.Email ?? user.Email;
+                user.UserName = userDTO.UserName ?? user.UserName;
+                user.Role = (Role)userDTO.Role;
+                user.Avatar = userDTO.Avatar ?? user.Avatar;
+
+
                 await _databaseManager.Instance.SaveChangesAsync();
                 return _convertToUserDTO(user);
             }
@@ -114,7 +117,9 @@ namespace CricketCreationsRepository.Repositories
             user.Tags = new List<Tag>();
 
             User newUser = _databaseManager.Instance.User.Add(user).Entity;
+
             await _databaseManager.Instance.SaveChangesAsync();
+
             return _convertToUserDTO(newUser);
         }
 

@@ -95,7 +95,7 @@ namespace CricketCreations.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return new ObjectResult(new { Errors = new[] { new { Message = ex.InnerException?.Message != null ? ex.InnerException.Message : ex.Message } } }) { StatusCode = StatusCodes.Status303SeeOther };
+                return new ObjectResult(new { Errors = new[] { new { Message = ex.InnerException?.Message != null ? ex.InnerException.Message : ex.Message } } }) { StatusCode = StatusCodes.Status500InternalServerError };
             }
             catch (Exception ex)
             {
