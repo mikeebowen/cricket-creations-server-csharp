@@ -33,10 +33,11 @@ namespace CricketCreationsRepository.Repositories
             c.CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
                 .ForMember(dest => dest.Tags, opt => opt.Ignore())
-                .ForMember(dest => dest.Password, opt => opt.Ignore())
                 .ReverseMap()
                 .ForMember(dest => dest.BlogPosts, opt => opt.Ignore())
                 .ForMember(dest => dest.Tags, opt => opt.Ignore())
+                .ForMember(dest => dest.Salt, opt => opt.Ignore())
+                .ForMember(dest => dest.Password, opt => opt.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         });
         private static IMapper _mapper = config.CreateMapper();
@@ -45,6 +46,24 @@ namespace CricketCreationsRepository.Repositories
         {
             User user = await _databaseManager.Instance.User.Where(u => u.Id == id).FirstOrDefaultAsync();
             return _convertToUserDTO(user);
+        }
+
+        public async Task<bool> UpdatePassword(int userId, string password)
+        {
+            User user = await _databaseManager.Instance.FindAsync<User>(userId);
+            
+            if (user != null)
+            {
+                user.Salt = _getSalt();
+                user.Password = HashPassword(password, user.Salt);
+
+                await _databaseManager.Instance.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public async Task<UserDTO> CheckPassword(string userName, string password)
@@ -79,21 +98,45 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<UserDTO> Update(UserDTO userDTO)
         {
+            //User user = await _databaseManager.Instance.User.FindAsync(userDTO.Id);
+            //if (user != null)
+            //{
+            //    user.Password = userDTO.Password ?? user.Password;
+            //    user.Salt = userDTO.Salt ?? user.Salt;
+            //    user.RefreshToken = userDTO.RefreshToken ?? user.RefreshToken;
+            //    user.RefreshTokenExpiration = userDTO.RefreshTokenExpiration;
+            //    user.Name = userDTO.Name ?? user.Name;
+            //    user.Surname = userDTO.Surname ?? user.Surname;
+            //    user.Email = userDTO.Email ?? user.Email;
+            //    user.UserName = userDTO.UserName ?? user.UserName;
+            //    user.Role = (Role)userDTO.Role;
+            //    user.Avatar = userDTO.Avatar ?? user.Avatar;
+
+
+            //    await _databaseManager.Instance.SaveChangesAsync();
+            //    return _convertToUserDTO(user);
+            //}
+            //return null;
             User user = await _databaseManager.Instance.User.FindAsync(userDTO.Id);
             if (user != null)
             {
-                user.Password = userDTO.Password ?? user.Password;
-                user.Salt = userDTO.Salt ?? user.Salt;
-                user.RefreshToken = userDTO.RefreshToken ?? user.RefreshToken;
-                user.RefreshTokenExpiration = userDTO.RefreshTokenExpiration;
-                user.Name = userDTO.Name ?? user.Name;
-                user.Surname = userDTO.Surname ?? user.Surname;
-                user.Email = userDTO.Email ?? user.Email;
-                user.UserName = userDTO.UserName ?? user.UserName;
-                user.Role = (Role)userDTO.Role;
-                user.Avatar = userDTO.Avatar ?? user.Avatar;
-
-
+                User updatedUser = _convertToUser(userDTO);
+                PropertyInfo[] propertyInfos = user.GetType().GetProperties();
+                foreach (PropertyInfo property in propertyInfos)
+                {
+                    var val = property.GetValue(updatedUser);
+                    if (val != null)
+                    {
+                        if (
+                                !(property.Name != "Id" && int.TryParse(val.ToString(), out int res) && res < 1) &&
+                                property.Name != "Created" &&
+                                property.Name != "LastUpdated"
+                            )
+                        {
+                            property.SetValue(user, val);
+                        }
+                    }
+                }
                 await _databaseManager.Instance.SaveChangesAsync();
                 return _convertToUserDTO(user);
             }
@@ -107,17 +150,28 @@ namespace CricketCreationsRepository.Repositories
             return user != null;
         }
 
-        public async Task<UserDTO> Create(UserDTO userDTO)
+        public async Task<UserDTO> Create(UserDTO userDTO, string password)
         {
             User user = _convertToUser(userDTO);
             user.BlogPosts = new List<BlogPost>();
             user.Tags = new List<Tag>();
+            user.Salt = _getSalt();
+            user.Password = HashPassword(password, user.Salt);
 
             User newUser = _databaseManager.Instance.User.Add(user).Entity;
 
             await _databaseManager.Instance.SaveChangesAsync();
 
             return _convertToUserDTO(newUser);
+        }
+
+        public async Task<bool> Logout(int id)
+        {
+            User user = await _databaseManager.Instance.User.FindAsync(id);
+            user.RefreshToken = null;
+
+            await _databaseManager.Instance.SaveChangesAsync();
+            return true;
         }
 
         private static User _convertToUser(UserDTO userDTO)
@@ -136,6 +190,16 @@ namespace CricketCreationsRepository.Repositories
             }
             return _mapper.Map<UserDTO>(user);
         }
+        private static byte[] _getSalt()
+        {
+            byte[] bytes = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(bytes);
+            }
+            return bytes;
+        }
+
         public static string HashPassword(string password, byte[] salt)
         {
             return Convert.ToBase64String(KeyDerivation.Pbkdf2(

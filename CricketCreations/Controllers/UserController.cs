@@ -143,5 +143,44 @@ namespace CricketCreations.Controllers
         public void Delete(int id)
         {
         }
+
+        [Authorize, HttpPost("password")]
+        public async Task<IActionResult> UpdatePassword([FromBody] NewUser user)
+        {
+            List<Claim> claims = User.Claims.ToList();
+            string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+            bool isInt = int.TryParse(idStr, out int id);
+
+            if (!isInt)
+            {
+                return new BadRequestResult();
+            }
+
+            bool updated = await _userService.UpdatePassword(id, user.Password);
+
+            if (updated)
+            {
+                return new StatusCodeResult(StatusCodes.Status200OK);
+            }
+
+            return new BadRequestResult();
+        }
+
+        [Authorize, HttpDelete("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            List<Claim> claims = User.Claims.ToList();
+            string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+            bool isInt = int.TryParse(idStr, out int id);
+
+            if (!isInt)
+            {
+                return new BadRequestResult();
+            }
+
+            await _userService.Logout(id);
+
+            return new StatusCodeResult(StatusCodes.Status204NoContent);
+        }
     }
 }

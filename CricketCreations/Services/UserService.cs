@@ -39,7 +39,7 @@ namespace CricketCreations.Services
                 .ReverseMap()
                 .ForMember(dest => dest.Token, options => options.Ignore()
             );
-                
+
             config.CreateMap<UserDTO, NewUser>().ReverseMap().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         });
         private static IMapper _mapper = _config.CreateMapper();
@@ -78,8 +78,7 @@ namespace CricketCreations.Services
         public async Task<User> Create(NewUser newUser)
         {
             UserDTO userDTO = _convertToUserDTO(newUser);
-            UserDTO newUserDTO = await _userRepository.Create(userDTO);
-            newUserDTO.Password = newUser.Password;
+            UserDTO newUserDTO = await _userRepository.Create(userDTO, newUser.Password);
 
             if (newUserDTO == null)
             {
@@ -115,7 +114,6 @@ namespace CricketCreations.Services
                 return null;
             }
             UserDTO userDTO = _mapper.Map<UserDTO>(newUser);
-            userDTO.Password = newUser.Password;
             return userDTO;
         }
 
@@ -149,8 +147,18 @@ namespace CricketCreations.Services
             updatedUserDTO.Id = id;
 
             UserDTO userDTO = await _userRepository.Update(updatedUserDTO);
-                                                        
+
             return _convertToUser(userDTO);
+        }
+
+        public async Task<bool> UpdatePassword(int userId, string password)
+        {
+            return await _userRepository.UpdatePassword(userId, password);
+        }
+
+        public async Task<bool> Logout(int id) 
+        {
+            return await _userRepository.Logout(id);
         }
     }
 }

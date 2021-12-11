@@ -22,19 +22,6 @@ namespace CricketCreationsRepository.Models
         public DateTime Created { get; set; }
         public DateTime LastUpdated { get; set; }
         [Required]
-        public string Password
-        {
-            get
-            {
-                return _password;
-            }
-            set
-            {
-                Salt = _getSalt();
-                _password = UserRepository.HashPassword(value, Salt);
-            }
-        }
-        [Required]
         public byte[] Salt { get; set; }
         public string RefreshToken
         {
@@ -59,16 +46,6 @@ namespace CricketCreationsRepository.Models
         public RoleTypes Role { get; set; }
         public List<BlogPostDTO> BlogPosts { get; set; }
         public List<TagDTO> Tags { get; set; }
-
-        private static byte[] _getSalt()
-        {
-            byte[] bytes = new byte[128 / 8];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(bytes);
-            }
-            return bytes;
-        }
 
         public enum RoleTypes
         {
