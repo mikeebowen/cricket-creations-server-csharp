@@ -121,12 +121,35 @@ namespace CricketCreationsRepository.Repositories
             Page page = _convertToPage(pageDTO);
             User user = await _databaseManager.Instance.User.FindAsync(userId);
             user.Pages = user.Pages ?? new List<Page>();
-            user.Pages.Add(page);
-            page.User = user;
+            Page existingPage = await _databaseManager.Instance.Page.Where(p => p.Heading == page.Heading).FirstOrDefaultAsync();
 
-            _databaseManager.Instance.Page.Add(page);
-            await _databaseManager.Instance.SaveChangesAsync();
-            return _convertToPageDTO(page);
+            if (existingPage == null || existingPage.Deleted == false)
+            {
+                user.Pages.Add(page);
+                page.User = user;
+
+                _databaseManager.Instance.Page.Add(page);
+                await _databaseManager.Instance.SaveChangesAsync();
+                return _convertToPageDTO(page);
+            }
+            else
+            {
+                existingPage.Deleted = false;
+                await _databaseManager.Instance.SaveChangesAsync();
+                return _convertToPageDTO(existingPage);
+            }
+        }
+
+        public bool IsUniquePageHeading(string pageHeading)
+        {
+            Page page = _databaseManager.Instance.Page.Where(p => p.Heading == pageHeading).FirstOrDefault();
+
+            if (page == null)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

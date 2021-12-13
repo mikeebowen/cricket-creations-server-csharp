@@ -9,7 +9,7 @@ namespace CricketCreations.Models
         public int Id { get; set; }
         public bool Deleted { get; set; } = false;
         public bool Published { get; set; } = false;
-        [Required]
+        [Required, IsUniquePageHeading]
         public string Heading { get; set; }
         [Required]
         public string Title { get; set; }

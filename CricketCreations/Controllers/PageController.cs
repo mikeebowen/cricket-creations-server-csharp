@@ -4,6 +4,7 @@ using CricketCreations.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,6 +72,10 @@ namespace CricketCreations.Controllers
 
                 Page createdPage = await _pageService.Create(page, userId);
                 return new CreatedResult($"api/page/{createdPage.Id}", createdPage);
+            }
+            catch(DbUpdateException ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status400BadRequest);
             }
             catch(Exception ex)
             {
