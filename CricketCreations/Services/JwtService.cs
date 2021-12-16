@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Text;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
-using CricketCreations.Models;
+using System.Text;
 using CricketCreations.Interfaces;
 using CricketCreationsRepository.Models;
-using System.Collections.Generic;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CricketCreations.Services
 {
@@ -35,19 +33,19 @@ namespace CricketCreations.Services
                     new Claim(ClaimTypes.Surname, userDTO.Surname),
                     new Claim(ClaimTypes.GivenName, userDTO.Name),
                     new Claim(ClaimTypes.NameIdentifier, userDTO.Id.ToString()),
-                    //new Claim("avatar", userDTO.Avatar ?? ""),
+                    // new Claim("avatar", userDTO.Avatar ?? ""),
                     new Claim(ClaimTypes.Name, userDTO.UserName),
-                    new Claim(ClaimTypes.Role, userDTO.Role.ToString())
+                    new Claim(ClaimTypes.Role, userDTO.Role.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(_expDate)),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             };
 
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-
         }
+
         public string GenerateRefreshToken()
         {
             byte[] randomNumber = new byte[255];

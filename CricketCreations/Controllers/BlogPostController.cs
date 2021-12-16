@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 using CricketCreations.Interfaces;
 using CricketCreations.Models;
-using CricketCreations.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,17 +13,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CricketCreations.Controllers
 {
-    [Route("api/[controller]"), ApiController]
+    [Route("api/[controller]")]
+    [ApiController]
     public class BlogPostController : ControllerBase
     {
-        IBlogPostService _blogPostService;
-        IUserService _userService;
+        private readonly IBlogPostService _blogPostService;
+        private readonly IUserService _userService;
 
         public BlogPostController(IBlogPostService blogPostService, IUserService userService)
         {
             _blogPostService = blogPostService;
             _userService = userService;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userId")] string userId)
         {
@@ -65,7 +65,6 @@ namespace CricketCreations.Controllers
                 }
 
                 return new OkObjectResult(new ResponseBody<List<BlogPost>>(blogPosts, typeof(BlogPost).Name.ToString(), blogPostCount));
-
             }
             catch (Exception ex)
             {
@@ -96,7 +95,8 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<BlogPostController>
-        [Authorize, HttpPost]
+        [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] BlogPost blogPost)
         {
             try
@@ -120,7 +120,8 @@ namespace CricketCreations.Controllers
         }
 
         // PATCH api/<BlogPostController>/5
-        [Authorize, HttpPatch]
+        [Authorize]
+        [HttpPatch]
         public async Task<IActionResult> Patch([FromBody] BlogPost blogPost)
         {
             try
@@ -133,7 +134,6 @@ namespace CricketCreations.Controllers
                 {
                     return new BadRequestResult();
                 }
-
 
                 BlogPost updatedBlogPost = await _blogPostService.Update(blogPost, id);
 
@@ -151,7 +151,8 @@ namespace CricketCreations.Controllers
         }
 
         // DELETE api/<BlogPostController>/5
-        [Authorize, HttpDelete("{id}")]
+        [Authorize]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try

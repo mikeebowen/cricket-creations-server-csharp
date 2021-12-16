@@ -1,31 +1,32 @@
-﻿using CricketCreations.Interfaces;
-using CricketCreations.Middleware;
-using CricketCreations.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using CricketCreations.Interfaces;
+using CricketCreations.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CricketCreations.Controllers
 {
-    [Route("api/[controller]"), ApiController]
+    [Route("api/[controller]")]
+    [ApiController]
     public class TagController : ControllerBase
     {
-        ITagService _tagService;
-        IUserService _userService;
+        private readonly ITagService _tagService;
+        private readonly IUserService _userService;
 
         public TagController(ITagService tagService, IUserService userService)
         {
             _tagService = tagService;
             _userService = userService;
         }
+
         // GET: api/<TagController>
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery(Name = "page")] string page, [FromQuery(Name = "count")] string count, [FromQuery(Name = "userId")] string userId)
@@ -59,7 +60,6 @@ namespace CricketCreations.Controllers
                 }
 
                 return new OkObjectResult(new ResponseBody<List<Tag>>(tags, typeof(Tag).Name.ToString(), blogPostCount));
-
             }
             catch (Exception ex)
             {
@@ -107,7 +107,8 @@ namespace CricketCreations.Controllers
         }
 
         // PUT api/<TagController>/5
-        [Authorize, HttpPatch]
+        [Authorize]
+        [HttpPatch]
         public async Task<IActionResult> Patch([FromBody] Tag tag)
         {
             try
@@ -137,7 +138,8 @@ namespace CricketCreations.Controllers
         }
 
         // DELETE api/<TagController>/5
-        [Authorize, HttpDelete("{id}")]
+        [Authorize]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -156,12 +158,15 @@ namespace CricketCreations.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
+
         public class TagData : IValidatableObject
         {
             [Required]
             public string Name { get; set; }
+
             [Required]
             public int UserId { get; set; }
+
             [Required]
             public int BlogPostId { get; set; }
 
@@ -172,10 +177,12 @@ namespace CricketCreations.Controllers
                 {
                     validationResults.Add(new ValidationResult("The UserId field is required"));
                 }
+
                 if (BlogPostId == 0)
                 {
                     validationResults.Add(new ValidationResult("The BlogPostId field is required"));
                 }
+
                 return validationResults;
             }
         }

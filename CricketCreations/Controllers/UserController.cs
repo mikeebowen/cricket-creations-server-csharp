@@ -1,24 +1,23 @@
-﻿using CricketCreations.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using CricketCreations.Interfaces;
 using CricketCreations.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace CricketCreations.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         public UserController(IUserService userService)
         {
@@ -33,7 +32,8 @@ namespace CricketCreations.Controllers
         }
 
         // GET api/<UserController>/5
-        [Authorize, HttpGet("{id}")]
+        [Authorize]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             try
@@ -45,6 +45,7 @@ namespace CricketCreations.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
+
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] CheckPasswordRequest checkPasswordRequest)
         {
@@ -76,6 +77,7 @@ namespace CricketCreations.Controllers
                 {
                     return new UnauthorizedObjectResult("Token authentication failed");
                 }
+
                 return new OkObjectResult(res);
             }
             catch (Exception ex)
@@ -104,7 +106,8 @@ namespace CricketCreations.Controllers
         }
 
         // PUT api/<UserController>/5
-        [Authorize, HttpPatch]
+        [Authorize]
+        [HttpPatch]
         public async Task<IActionResult> Patch([FromBody] NewUser user)
         {
             try
@@ -144,7 +147,8 @@ namespace CricketCreations.Controllers
         {
         }
 
-        [Authorize, HttpPost("password")]
+        [Authorize]
+        [HttpPost("password")]
         public async Task<IActionResult> UpdatePassword([FromBody] NewUser user)
         {
             List<Claim> claims = User.Claims.ToList();
@@ -166,7 +170,8 @@ namespace CricketCreations.Controllers
             return new BadRequestResult();
         }
 
-        [Authorize, HttpDelete("logout")]
+        [Authorize]
+        [HttpDelete("logout")]
         public async Task<IActionResult> Logout()
         {
             List<Claim> claims = User.Claims.ToList();

@@ -1,30 +1,27 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using CricketCreationsDatabase.Models;
-using System.Threading.Tasks;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using CricketCreationsDatabase.Models;
 using CricketCreationsRepository.Interfaces;
 using CricketCreationsRepository.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CricketCreationsRepository.Repositories
 {
     public class PageRepository : IPageRepository
     {
-        private IDatabaseManager _databaseManager;
+        private static readonly MapperConfiguration _config = new MapperConfiguration(c => c.CreateMap<Page, PageDTO>().ReverseMap());
+        private static readonly IMapper _mapper = _config.CreateMapper();
+
+        private readonly IDatabaseManager _databaseManager;
 
         public PageRepository(IDatabaseManager databaseManager)
         {
             _databaseManager = databaseManager;
         }
-
-        private static MapperConfiguration _config = new MapperConfiguration(c => c.CreateMap<Page, PageDTO>().ReverseMap());
-        private static IMapper _mapper = _config.CreateMapper();
 
         public async Task<bool> Delete(int id)
         {
@@ -35,6 +32,7 @@ namespace CricketCreationsRepository.Repositories
                 await _databaseManager.Instance.SaveChangesAsync();
                 return true;
             }
+
             return false;
         }
 
@@ -78,7 +76,6 @@ namespace CricketCreationsRepository.Repositories
             User user = await _databaseManager.Instance.User.FindAsync(userId);
             if (user != null && user.Role == Role.Administrator)
             {
-
                 Page page = await _databaseManager.Instance.Page.FindAsync(pageDTO.Id);
 
                 if (page != null)
@@ -91,29 +88,13 @@ namespace CricketCreationsRepository.Repositories
                     {
                         _databaseManager.Instance.Entry(page).Property("Created").IsModified = false;
                     }
+
                     await _databaseManager.Instance.SaveChangesAsync();
                     return _convertToPageDTO(page);
                 }
             }
+
             return null;
-        }
-
-        private static PageDTO _convertToPageDTO(Page page)
-        {
-            if (page == null)
-            {
-                return null;
-            }
-            return _mapper.Map<PageDTO>(page);
-        }
-
-        private static Page _convertToPage(PageDTO pageDTO)
-        {
-            if (pageDTO == null)
-            {
-                return null;
-            }
-            return _mapper.Map<Page>(pageDTO);
         }
 
         public async Task<PageDTO> Create(PageDTO pageDTO, int userId)
@@ -150,6 +131,27 @@ namespace CricketCreationsRepository.Repositories
             }
 
             return false;
+        }
+
+
+        private static PageDTO _convertToPageDTO(Page page)
+        {
+            if (page == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<PageDTO>(page);
+        }
+
+        private static Page _convertToPage(PageDTO pageDTO)
+        {
+            if (pageDTO == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<Page>(pageDTO);
         }
     }
 }

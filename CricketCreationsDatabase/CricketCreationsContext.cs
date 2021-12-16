@@ -1,14 +1,12 @@
-﻿using System.Reflection;
-using CricketCreationsDatabase.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
 using System.Collections.Generic;
-using System;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 using System.Threading;
-using Microsoft.EntityFrameworkCore.Metadata;
+using System.Threading.Tasks;
+using CricketCreationsDatabase.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.EntityFrameworkCore;
 
 namespace CricketCreationsDatabase
 {
@@ -16,25 +14,27 @@ namespace CricketCreationsDatabase
     {
         public CricketCreationsContext()
         {
-
         }
+
         public CricketCreationsContext(DbContextOptions<CricketCreationsContext> options)
             : base(options)
         {
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            //Console.WriteLine($"connectionString: {Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")}");
-            //string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
-            string connectionString = "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
-            optionsBuilder.UseSqlServer(connectionString);
-        }
+
+        public DbSet<User> User { get; set; }
+
+        public DbSet<BlogPost> BlogPost { get; set; }
+
+        public DbSet<Tag> Tag { get; set; }
+
+        public DbSet<Page> Page { get; set; }
+
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var EditedEntities = ChangeTracker.Entries().Where(entry => entry.State == EntityState.Modified).ToList();
-            var AddedEntities = ChangeTracker.Entries().Where(entry => entry.State == EntityState.Added).ToList();
+            var editedEntities = ChangeTracker.Entries().Where(entry => entry.State == EntityState.Modified).ToList();
+            var addedEntities = ChangeTracker.Entries().Where(entry => entry.State == EntityState.Added).ToList();
             DateTime now = DateTime.Now;
-            AddedEntities.ForEach(entity =>
+            addedEntities.ForEach(entity =>
             {
                 if (entity.Entity.GetType().GetProperty("Created") != null && entity.Entity.GetType().GetProperty("LastUpdated") != null)
                 {
@@ -43,7 +43,7 @@ namespace CricketCreationsDatabase
                 }
             });
 
-            EditedEntities.ForEach(entity =>
+            editedEntities.ForEach(entity =>
             {
                 if (entity.Entity.GetType().GetProperty("LastUpdated") != null)
                 {
@@ -53,10 +53,7 @@ namespace CricketCreationsDatabase
 
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
-        public DbSet<User> User { get; set; }
-        public DbSet<BlogPost> BlogPost { get; set; }
-        public DbSet<Tag> Tag { get; set; }
-        public DbSet<Page> Page { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
@@ -77,9 +74,20 @@ namespace CricketCreationsDatabase
 
             modelBuilder.Seed();
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // Console.WriteLine($"connectionString: {Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")}");
+            // string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
+            string connectionString = "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
+            optionsBuilder.UseSqlServer(connectionString);
+        }
     }
 }
+
+#pragma warning disable SA1402 // File may only contain a single type
 public static class ModelBuilderExtensions
+#pragma warning restore SA1402 // File may only contain a single type
 {
     public static void Seed(this ModelBuilder modelBuilder)
     {
@@ -88,6 +96,7 @@ public static class ModelBuilderExtensions
         {
             rng.GetBytes(salt);
         }
+
         string password =
             Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: "password",
@@ -111,10 +120,8 @@ public static class ModelBuilderExtensions
                 BlogPosts = new List<BlogPost>(),
                 Tags = new List<Tag>(),
                 Pages = new List<Page>(),
-
-            }
-        );
-        //modelBuilder.Entity<BlogPost>().HasData(
+            });
+        // modelBuilder.Entity<BlogPost>().HasData(
         //    new BlogPost
         //    {
         //        Published = true,
@@ -155,8 +162,8 @@ public static class ModelBuilderExtensions
         //          Title = "viverra mauris in aliquam sem",
         //          UserId = 1
         //      }
-        //);
-        //modelBuilder.Entity<Page>().HasData(
+        // );
+        // modelBuilder.Entity<Page>().HasData(
         //    new Page
         //    {
         //        // UserId = 1,
@@ -178,11 +185,11 @@ public static class ModelBuilderExtensions
         //        LastUpdated = DateTime.Now
         //    }
         //    );
-        //modelBuilder.Entity<Tag>().HasData(
+        // modelBuilder.Entity<Tag>().HasData(
         //    new Tag { Id = 1, Name = "car" }
-        //);
-        //modelBuilder.Entity<BlogPostTag>().HasData(
+        // );
+        // modelBuilder.Entity<BlogPostTag>().HasData(
         //    new BlogPostTag { Id = 1, BlogPostId = 1, TagId = 1 }
-        //);
+        // );
     }
 }

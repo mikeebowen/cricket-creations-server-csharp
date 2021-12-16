@@ -1,11 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
 
 namespace CricketCreationsDatabase.Models
 {
@@ -13,7 +7,9 @@ namespace CricketCreationsDatabase.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
         public DateTime? Created { get; set; }
+
         public DateTime? LastUpdated { get; set; }
     }
 }

@@ -1,34 +1,33 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using CricketCreations.Interfaces;
 using CricketCreations.Models;
 using CricketCreationsRepository.Interfaces;
 using CricketCreationsRepository.Models;
-using CricketCreationsRepository.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CricketCreations.Services
 {
     public class PageService : IPageService
     {
-        private IPageRepository _pageRepository;
+        private static readonly MapperConfiguration _config = new MapperConfiguration(c => c.CreateMap<Page, PageDTO>().ReverseMap());
+        private static readonly IMapper _mapper = _config.CreateMapper();
+
+        private readonly IPageRepository _pageRepository;
 
         public PageService(IPageRepository pageRepository)
         {
             _pageRepository = pageRepository;
         }
-        
-        private static MapperConfiguration _config = new MapperConfiguration(c => c.CreateMap<Page, PageDTO>().ReverseMap());
-        private static IMapper _mapper = _config.CreateMapper();
 
         public async Task<List<Page>> Read()
         {
             List<PageDTO> pageDTOs = await _pageRepository.Read();
             return pageDTOs.Select(p => _convertToPage(p)).ToList();
         }
+
         public async Task<Page> Read(int id)
         {
             PageDTO pageDTO = await _pageRepository.Read(id);
@@ -80,6 +79,7 @@ namespace CricketCreations.Services
             {
                 return null;
             }
+
             return _mapper.Map<PageDTO>(page);
         }
 
@@ -89,6 +89,7 @@ namespace CricketCreations.Services
             {
                 return null;
             }
+
             return _mapper.Map<Page>(pageDTO);
         }
     }

@@ -1,11 +1,5 @@
-﻿using CricketCreations.Models;
-using CricketCreationsRepository.Models;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using CricketCreations.Models;
 
 namespace CricketCreations.Interfaces
 {

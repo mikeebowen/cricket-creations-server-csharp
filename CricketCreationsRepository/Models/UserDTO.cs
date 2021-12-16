@@ -1,34 +1,48 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography;
 using CricketCreationsRepository.Repositories;
 
 namespace CricketCreationsRepository.Models
 {
     public class UserDTO
     {
-        private string _password;
         private string _refreshToken;
+
+        public enum RoleTypes
+        {
+            Administrator,
+            User,
+        }
 
         [Key]
         public int Id { get; set; }
+
         public bool Deleted { get; set; } = false;
-        [Required, MaxLength(200)]
+
+        [Required]
+        [MaxLength(200)]
         public string Name { get; set; }
+
         public string Surname { get; set; }
-        [Required, MaxLength(200), EmailAddress]
+
+        [Required]
+        [MaxLength(200)]
+        [EmailAddress]
         public DateTime Created { get; set; }
+
         public DateTime LastUpdated { get; set; }
+
         [Required]
         public byte[] Salt { get; set; }
+
         public string RefreshToken
         {
             get
             {
                 return _refreshToken;
             }
+
             set
             {
                 if (value != null)
@@ -37,20 +51,23 @@ namespace CricketCreationsRepository.Models
                 }
             }
         }
-        public DateTime RefreshTokenExpiration { get; set; }
-        [Required, MaxLength(200)]
-        public string Email { get; set; }
-        [Required, MaxLength(200)]
-        public string UserName { get; set; }
-        public string Avatar { get; set; }
-        public RoleTypes Role { get; set; }
-        public List<BlogPostDTO> BlogPosts { get; set; }
-        public List<TagDTO> Tags { get; set; }
 
-        public enum RoleTypes
-        {
-            Administrator,
-            User
-        }
+        public DateTime RefreshTokenExpiration { get; set; }
+
+        [Required]
+        [MaxLength(200)]
+        public string Email { get; set; }
+
+        [Required]
+        [MaxLength(200)]
+        public string UserName { get; set; }
+
+        public string Avatar { get; set; }
+
+        public RoleTypes Role { get; set; }
+
+        public List<BlogPostDTO> BlogPosts { get; set; }
+
+        public List<TagDTO> Tags { get; set; }
     }
 }

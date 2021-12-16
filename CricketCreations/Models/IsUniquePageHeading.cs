@@ -1,24 +1,19 @@
-﻿using CricketCreationsRepository.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using CricketCreationsRepository.Interfaces;
 
 namespace CricketCreations.Models
 {
     public class IsUniquePageHeading : ValidationAttribute
     {
-
-        //public IsUniquePageHeading(IPageRepository pageRepository)
-        //{
+        // public IsUniquePageHeading(IPageRepository pageRepository)
+        // {
         //    _pageRepository = pageRepository;
-        //}
+        // }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var _pageRepository = (IPageRepository)validationContext.GetService(typeof(IPageRepository));
+            var pageRepository = (IPageRepository)validationContext.GetService(typeof(IPageRepository));
 
-            if (_pageRepository.IsUniquePageHeading(value.ToString()))
+            if (pageRepository.IsUniquePageHeading(value.ToString()))
             {
                 return ValidationResult.Success;
             }

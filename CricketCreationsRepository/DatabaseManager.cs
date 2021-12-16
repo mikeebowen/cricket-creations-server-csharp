@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CricketCreationsDatabase;
 using CricketCreationsRepository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Linq;
 
 namespace CricketCreationsRepository
 {
@@ -18,6 +15,7 @@ namespace CricketCreationsRepository
 
             Instance.SaveChangesFailed += _handleFailedSave;
         }
+
         public CricketCreationsContext Instance { get; set; }
 
         private void _handleFailedSave(object sender, SaveChangesFailedEventArgs saveChangesFailedEventArgs)

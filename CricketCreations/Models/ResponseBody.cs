@@ -1,65 +1,69 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+﻿using System;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace CricketCreations.Models
 {
     public class ResponseBody<T>
     {
-        T t;
-        string type;
-        int? count;
+        private readonly T _t;
+        private readonly string _type;
+        private readonly int? _count;
+
         public ResponseBody(T typ, string s, int? cnt)
         {
-            t = typ;
-            type = s;
-            count = cnt;
+            _t = typ;
+            _type = s;
+            _count = cnt;
         }
+
         public string Id
         {
             get
             {
-                Type tp = t.GetType();
+                Type tp = _t.GetType();
                 PropertyInfo prop = tp.GetProperty("Id");
-                string val = prop != null && prop.GetValue(t)  != null ? prop.GetValue(t).ToString() : null;
+                string val = prop != null && prop.GetValue(_t) != null ? prop.GetValue(_t).ToString() : null;
                 return val;
             }
         }
+
         public string Type
         {
             get
             {
-                return type ?? typeof(T).ToString();
+                return _type ?? typeof(T).ToString();
             }
         }
-        public Object Meta
+
+        public object Meta
         {
             get
             {
                 return new
                 {
-                    total = count
+                    total = _count,
                 };
             }
         }
+
         public T Data
         {
             get
             {
-                return t;
+                return _t;
             }
         }
+
         public T Errors { get; set; }
+
         public string GetJson()
         {
-            return JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings { 
-                NullValueHandling = NullValueHandling.Ignore, 
-                ContractResolver = new CamelCasePropertyNamesContractResolver() 
+            return JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
             });
         }
     }

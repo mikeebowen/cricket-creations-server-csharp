@@ -1,13 +1,13 @@
-﻿using System.Text;
-using Microsoft.IdentityModel.Tokens;
+﻿using System;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CricketCreations.Middleware
 {
-    public static class AuthenticationExtension
+    public static class AuthenticationMiddleware
     {
         public static IServiceCollection AddTokenAuthentication(this IServiceCollection services, IConfiguration config)
         {
@@ -27,11 +27,11 @@ namespace CricketCreations.Middleware
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ValidateLifetime = true
-                    //ValidIssuer = "localhost",
-                    //ValidAudience = "localhost"
+                    ValidateLifetime = true,
+                    // ValidIssuer = "localhost",
+                    // ValidAudience = "localhost"
                 };
-                x.RequireHttpsMetadata = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")?.ToLower() == "development" ? false : true; // TODO: change this to true for 
+                x.RequireHttpsMetadata = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")?.ToLower() == "development" ? false : true; // TODO: change this to true for
                 x.SaveToken = true;
             });
 

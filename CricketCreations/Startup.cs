@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using CricketCreations.Interfaces;
+using CricketCreations.Middleware;
+using CricketCreations.Services;
+using CricketCreationsRepository;
+using CricketCreationsRepository.Interfaces;
+using CricketCreationsRepository.Repositories;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VueCliMiddleware;
-using CricketCreations.Middleware;
-using CricketCreations.Interfaces;
-using CricketCreations.Services;
-using CricketCreationsRepository.Interfaces;
-using CricketCreationsRepository.Repositories;
-using CricketCreationsRepository;
 
 namespace CricketCreations
 {
@@ -25,8 +25,8 @@ namespace CricketCreations
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //string dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-            //services.AddDbContext<CricketCreationsContext>(opt => opt.UseSqlServer(dbConnectionString));
+            // string dbConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+            // services.AddDbContext<CricketCreationsContext>(opt => opt.UseSqlServer(dbConnectionString));
             services.AddControllers();
             services.AddTokenAuthentication(Configuration);
             services.AddSpaStaticFiles(configuration =>
@@ -54,7 +54,7 @@ namespace CricketCreations
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseRouting();
             app.UseSpaStaticFiles();
             app.UseAuthentication();
@@ -68,15 +68,18 @@ namespace CricketCreations
             app.UseSpa(spa =>
             {
                 if (env.IsDevelopment())
+                {
                     spa.Options.SourcePath = "ClientApp";
+                }
                 else
+                {
                     spa.Options.SourcePath = "dist";
+                }
 
                 if (env.IsDevelopment())
                 {
                     spa.UseVueCli(npmScript: "serve");
                 }
-
             });
         }
     }

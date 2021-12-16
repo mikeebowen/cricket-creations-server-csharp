@@ -1,30 +1,30 @@
-﻿using CricketCreations.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using CricketCreations.Interfaces;
 using CricketCreations.Models;
-using CricketCreations.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CricketCreations.Controllers
 {
-    [Route("api/[controller]"), ApiController]
+    [Route("api/[controller]")]
+    [ApiController]
     public class PageController : ControllerBase
     {
-        IPageService _pageService;
+        private readonly IPageService _pageService;
 
         public PageController(IPageService pageService)
         {
             _pageService = pageService;
         }
+
         // GET: api/<PageController>
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -49,14 +49,15 @@ namespace CricketCreations.Controllers
                 Page page = await _pageService.Read(id);
                 return new OkObjectResult(new ResponseBody<Page>(page, typeof(Page).Name.ToString(), await _pageService.GetCount()));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         // POST api/<PageController>
-        [Authorize, HttpPost]
+        [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] Page page)
         {
             try
@@ -73,18 +74,19 @@ namespace CricketCreations.Controllers
                 Page createdPage = await _pageService.Create(page, userId);
                 return new CreatedResult($"api/page/{createdPage.Id}", createdPage);
             }
-            catch(DbUpdateException ex)
+            catch (DbUpdateException ex)
             {
                 return new StatusCodeResult(StatusCodes.Status400BadRequest);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         // PUT api/<PageController>/5
-        [Authorize, HttpPatch]
+        [Authorize]
+        [HttpPatch]
         public async Task<IActionResult> Patch([FromBody] Page page)
         {
             try
@@ -104,16 +106,18 @@ namespace CricketCreations.Controllers
                 {
                     return new BadRequestResult();
                 }
+
                 return new OkObjectResult(new ResponseBody<Page>(updatedPage, typeof(Page).Name.ToString(), null));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         // DELETE api/<PageController>/5
-        [Authorize, HttpDelete("{id}")]
+        [Authorize]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
