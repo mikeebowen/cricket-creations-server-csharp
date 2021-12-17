@@ -5,17 +5,25 @@ namespace CricketCreations.Models
 {
     public class IsUniquePageHeading : ValidationAttribute
     {
-        // public IsUniquePageHeading(IPageRepository pageRepository)
-        // {
-        //    _pageRepository = pageRepository;
-        // }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var pageRepository = (IPageRepository)validationContext.GetService(typeof(IPageRepository));
+            IPageRepository pageRepository = (IPageRepository)validationContext.GetService(typeof(IPageRepository));
+            object instance = validationContext.ObjectInstance;
+            string id = instance.GetType().GetProperty("Id").GetValue(instance, null).ToString();
 
-            if (pageRepository.IsUniquePageHeading(value.ToString()))
+            if (int.TryParse(id, out int idInt))
             {
-                return ValidationResult.Success;
+                if (pageRepository.IsUniquePageHeading(value.ToString(), idInt))
+                {
+                    return ValidationResult.Success;
+                }
+            }
+            else
+            {
+                if (pageRepository.IsUniquePageHeading(value.ToString()))
+                {
+                    return ValidationResult.Success;
+                }
             }
 
             return new ValidationResult("Page heading must be unique.");

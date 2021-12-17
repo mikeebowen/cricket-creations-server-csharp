@@ -133,6 +133,17 @@ namespace CricketCreationsRepository.Repositories
             return false;
         }
 
+        public bool IsUniquePageHeading(string pageHeading, int id)
+        {
+            Page page = _databaseManager.Instance.Page.Where(p => p.Heading == pageHeading).FirstOrDefault();
+
+            if (page == null || page.Id == id)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         private static PageDTO _convertToPageDTO(Page page)
         {

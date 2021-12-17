@@ -86,11 +86,30 @@ namespace CricketCreationsRepository.Repositories
         {
             BlogPost blogPost = _convertToBlogPost(blogPostDTO);
 
-            User user = await _databaseManager.Instance.User.FirstAsync(u => u.Id == userId);
+            User user = await _databaseManager.Instance.User.FindAsync(userId);
             user.BlogPosts.Add(blogPost);
             blogPost.User = user;
 
+            List<Tag> newTags = blogPostDTO.Tags.Select(t =>
+            {
+                Tag tag;
+                if (t.Id != null)
+                {
+                    tag = _databaseManager.Instance.Tag.Find(t.Id);
+                    return tag;
+                }
+                else
+                {
+                    tag = _convertToTag(t);
+                    tag.User = user;
+                    return tag;
+                }
+            }).ToList();
+
+            blogPost.Tags = newTags;
+
             var blog = await _databaseManager.Instance.BlogPost.AddAsync(blogPost);
+
             await _databaseManager.Instance.SaveChangesAsync();
             return _convertToBlogPostDTO(blog.Entity);
         }
