@@ -125,7 +125,7 @@ namespace CricketCreationsRepository.Repositories
         {
             Page page = _databaseManager.Instance.Page.Where(p => p.Heading == pageHeading).FirstOrDefault();
 
-            if (page == null)
+            if (page == null || page.Deleted == true)
             {
                 return true;
             }
@@ -137,7 +137,7 @@ namespace CricketCreationsRepository.Repositories
         {
             Page page = _databaseManager.Instance.Page.Where(p => p.Heading == pageHeading).FirstOrDefault();
 
-            if (page == null || page.Id == id)
+            if (page == null || page.Id == id || page.Deleted == true)
             {
                 return true;
             }
