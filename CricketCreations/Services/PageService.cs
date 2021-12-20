@@ -44,6 +44,12 @@ namespace CricketCreations.Services
             throw new NotImplementedException();
         }
 
+        public async Task<List<Page>> AdminRead(int userId)
+        {
+            List<PageDTO> pageDTOs = await _pageRepository.AdminRead(userId);
+            return pageDTOs.Select(p => _convertToPage(p)).ToList();
+        }
+
         public async Task<Page> Update(Page page, int userId)
         {
             PageDTO pageDTO = _convertToPageDTO(page);

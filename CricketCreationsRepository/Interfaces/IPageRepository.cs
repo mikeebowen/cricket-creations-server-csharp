@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CricketCreationsRepository.Models;
 
 namespace CricketCreationsRepository.Interfaces
@@ -10,5 +11,7 @@ namespace CricketCreationsRepository.Interfaces
         public abstract bool IsUniquePageHeading(string pageHeading);
 
         public abstract bool IsUniquePageHeading(string pageHeading, int id);
+
+        public abstract Task<List<PageDTO>> AdminRead(int id);
     }
 }

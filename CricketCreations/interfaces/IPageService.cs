@@ -7,5 +7,7 @@ namespace CricketCreations.Interfaces
     public interface IPageService : IApiService<Page>
     {
         public abstract Task<List<Page>> Read();
+
+        public abstract Task<List<Page>> AdminRead(int userId);
     }
 }

@@ -55,6 +55,30 @@ namespace CricketCreations.Controllers
             }
         }
 
+        [HttpGet("include-unpublished")]
+        [Authorize]
+        public async Task<IActionResult> AdminGet()
+        {
+            try
+            {
+                List<Claim> claims = User.Claims.ToList();
+                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+                bool isInt = int.TryParse(idStr, out int id);
+
+                if (!isInt)
+                {
+                    return new BadRequestResult();
+                }
+
+                List<Page> pages = await _pageService.AdminRead(id);
+                return new OkObjectResult(new ResponseBody<List<Page>>(pages, typeof(Page).Name.ToString(), pages.Count()));
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // POST api/<PageController>
         [Authorize]
         [HttpPost]
