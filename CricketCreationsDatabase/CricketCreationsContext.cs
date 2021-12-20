@@ -77,9 +77,7 @@ namespace CricketCreationsDatabase
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Console.WriteLine($"connectionString: {Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")}");
-            // string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
-            string connectionString = "Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;";
+            string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
             optionsBuilder.UseSqlServer(connectionString);
         }
     }
