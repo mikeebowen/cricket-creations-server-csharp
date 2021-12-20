@@ -28,6 +28,7 @@ namespace CricketCreations.Middleware
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
+
                     // ValidIssuer = "localhost",
                     // ValidAudience = "localhost"
                 };

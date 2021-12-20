@@ -12,9 +12,11 @@ namespace CricketCreations.Profiles
             // _tagService = tagService;
 
             CreateMap<BlogPost, BlogPostDTO>();
+
             // .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => _mapper.Map<Tag, TagDTO>(t))));
 
             CreateMap<BlogPostDTO, BlogPost>();
+
             // .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => _tagService.ConvertToTag(t))));
         }
     }

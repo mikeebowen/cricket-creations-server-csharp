@@ -119,6 +119,7 @@ public static class ModelBuilderExtensions
                 Tags = new List<Tag>(),
                 Pages = new List<Page>(),
             });
+
         // modelBuilder.Entity<BlogPost>().HasData(
         //    new BlogPost
         //    {

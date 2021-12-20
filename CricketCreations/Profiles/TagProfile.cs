@@ -12,8 +12,10 @@ namespace CricketCreations.Profiles
             // _blogPostService = blogPostService;
 
             CreateMap<TagDTO, Tag>()
+
             // .ForMember(t => t.BlogPosts, option => option.MapFrom(t => t.BlogPosts.Select(b => _blogPostService.ConvertToBlogPost(b))))
             .ReverseMap();
+
             // .ForMember(t => t.BlogPosts, option => option.MapFrom(t => t.BlogPosts.Select(b => _blogPostService.ConvertToBlogPostDTO(b))));
         }
     }
