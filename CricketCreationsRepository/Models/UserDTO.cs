@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using CricketCreationsRepository.Repositories;
+using Ganss.XSS;
 
 namespace CricketCreationsRepository.Models
 {
     public class UserDTO
     {
+        private HtmlSanitizer _htmlSanitizer = new HtmlSanitizer();
+        private string _name;
+        private string _surname;
+        private string _userName;
         private string _refreshToken;
 
         public enum RoleTypes
@@ -22,9 +27,31 @@ namespace CricketCreationsRepository.Models
 
         [Required]
         [MaxLength(200)]
-        public string Name { get; set; }
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
 
-        public string Surname { get; set; }
+            set
+            {
+                _name = _htmlSanitizer.Sanitize(value);
+            }
+        }
+
+        public string Surname
+        {
+            get
+            {
+                return _surname;
+            }
+
+            set
+            {
+                _surname = _htmlSanitizer.Sanitize(value);
+            }
+        }
 
         [Required]
         [MaxLength(200)]
@@ -56,11 +83,23 @@ namespace CricketCreationsRepository.Models
 
         [Required]
         [MaxLength(200)]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]
         [MaxLength(200)]
-        public string UserName { get; set; }
+        public string UserName
+        {
+            get
+            {
+                return _userName;
+            }
+
+            set
+            {
+                _userName = _htmlSanitizer.Sanitize(value);
+            }
+        }
 
         public string Avatar { get; set; }
 

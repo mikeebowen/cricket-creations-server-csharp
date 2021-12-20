@@ -87,6 +87,12 @@ namespace CricketCreationsRepository.Repositories
             BlogPost blogPost = _convertToBlogPost(blogPostDTO);
 
             User user = await _databaseManager.Instance.User.FindAsync(userId);
+
+            if (user.BlogPosts == null)
+            {
+                user.BlogPosts = new List<BlogPost>();
+            }
+
             user.BlogPosts.Add(blogPost);
             blogPost.User = user;
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ganss.XSS;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,6 +7,9 @@ namespace CricketCreationsRepository.Models
 {
     public class TagDTO
     {
+        private HtmlSanitizer _htmlSanitizer = new HtmlSanitizer();
+        private string _name;
+
         [Key]
         public int? Id { get; set; }
 
@@ -15,7 +19,18 @@ namespace CricketCreationsRepository.Models
 
         public bool Deleted { get; set; } = false;
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+
+            set
+            {
+                _name = _htmlSanitizer.Sanitize(value);
+            }
+        }
 
         public ICollection<BlogPostDTO> BlogPosts { get; set; }
     }
