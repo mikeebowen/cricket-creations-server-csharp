@@ -112,9 +112,7 @@ namespace CricketCreations.Controllers
         {
             try
             {
-                List<Claim> claims = User.Claims.ToList();
-                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
-                bool isInt = int.TryParse(idStr, out int id);
+                (bool isInt, int id) = _userService.GetId(User);
 
                 if (!isInt)
                 {
@@ -151,9 +149,7 @@ namespace CricketCreations.Controllers
         [HttpPost("password")]
         public async Task<IActionResult> UpdatePassword([FromBody] NewUser user)
         {
-            List<Claim> claims = User.Claims.ToList();
-            string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
-            bool isInt = int.TryParse(idStr, out int id);
+            (bool isInt, int id) = _userService.GetId(User);
 
             if (!isInt)
             {
@@ -174,9 +170,7 @@ namespace CricketCreations.Controllers
         [HttpDelete("logout")]
         public async Task<IActionResult> Logout()
         {
-            List<Claim> claims = User.Claims.ToList();
-            string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
-            bool isInt = int.TryParse(idStr, out int id);
+            (bool isInt, int id) = _userService.GetId(User);
 
             if (!isInt)
             {

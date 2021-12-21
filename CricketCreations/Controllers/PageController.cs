@@ -19,10 +19,12 @@ namespace CricketCreations.Controllers
     public class PageController : ControllerBase
     {
         private readonly IPageService _pageService;
+        private readonly IUserService _userService;
 
-        public PageController(IPageService pageService)
+        public PageController(IPageService pageService, IUserService userService)
         {
             _pageService = pageService;
+            _userService = userService;
         }
 
         // GET: api/<PageController>
@@ -55,15 +57,13 @@ namespace CricketCreations.Controllers
             }
         }
 
-        [HttpGet("include-unpublished")]
         [Authorize]
+        [HttpGet("include-unpublished")]
         public async Task<IActionResult> AdminGet()
         {
             try
             {
-                List<Claim> claims = User.Claims.ToList();
-                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
-                bool isInt = int.TryParse(idStr, out int id);
+                (bool isInt, int id) = _userService.GetId(User);
 
                 if (!isInt)
                 {
@@ -86,16 +86,14 @@ namespace CricketCreations.Controllers
         {
             try
             {
-                List<Claim> claims = User.Claims.ToList();
-                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
-                bool isInt = int.TryParse(idStr, out int userId);
+                (bool isInt, int id) = _userService.GetId(User);
 
                 if (!isInt)
                 {
                     return new BadRequestResult();
                 }
 
-                Page createdPage = await _pageService.Create(page, userId);
+                Page createdPage = await _pageService.Create(page, id);
                 return new CreatedResult($"api/page/{createdPage.Id}", createdPage);
             }
             catch (DbUpdateException ex)
@@ -115,9 +113,7 @@ namespace CricketCreations.Controllers
         {
             try
             {
-                List<Claim> claims = User.Claims.ToList();
-                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
-                bool isInt = int.TryParse(idStr, out int id);
+                (bool isInt, int id) = _userService.GetId(User);
 
                 if (!isInt)
                 {

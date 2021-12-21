@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using CricketCreations.Models;
 
 namespace CricketCreations.Interfaces
@@ -20,5 +22,7 @@ namespace CricketCreations.Interfaces
         public abstract Task<bool> IsValidId(int id);
 
         public abstract Task<bool> Logout(int id);
+
+        public abstract (bool, int) GetId(ClaimsPrincipal user);
     }
 }

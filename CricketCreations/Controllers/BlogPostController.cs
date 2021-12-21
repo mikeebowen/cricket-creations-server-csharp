@@ -36,9 +36,8 @@ namespace CricketCreations.Controllers
                 bool validIdInt = int.TryParse(userId, out int id);
                 int blogPostCount = userId != null && validIdInt ? await _blogPostService.GetCount(id) : await _blogPostService.GetCount();
                 bool inRange = Math.Abs(blogPostCount - (pg * cnt) - ((cnt * -1) + 1)) >= 1;
-                List<Claim> claims = User.Claims.ToList();
-                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
-                bool isIntAdminId = int.TryParse(idStr, out int adminUserId);
+
+                (bool isIntAdminId, int adminUserId) = _userService.GetId(User);
 
                 if ((page == null || !validPage) || (count == null || !validCount) || (blogPostCount > 0 && !inRange) || (userId != null && (!validIdInt || !(await _userService.IsValidId(id)))))
                 {
@@ -101,11 +100,9 @@ namespace CricketCreations.Controllers
         {
             try
             {
-                List<Claim> claims = User.Claims.ToList();
-                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
-                bool isInt = int.TryParse(idStr, out int id);
+                (bool idInfo, int id) = _userService.GetId(User);
 
-                if (!isInt)
+                if (!idInfo)
                 {
                     return new BadRequestResult();
                 }
@@ -126,9 +123,7 @@ namespace CricketCreations.Controllers
         {
             try
             {
-                List<Claim> claims = User.Claims.ToList();
-                string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
-                bool isInt = int.TryParse(idStr, out int id);
+                (bool isInt, int id) = _userService.GetId(User);
 
                 if (!isInt)
                 {

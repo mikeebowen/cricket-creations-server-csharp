@@ -105,24 +105,6 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<UserDTO> Update(UserDTO userDTO)
         {
-            // User user = await _databaseManager.Instance.User.FindAsync(userDTO.Id);
-            // if (user != null)
-            // {
-            //    user.Password = userDTO.Password ?? user.Password;
-            //    user.Salt = userDTO.Salt ?? user.Salt;
-            //    user.RefreshToken = userDTO.RefreshToken ?? user.RefreshToken;
-            //    user.RefreshTokenExpiration = userDTO.RefreshTokenExpiration;
-            //    user.Name = userDTO.Name ?? user.Name;
-            //    user.Surname = userDTO.Surname ?? user.Surname;
-            //    user.Email = userDTO.Email ?? user.Email;
-            //    user.UserName = userDTO.UserName ?? user.UserName;
-            //    user.Role = (Role)userDTO.Role;
-            //    user.Avatar = userDTO.Avatar ?? user.Avatar;
-
-            // await _databaseManager.Instance.SaveChangesAsync();
-            //    return _convertToUserDTO(user);
-            // }
-            // return null;
             User user = await _databaseManager.Instance.User.FindAsync(userDTO.Id);
             if (user != null)
             {

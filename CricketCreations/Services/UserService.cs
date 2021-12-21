@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using CricketCreations.Interfaces;
@@ -112,6 +115,15 @@ namespace CricketCreations.Services
         public async Task<bool> Logout(int id)
         {
             return await _userRepository.Logout(id);
+        }
+
+        public (bool, int) GetId(ClaimsPrincipal user)
+        {
+            List<Claim> claims = user.Claims.ToList();
+            string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+            bool isInt = int.TryParse(idStr, out int id);
+
+            return (isInt, id);
         }
 
         private static UserDTO _convertToUserDTO(NewUser newUser)
