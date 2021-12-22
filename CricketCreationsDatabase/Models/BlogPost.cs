@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CricketCreationsDatabase.Models
 {
     public class BlogPost : BaseEntity
     {
+        [MaxLength(300)]
         public string Title { get; set; }
 
         public string Content { get; set; }

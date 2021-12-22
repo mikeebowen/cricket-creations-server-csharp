@@ -1,4 +1,6 @@
-﻿namespace CricketCreationsDatabase.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CricketCreationsDatabase.Models
 {
     public class Page : BaseEntity
     {
@@ -8,8 +10,10 @@
 
         public User User { get; set; }
 
+        [MaxLength(300)]
         public string Title { get; set; }
 
+        [MaxLength(300)]
         public string Heading { get; set; }
 
         public string Content { get; set; }

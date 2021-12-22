@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CricketCreationsDatabase.Models
 {
@@ -8,6 +9,7 @@ namespace CricketCreationsDatabase.Models
 
         public User User { get; set; }
 
+        [MaxLength(100)]
         public string Name { get; set; }
 
         public List<BlogPost> BlogPosts { get; set; }
