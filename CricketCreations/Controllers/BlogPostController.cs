@@ -8,6 +8,7 @@ using CricketCreations.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -110,6 +111,10 @@ namespace CricketCreations.Controllers
                 BlogPost createdBlogPost = await _blogPostService.Create(blogPost, id);
                 return new CreatedResult($"api/blogpost/{createdBlogPost.Id}", createdBlogPost);
             }
+            catch (DbUpdateException ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            }
             catch (Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -139,6 +144,10 @@ namespace CricketCreations.Controllers
 
                 return new OkObjectResult(new ResponseBody<BlogPost>(updatedBlogPost, typeof(BlogPost).Name.ToString(), null));
             }
+            catch (DbUpdateException ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            }
             catch (Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -160,6 +169,10 @@ namespace CricketCreations.Controllers
                 {
                     return new NotFoundResult();
                 }
+            }
+            catch (DbUpdateException ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status400BadRequest);
             }
             catch (Exception ex)
             {

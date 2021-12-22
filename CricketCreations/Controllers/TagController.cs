@@ -9,6 +9,7 @@ using CricketCreations.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -98,6 +99,10 @@ namespace CricketCreations.Controllers
                 Tag newTag = await _tagService.Create(new Tag() { Name = data.Name }, data.BlogPostId, id);
                 return new CreatedResult($"api/tag/{newTag.Id}", newTag);
             }
+            catch (DbUpdateException ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            }
             catch (Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -127,6 +132,10 @@ namespace CricketCreations.Controllers
 
                 return new OkObjectResult(new ResponseBody<Tag>(updatedTag, typeof(Tag).Name.ToString(), null));
             }
+            catch (DbUpdateException ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            }
             catch (Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -148,6 +157,10 @@ namespace CricketCreations.Controllers
                 {
                     return new NotFoundResult();
                 }
+            }
+            catch (DbUpdateException ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status400BadRequest);
             }
             catch (Exception ex)
             {

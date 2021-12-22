@@ -170,16 +170,27 @@ namespace CricketCreations.Controllers
         [HttpDelete("logout")]
         public async Task<IActionResult> Logout()
         {
-            (bool isInt, int id) = _userService.GetId(User);
-
-            if (!isInt)
+            try
             {
-                return new BadRequestResult();
+                (bool isInt, int id) = _userService.GetId(User);
+
+                if (!isInt)
+                {
+                    return new BadRequestResult();
+                }
+
+                await _userService.Logout(id);
+
+                return new StatusCodeResult(StatusCodes.Status204NoContent);
             }
-
-            await _userService.Logout(id);
-
-            return new StatusCodeResult(StatusCodes.Status204NoContent);
+            catch (DbUpdateException ex)
+            {
+                return new ObjectResult(new { Errors = new[] { new { Message = ex.InnerException?.Message != null ? ex.InnerException.Message : ex.Message } } }) { StatusCode = StatusCodes.Status303SeeOther };
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

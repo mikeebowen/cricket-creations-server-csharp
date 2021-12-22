@@ -129,6 +129,10 @@ namespace CricketCreations.Controllers
 
                 return new OkObjectResult(new ResponseBody<Page>(updatedPage, typeof(Page).Name.ToString(), null));
             }
+            catch (DbUpdateException ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            }
             catch (Exception ex)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -150,6 +154,10 @@ namespace CricketCreations.Controllers
                 {
                     return new NotFoundResult();
                 }
+            }
+            catch (DbUpdateException ex)
+            {
+                return new StatusCodeResult(StatusCodes.Status400BadRequest);
             }
             catch (Exception ex)
             {
