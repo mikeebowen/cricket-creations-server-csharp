@@ -44,6 +44,7 @@ namespace CricketCreations
             services.AddSingleton<IJwtService, JwtService>();
             services.AddSingleton<IPageService, PageService>();
             services.AddTransient<IDatabaseManager, DatabaseManager>();
+            services.AddSingleton<IImageService, ImageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +60,7 @@ namespace CricketCreations
             app.UseSpaStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
