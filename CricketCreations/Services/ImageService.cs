@@ -14,17 +14,41 @@ namespace CricketCreations.Services
             Guid guid = Guid.NewGuid();
             string fName = $"{guid}-{file.FileName.Replace(" ", "_")}";
             string directoryPath = Path.Join(Directory.GetCurrentDirectory(), "wwwroot");
+            DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
+            DirectoryInfo[] directoryInfos = directoryInfo.GetDirectories();
+            string saveFolderPath;
+            string saveFolderName;
 
-            Directory.CreateDirectory(directoryPath);
+            if (directoryInfos.Length == 0)
+            {
+                saveFolderPath = Path.Join(directoryPath, "Images", "0");
+                Directory.CreateDirectory(saveFolderPath);
+                saveFolderName = "0";
+            }
+            else
+            {
+                saveFolderName = (directoryInfos.Length - 1).ToString();
+                saveFolderPath = Path.Join(directoryPath, "Images", saveFolderName);
+                Directory.CreateDirectory(saveFolderPath);
+                DirectoryInfo saveFolderInfo = new DirectoryInfo(saveFolderPath);
+                FileInfo[] files = saveFolderInfo.GetFiles();
 
-            string filePath = Path.Combine(directoryPath, fName);
+                if (files.Length > 99)
+                {
+                    saveFolderName = directoryInfos.Length.ToString();
+                    saveFolderPath = Path.Join(directoryPath, "Images", saveFolderName);
+                    Directory.CreateDirectory(saveFolderPath);
+                }
+            }
+
+            string filePath = Path.Combine(saveFolderPath, fName);
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
 
             var dict = new Dictionary<string, string>();
-            dict.Add("location", $"//{host}/{fName}");
+            dict.Add("location", $"//{host}/Images/{saveFolderName}/{fName}");
 
             return dict;
         }
