@@ -18,10 +18,12 @@ namespace CricketCreations.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly ILoggerService _loggerService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, ILoggerService loggerService)
         {
             _userService = userService;
+            _loggerService = loggerService;
         }
 
         // GET: api/<UserController>
@@ -42,7 +44,7 @@ namespace CricketCreations.Controllers
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return _loggerService.Error(ex);
             }
         }
 
@@ -62,7 +64,7 @@ namespace CricketCreations.Controllers
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return _loggerService.Error(ex);
             }
         }
 
@@ -82,7 +84,7 @@ namespace CricketCreations.Controllers
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return _loggerService.Error(ex);
             }
         }
 
@@ -97,11 +99,11 @@ namespace CricketCreations.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return new ObjectResult(new { Errors = new[] { new { Message = ex.InnerException?.Message != null ? ex.InnerException.Message : ex.Message } } }) { StatusCode = StatusCodes.Status500InternalServerError };
+                return _loggerService.Info(ex);
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return _loggerService.Error(ex);
             }
         }
 
@@ -131,11 +133,11 @@ namespace CricketCreations.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return new ObjectResult(new { Errors = new[] { new { Message = ex.InnerException?.Message != null ? ex.InnerException.Message : ex.Message } } }) { StatusCode = StatusCodes.Status303SeeOther };
+                return _loggerService.Info(ex);
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return _loggerService.Error(ex);
             }
         }
 
@@ -185,11 +187,11 @@ namespace CricketCreations.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return new ObjectResult(new { Errors = new[] { new { Message = ex.InnerException?.Message != null ? ex.InnerException.Message : ex.Message } } }) { StatusCode = StatusCodes.Status303SeeOther };
+                return _loggerService.Info(ex);
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return _loggerService.Error(ex);
             }
         }
     }

@@ -20,11 +20,13 @@ namespace CricketCreations.Controllers
     {
         private readonly IBlogPostService _blogPostService;
         private readonly IUserService _userService;
+        private readonly ILoggerService _loggerService;
 
-        public BlogPostController(IBlogPostService blogPostService, IUserService userService)
+        public BlogPostController(IBlogPostService blogPostService, IUserService userService, ILoggerService loggerService)
         {
             _blogPostService = blogPostService;
             _userService = userService;
+            _loggerService = loggerService;
         }
 
         [HttpGet]
@@ -68,7 +70,7 @@ namespace CricketCreations.Controllers
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return _loggerService.Error(ex);
             }
         }
 
@@ -90,7 +92,7 @@ namespace CricketCreations.Controllers
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return _loggerService.Error(ex);
             }
         }
 
@@ -113,11 +115,11 @@ namespace CricketCreations.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return new StatusCodeResult(StatusCodes.Status400BadRequest);
+                return _loggerService.Info(ex);
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return _loggerService.Error(ex);
             }
         }
 
@@ -146,11 +148,11 @@ namespace CricketCreations.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return new StatusCodeResult(StatusCodes.Status400BadRequest);
+                return _loggerService.Info(ex);
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return _loggerService.Error(ex);
             }
         }
 
@@ -172,11 +174,11 @@ namespace CricketCreations.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return new StatusCodeResult(StatusCodes.Status400BadRequest);
+                return _loggerService.Info(ex);
             }
             catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return _loggerService.Error(ex);
             }
         }
     }

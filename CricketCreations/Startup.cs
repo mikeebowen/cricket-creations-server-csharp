@@ -1,4 +1,6 @@
-﻿using CricketCreations.Interfaces;
+﻿using System;
+using System.IO;
+using CricketCreations.Interfaces;
 using CricketCreations.Middleware;
 using CricketCreations.Services;
 using CricketCreationsRepository;
@@ -9,7 +11,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using VueCliMiddleware;
+using RockLib.Logging;
+//using VueCliMiddleware;
+using RockLib.Logging.DependencyInjection;
 
 namespace CricketCreations
 {
@@ -45,6 +49,19 @@ namespace CricketCreations
             services.AddSingleton<IPageService, PageService>();
             services.AddTransient<IDatabaseManager, DatabaseManager>();
             services.AddSingleton<IImageService, ImageService>();
+
+            string dir = Path.Join(Directory.GetCurrentDirectory(), "logs");
+            Directory.CreateDirectory(dir);
+            services.AddLogger().AddRollingFileLogProvider(opt =>
+            {
+                opt.File = Path.Join(dir, $"log.txt");
+                opt.Level = LogLevel.Info;
+                opt.Timeout = TimeSpan.FromSeconds(1);
+                opt.MaxFileSizeKilobytes = 2048;
+                opt.RolloverPeriod = RolloverPeriod.Daily;
+            });
+
+            services.AddSingleton<ILoggerService, LoggingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +72,11 @@ namespace CricketCreations
                 app.UseDeveloperExceptionPage();
             }
 
-            // app.UseHttpsRedirection();
+            if (env.IsProduction())
+            {
+                app.UseHttpsRedirection();
+            }
+
             app.UseRouting();
             app.UseSpaStaticFiles();
             app.UseAuthentication();
@@ -78,10 +99,10 @@ namespace CricketCreations
                     spa.Options.SourcePath = "dist";
                 }
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseVueCli(npmScript: "serve");
-                }
+                //if (env.IsDevelopment())
+                //{
+                //    spa.UseVueCli(npmScript: "serve");
+                //}
             });
         }
     }
