@@ -28,6 +28,7 @@ namespace CricketCreations.Models
         [MaxLength(200)]
         public string UserName { get; set; }
 
+        [IsValidBase64]
         public string Avatar { get; set; }
 
         public Role Role { get; set; }

@@ -21,6 +21,7 @@
         // [MaxLength(200)]
         public string Password { get; set; }
 
+        [IsValidBase64]
         public string Avatar { get; set; }
     }
 }
