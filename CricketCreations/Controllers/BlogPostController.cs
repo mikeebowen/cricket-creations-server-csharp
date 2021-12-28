@@ -38,7 +38,8 @@ namespace CricketCreations.Controllers
                 bool validCount = int.TryParse(count, out int cnt);
                 bool validIdInt = int.TryParse(userId, out int id);
                 int blogPostCount = userId != null && validIdInt ? await _blogPostService.GetCount(id) : await _blogPostService.GetCount();
-                bool inRange = Math.Abs(blogPostCount - (pg * cnt) - ((cnt * -1) + 1)) >= 1;
+                int range = Math.Abs(blogPostCount - (pg * cnt) - ((cnt * -1) + 1));
+                bool inRange = range >= 0;
 
                 (bool isIntAdminId, int adminUserId) = _userService.GetId(User);
 
