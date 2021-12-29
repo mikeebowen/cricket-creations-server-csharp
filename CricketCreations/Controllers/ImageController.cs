@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using CricketCreations.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<ImageController>
+        [Authorize]
         [HttpPost]
         public async Task<Dictionary<string, string>> UploadFile([FromForm] IFormFile file, [FromHeader] string host)
         {
