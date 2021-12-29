@@ -183,14 +183,7 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<int> GetCount(int id)
         {
-            User user = await _databaseManager.Instance.User.FindAsync(id);
-            if (user.BlogPosts == null)
-            {
-                user.BlogPosts = new List<BlogPost>();
-            }
-
-            IEnumerable<BlogPost> blogPosts = user.BlogPosts.Where(b => b.Deleted == false);
-            return blogPosts.Count();
+            return await _databaseManager.Instance.BlogPost.Where(b => b.Deleted == false && b.User.Id == id).CountAsync();
         }
 
         private static BlogPostDTO _convertToBlogPostDTO(BlogPost blogPost)
