@@ -48,32 +48,32 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<List<PageDTO>> Read()
         {
-            List<Page> pages = await _databaseManager.Instance.Page.Where(p => p.Deleted == false).ToListAsync();
+            List<Page> pages = await _databaseManager.Instance.Page.Where(p => p.Deleted == false && p.Published == true).ToListAsync();
             List<PageDTO> pageDTOs = pages.Select(p => _convertToPageDTO(p)).ToList();
             return pageDTOs;
         }
 
         public async Task<List<PageDTO>> Read(int page, int count)
         {
-            List<Page> pages = await _databaseManager.Instance.Page.Where(p => p.Published == true).Skip((page - 1) * count).Take(count).ToListAsync();
+            List<Page> pages = await _databaseManager.Instance.Page.Where(p => p.Published == true && p.Deleted == false).Skip((page - 1) * count).Take(count).ToListAsync();
             return pages.Select(p => _convertToPageDTO(p)).ToList();
         }
 
         public async Task<List<PageDTO>> Read(int page, int count, int id)
         {
-            List<Page> pages = await _databaseManager.Instance.Page.Where(p => p.User.Id == id && p.Published).Skip((page - 1) * count).Take(count).ToListAsync();
+            List<Page> pages = await _databaseManager.Instance.Page.Where(p => p.User.Id == id && p.Published && p.Deleted == false).Skip((page - 1) * count).Take(count).ToListAsync();
             return pages.Select(p => _convertToPageDTO(p)).ToList();
         }
 
         public async Task<PageDTO> Read(int id)
         {
-            Page page = await _databaseManager.Instance.Page.Where(p => p.User.Id == id && p.Published).FirstOrDefaultAsync();
+            Page page = await _databaseManager.Instance.Page.Where(p => p.User.Id == id && p.Published && p.Deleted == false).FirstOrDefaultAsync();
             return _convertToPageDTO(page);
         }
 
         public async Task<List<PageDTO>> AdminRead(int id)
         {
-            List<Page> pages = await _databaseManager.Instance.Page.Where(p => p.User.Id == id).ToListAsync();
+            List<Page> pages = await _databaseManager.Instance.Page.Where(p => p.User.Id == id && p.Deleted == false).ToListAsync();
             return pages.Select(p => _convertToPageDTO(p)).ToList();
         }
 

@@ -78,7 +78,7 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<BlogPostDTO> Read(int id)
         {
-            BlogPost blogPost = await _databaseManager.Instance.BlogPost.FindAsync(id);
+            BlogPost blogPost = await _databaseManager.Instance.BlogPost.Where(b => b.Id == id && !b.Deleted && b.Published).FirstOrDefaultAsync();
             return _convertToBlogPostDTO(blogPost);
         }
 
