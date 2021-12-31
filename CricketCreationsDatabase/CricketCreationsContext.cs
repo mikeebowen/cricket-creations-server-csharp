@@ -79,6 +79,8 @@ namespace CricketCreationsDatabase
         {
             string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
             optionsBuilder.UseSqlServer(connectionString);
+
+            // optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;");
         }
     }
 }

@@ -188,6 +188,11 @@ namespace CricketCreationsRepository.Repositories
 
         private static BlogPostDTO _convertToBlogPostDTO(BlogPost blogPost)
         {
+            if (blogPost == null)
+            {
+                return null;
+            }
+
             BlogPostDTO blogPostDTO = _mapper.Map<BlogPost, BlogPostDTO>(blogPost);
 
             return blogPostDTO;

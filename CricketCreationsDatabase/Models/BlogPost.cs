@@ -8,6 +8,9 @@ namespace CricketCreationsDatabase.Models
         [MaxLength(300)]
         public string Title { get; set; }
 
+        [MaxLength(300)]
+        public string Subtitle { get; set; }
+
         public string Content { get; set; }
 
         public string Image { get; set; }

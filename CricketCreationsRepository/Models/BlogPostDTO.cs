@@ -10,6 +10,7 @@ namespace CricketCreationsRepository.Models
         private HtmlSanitizer _htmlSanitizer = new HtmlSanitizer();
         private string _content;
         private string _title;
+        private string _subtitle;
 
         [Key]
         public int? Id { get; set; }
@@ -28,6 +29,19 @@ namespace CricketCreationsRepository.Models
             set
             {
                 _title = _htmlSanitizer.Sanitize(value);
+            }
+        }
+
+        public string Subtitle
+        {
+            get
+            {
+                return _subtitle;
+            }
+
+            set
+            {
+                _subtitle = _htmlSanitizer.Sanitize(value);
             }
         }
 
