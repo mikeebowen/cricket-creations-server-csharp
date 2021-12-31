@@ -7,7 +7,7 @@ namespace CricketCreationsDatabase.Models
     {
         public bool Deleted { get; set; } = false;
 
-        public User User { get; set; }
+        public List<User> Users { get; set; }
 
         [MaxLength(100)]
         public string Name { get; set; }

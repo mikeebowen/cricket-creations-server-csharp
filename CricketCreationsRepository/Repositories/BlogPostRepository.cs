@@ -117,7 +117,13 @@ namespace CricketCreationsRepository.Repositories
                         tag = existingTag;
                     }
 
-                    tag.User = user;
+
+                    if (tag.Users == null)
+                    {
+                        tag.Users = new List<User>();
+                    }
+
+                    tag.Users.Add(user);
 
                     return tag;
                 }
@@ -163,7 +169,12 @@ namespace CricketCreationsRepository.Repositories
                         tag = existingTag;
                     }
 
-                    tag.User = user;
+                    if (tag.Users == null)
+                    {
+                        tag.Users = new List<User>();
+                    }
+
+                    tag.Users.Add(user);
 
                     return tag;
                 }

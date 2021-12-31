@@ -76,7 +76,13 @@ namespace CricketCreationsRepository.Repositories
 
             blogPost.Tags.Add(newTag);
             user.Tags.Add(newTag);
-            newTag.User = user;
+
+            if (newTag.Users == null)
+            {
+                newTag.Users = new List<User>();
+            }
+
+            newTag.Users.Add(user);
             newTag.BlogPosts.Add(blogPost);
 
             _databaseManager.Instance.Tag.Add(newTag);
@@ -126,7 +132,7 @@ namespace CricketCreationsRepository.Repositories
                 }).ToList();
             }
 
-            if (tag != null && (user.Role == Role.Administrator || tag.User.Id == userId))
+            if (tag != null && (user.Role == Role.Administrator || tag.Users.Contains(user)))
             {
                 Tag updatedTag = _convertToTag(tagDTO);
                 _databaseManager.Instance.Entry(tag).CurrentValues.SetValues(updatedTag);
