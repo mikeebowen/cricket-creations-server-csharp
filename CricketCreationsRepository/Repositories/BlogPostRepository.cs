@@ -106,8 +106,19 @@ namespace CricketCreationsRepository.Repositories
                 }
                 else
                 {
-                    tag = _convertToTag(t);
+                    Tag existingTag = _databaseManager.Instance.Tag.Where(x => x.Name == t.Name).FirstOrDefault();
+
+                    if (existingTag == null)
+                    {
+                        tag = _convertToTag(t);
+                    }
+                    else
+                    {
+                        tag = existingTag;
+                    }
+
                     tag.User = user;
+
                     return tag;
                 }
             }).ToList();
@@ -133,6 +144,7 @@ namespace CricketCreationsRepository.Repositories
             List<Tag> newTags = blogPostDto.Tags.Select(t =>
             {
                 Tag tag;
+
                 if (t.Id != null)
                 {
                     tag = _databaseManager.Instance.Tag.Find(t.Id);
@@ -140,8 +152,19 @@ namespace CricketCreationsRepository.Repositories
                 }
                 else
                 {
-                    tag = _convertToTag(t);
+                    Tag existingTag = _databaseManager.Instance.Tag.Where(x => x.Name == t.Name).FirstOrDefault();
+
+                    if (existingTag == null)
+                    {
+                        tag = _convertToTag(t);
+                    }
+                    else
+                    {
+                        tag = existingTag;
+                    }
+
                     tag.User = user;
+
                     return tag;
                 }
             }).ToList();

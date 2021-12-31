@@ -61,7 +61,18 @@ namespace CricketCreationsRepository.Repositories
         {
             User user = await _databaseManager.Instance.User.FindAsync(userId);
             BlogPost blogPost = await _databaseManager.Instance.BlogPost.FindAsync(blogPostId);
-            Tag newTag = _convertToTag(tagDTO);
+            Tag newTag;
+
+            Tag dbTag = await _databaseManager.Instance.Tag.Where(t => t.Name == tagDTO.Name).FirstOrDefaultAsync();
+
+            if (dbTag == null)
+            {
+                newTag = _convertToTag(tagDTO);
+            }
+            else
+            {
+                newTag = dbTag;
+            }
 
             blogPost.Tags.Add(newTag);
             user.Tags.Add(newTag);
