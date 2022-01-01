@@ -12,6 +12,8 @@ namespace CricketCreations.Models
 
         public DateTime LastUpdated { get; set; }
 
+        public string Author { get; set; }
+
         [Required]
         public string Title { get; set; }
 

@@ -16,6 +16,7 @@ namespace CricketCreationsRepository.Repositories
         {
             c.CreateMap<BlogPost, BlogPostDTO>()
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => _convertToTagDTO(t))))
+            .ForMember(dest => dest.Author, opt => opt.MapFrom(bp => string.Concat(bp.User.Name, ' ', bp.User.Surname)))
             .ReverseMap()
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(b => b.Tags.Select(t => _convertToTag(t))))
             .ForMember(dest => dest.Created, opt => opt.Ignore());
@@ -97,7 +98,7 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<BlogPostDTO> Read(int id)
         {
-            BlogPost blogPost = await _databaseManager.Instance.BlogPost.Where(b => b.Id == id && !b.Deleted && b.Published).FirstOrDefaultAsync();
+            BlogPost blogPost = await _databaseManager.Instance.BlogPost.Include(bp => bp.User).Where(b => b.Id == id && !b.Deleted && b.Published).FirstOrDefaultAsync();
             return _convertToBlogPostDTO(blogPost);
         }
 
