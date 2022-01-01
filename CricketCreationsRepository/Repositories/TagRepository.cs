@@ -101,11 +101,48 @@ namespace CricketCreationsRepository.Repositories
             return user.Tags.Where(t => t.Deleted == false).Count();
         }
 
+        public async Task<int> GetCountOfBlogPosts(string tagName)
+        {
+            List<Tag> tags = await _databaseManager.Instance.Tag.Where(t => t.Name == tagName).Include(x => x.BlogPosts).ToListAsync();
+            int total = 0;
+
+            foreach (Tag tag in tags)
+            {
+                if (tag.BlogPosts != null)
+                {
+                    total += tag.BlogPosts.Count();
+                }
+            }
+
+            return total;
+        }
+
+        public async Task<int> GetCount(string tagName)
+        {
+            return await _databaseManager.Instance.Tag.Where(t => t.Name == tagName).CountAsync();
+        }
+
         public async Task<List<TagDTO>> Read(int page, int count, int id)
         {
             User user = await _databaseManager.Instance.User.FindAsync(id);
             List<Tag> tags = user.Tags.Where(t => t.Deleted == false).Skip((page - 1) * count).Take(count).ToList();
             return tags.Select(b => _convertToTagDTO(b)).ToList();
+        }
+
+        public async Task<List<BlogPostDTO>> Read(int page, int count, string tagName)
+        {
+            List<Tag> tags = await _databaseManager.Instance.Tag.Where(t => t.Name == tagName).ToListAsync();
+            List<BlogPost> blogPosts = new List<BlogPost>();
+
+            foreach (Tag tag in tags)
+            {
+                foreach (BlogPost blogPost in tag.BlogPosts)
+                {
+                    blogPosts.Add(blogPost);
+                }
+            }
+
+            return blogPosts.Skip((page - 1) * count).Take(count).Select(x => _convertToBlogPostDTO(x)).ToList();
         }
 
         public async Task<TagDTO> Update(TagDTO tagDTO, int userId)

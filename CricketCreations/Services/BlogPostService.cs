@@ -44,6 +44,14 @@ namespace CricketCreations.Services
             return _convertToBlogPost(blogPostDTO);
         }
 
+        public async Task<List<BlogPost>> ReadByTagName(int page, int count, string tagName)
+        {
+            List<BlogPostDTO> blogPostDTOs = await _blogPostRepository.ReadByTagName(page, count, tagName);
+
+            return blogPostDTOs.Select(b => _convertToBlogPost(b)).ToList();
+        }
+
+
         public async Task<BlogPost> Create(BlogPost blogPost, int userId)
         {
             BlogPostDTO blogPostDTO = _convertToBlogPostDTO(blogPost);

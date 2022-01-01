@@ -73,6 +73,12 @@ namespace CricketCreations.Services
             return await _tagRepository.GetCount(id);
         }
 
+        public async Task<int> GetCountOfBlogPosts(string tagName)
+        {
+            return await _tagRepository.GetCountOfBlogPosts(tagName);
+        }
+
+
         private TagDTO _convertToTagDTO(Tag tag)
         {
             if (tag == null)

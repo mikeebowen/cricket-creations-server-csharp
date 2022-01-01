@@ -6,5 +6,8 @@ namespace CricketCreations.Interfaces
     public interface ITagService : IApiService<Tag>
     {
         public abstract Task<Tag> Create(Tag tag, int blogPostId, int userId);
+
+        public abstract Task<int> GetCountOfBlogPosts(string tagName);
+
     }
 }

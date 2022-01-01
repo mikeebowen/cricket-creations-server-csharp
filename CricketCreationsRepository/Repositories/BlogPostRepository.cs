@@ -76,6 +76,25 @@ namespace CricketCreationsRepository.Repositories
             return blogPosts.Select(b => _convertToBlogPostDTO(b)).ToList();
         }
 
+        public async Task<List<BlogPostDTO>> ReadByTagName(int page, int count, string tagName)
+        {
+            List<Tag> tags = await _databaseManager.Instance.Tag.Where(t => t.Name.ToLower() == tagName.ToLower()).Include(x => x.BlogPosts).ToListAsync();
+            List<BlogPostDTO> blogPostDTOs = new List<BlogPostDTO>();
+
+            foreach (Tag tag in tags)
+            {
+                if (tag.BlogPosts != null)
+                {
+                    foreach (BlogPost blogPost in tag.BlogPosts)
+                    {
+                        blogPostDTOs.Add(_convertToBlogPostDTO(blogPost));
+                    }
+                }
+            }
+
+            return blogPostDTOs.Skip((page - 1) * count).Take(count).ToList();
+        }
+
         public async Task<BlogPostDTO> Read(int id)
         {
             BlogPost blogPost = await _databaseManager.Instance.BlogPost.Where(b => b.Id == id && !b.Deleted && b.Published).FirstOrDefaultAsync();
