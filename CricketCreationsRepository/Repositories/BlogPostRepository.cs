@@ -120,12 +120,12 @@ namespace CricketCreationsRepository.Repositories
                 Tag tag;
                 if (t.Id != null)
                 {
-                    tag = _databaseManager.Instance.Tag.Find(t.Id);
+                    tag = _databaseManager.Instance.Tag.Include(tg => tg.Users).Where(tag => tag.Id == t.Id).FirstOrDefault();
                     return tag;
                 }
                 else
                 {
-                    Tag existingTag = _databaseManager.Instance.Tag.Where(x => x.Name == t.Name).FirstOrDefault();
+                    Tag existingTag = _databaseManager.Instance.Tag.Include(tg => tg.Users).Where(x => x.Name == t.Name).FirstOrDefault();
 
                     if (existingTag == null)
                     {
@@ -136,13 +136,15 @@ namespace CricketCreationsRepository.Repositories
                         tag = existingTag;
                     }
 
-
                     if (tag.Users == null)
                     {
                         tag.Users = new List<User>();
                     }
 
-                    tag.Users.Add(user);
+                    if (!tag.Users.Contains(user))
+                    {
+                        tag.Users.Add(user);
+                    }
 
                     return tag;
                 }
@@ -172,12 +174,12 @@ namespace CricketCreationsRepository.Repositories
 
                 if (t.Id != null)
                 {
-                    tag = _databaseManager.Instance.Tag.Find(t.Id);
+                    tag = _databaseManager.Instance.Tag.Include(t => t.Users).Where(x => x.Id == t.Id).FirstOrDefault();
                     return tag;
                 }
                 else
                 {
-                    Tag existingTag = _databaseManager.Instance.Tag.Where(x => x.Name == t.Name).FirstOrDefault();
+                    Tag existingTag = _databaseManager.Instance.Tag.Include(t => t.Users).Where(x => x.Name == t.Name).FirstOrDefault();
 
                     if (existingTag == null)
                     {
@@ -193,7 +195,10 @@ namespace CricketCreationsRepository.Repositories
                         tag.Users = new List<User>();
                     }
 
-                    tag.Users.Add(user);
+                    if (!tag.Users.Contains(user))
+                    {
+                        tag.Users.Add(user);
+                    }
 
                     return tag;
                 }
@@ -203,6 +208,7 @@ namespace CricketCreationsRepository.Repositories
             PropertyEntry createdProperty = _databaseManager.Instance.Entry(blogPost).Property("Created");
             updatedBlogPost.Id = blogPost.Id;
             _databaseManager.Instance.Entry(blogPost).CurrentValues.SetValues(updatedBlogPost);
+
             if (createdProperty != null)
             {
                 _databaseManager.Instance.Entry(blogPost).Property("Created").IsModified = false;
@@ -210,7 +216,6 @@ namespace CricketCreationsRepository.Repositories
 
             blogPost.Tags = newTags;
             user.Tags = user.Tags ?? new List<Tag>();
-            user.Tags.AddRange(newTags);
 
             await _databaseManager.Instance.SaveChangesAsync();
             return _convertToBlogPostDTO(blogPost);
