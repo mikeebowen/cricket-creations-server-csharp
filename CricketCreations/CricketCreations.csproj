@@ -4,6 +4,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>CricketCreations</RootNamespace>
         <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
+        <UserSecretsId>4d84dd6d-e117-46ee-8159-9f8632d302c5</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -40,5 +41,8 @@
         <ProjectReference Include="..\CricketCreationsRepository\CricketCreationsRepository.csproj" />
     </ItemGroup>
 
+	<PropertyGroup>
+		<TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
+	</PropertyGroup>
 
 </Project>
