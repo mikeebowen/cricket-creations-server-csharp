@@ -5,6 +5,7 @@
         <RootNamespace>CricketCreations</RootNamespace>
         <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
         <UserSecretsId>4d84dd6d-e117-46ee-8159-9f8632d302c5</UserSecretsId>
+        <Platforms>AnyCPU;x64</Platforms>
     </PropertyGroup>
 
     <ItemGroup>
@@ -43,6 +44,12 @@
 
 	<PropertyGroup>
 		<TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+		<GenerateDependencyFile>true</GenerateDependencyFile>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
 </Project>

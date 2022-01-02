@@ -33,10 +33,22 @@ namespace CricketCreations
             // services.AddDbContext<CricketCreationsContext>(opt => opt.UseSqlServer(dbConnectionString));
             services.AddControllers();
             services.AddTokenAuthentication(Configuration);
-            services.AddSpaStaticFiles(configuration =>
+
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             {
-                configuration.RootPath = "ClientApp";
-            });
+                services.AddSpaStaticFiles(configuration =>
+                {
+                    configuration.RootPath = "ClientApp";
+                });
+            }
+            else
+            {
+                services.AddSpaStaticFiles(configuration =>
+                {
+                    configuration.RootPath = "ClientApp/dist";
+                });
+            }
+
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddSingleton<IBlogPostRepository, BlogPostRepository>();
             services.AddSingleton<ITagRepository, TagRepository>();
@@ -96,7 +108,7 @@ namespace CricketCreations
                 }
                 else
                 {
-                    spa.Options.SourcePath = "dist";
+                    spa.Options.SourcePath = "ClientApp/dist";
                 }
 
                 //if (env.IsDevelopment())
