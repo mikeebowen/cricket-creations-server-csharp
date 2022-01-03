@@ -39,27 +39,27 @@ namespace CricketCreations
             {
                 services.AddSpaStaticFiles(configuration =>
                 {
-                    configuration.RootPath = "ClientApp";
+                    configuration.RootPath = "clientapp";
                 });
             }
             else
             {
                 services.AddSpaStaticFiles(configuration =>
                 {
-                    configuration.RootPath = "ClientApp/dist";
+                    configuration.RootPath = "clientapp/dist";
                 });
             }
 
             services.AddAutoMapper(typeof(Startup).Assembly);
-            services.AddSingleton<IBlogPostRepository, BlogPostRepository>();
-            services.AddSingleton<ITagRepository, TagRepository>();
-            services.AddSingleton<IUserRepository, UserRepository>();
-            services.AddSingleton<IPageRepository, PageRepository>();
-            services.AddSingleton<IBlogPostService, BlogPostService>();
-            services.AddSingleton<ITagService, TagService>();
-            services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<IJwtService, JwtService>();
-            services.AddSingleton<IPageService, PageService>();
+            services.AddTransient<IBlogPostRepository, BlogPostRepository>();
+            services.AddTransient<ITagRepository, TagRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IPageRepository, PageRepository>();
+            services.AddTransient<IBlogPostService, BlogPostService>();
+            services.AddTransient<ITagService, TagService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IJwtService, JwtService>();
+            services.AddTransient<IPageService, PageService>();
             services.AddTransient<IDatabaseManager, DatabaseManager>();
             services.AddSingleton<IImageService, ImageService>();
 
