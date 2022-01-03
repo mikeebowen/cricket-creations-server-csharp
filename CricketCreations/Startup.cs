@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using RockLib.Logging;
 //using VueCliMiddleware;
@@ -89,6 +90,7 @@ namespace CricketCreations
                 app.UseHttpsRedirection();
             }
 
+            app.UseDefaultFiles();
             app.UseRouting();
             app.UseSpaStaticFiles();
             app.UseAuthentication();
@@ -104,11 +106,11 @@ namespace CricketCreations
             {
                 if (env.IsDevelopment())
                 {
-                    spa.Options.SourcePath = "ClientApp";
+                    spa.Options.SourcePath = "clientapp";
                 }
                 else
                 {
-                    spa.Options.SourcePath = "ClientApp/dist";
+                    spa.Options.SourcePath = "clientapp/dist";
                 }
 
                 //if (env.IsDevelopment())

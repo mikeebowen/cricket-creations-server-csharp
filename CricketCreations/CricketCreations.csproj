@@ -42,6 +42,10 @@
         <ProjectReference Include="..\CricketCreationsRepository\CricketCreationsRepository.csproj" />
     </ItemGroup>
 
+	<ItemGroup>
+		<Folder Include="clientapp\dist\" />
+	</ItemGroup>
+
 	<PropertyGroup>
 		<TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
 	</PropertyGroup>
