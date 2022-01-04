@@ -3,11 +3,13 @@ using System.IO;
 using CricketCreations.Interfaces;
 using CricketCreations.Middleware;
 using CricketCreations.Services;
+using CricketCreationsDatabase;
 using CricketCreationsRepository;
 using CricketCreationsRepository.Interfaces;
 using CricketCreationsRepository.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -75,11 +77,16 @@ namespace CricketCreations
             });
 
             services.AddSingleton<ILoggerService, LoggingService>();
+
+            string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+            services.AddDbContext<CricketCreationsContext>(x => x.UseSqlServer(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CricketCreationsContext cricketCreationsContext)
         {
+            cricketCreationsContext.Database.Migrate();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
