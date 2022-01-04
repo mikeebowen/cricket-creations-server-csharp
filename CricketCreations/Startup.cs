@@ -100,6 +100,7 @@ namespace CricketCreations
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToFile("/index.html");
             });
 
             app.UseSpa(spa =>
