@@ -10,6 +10,11 @@ namespace CricketCreations.Models
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == null)
+            {
+                return ValidationResult.Success;
+            }
+
             string base64;
             string val = value.ToString();
 
