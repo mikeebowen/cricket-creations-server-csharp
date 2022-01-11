@@ -37,7 +37,7 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<List<BlogPostDTO>> Read()
         {
-            List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost.Where(x => !x.Deleted && x.Published).Include(b => b.Tags).ToListAsync();
+            List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost.Where(x => !x.Deleted && x.Published).Include(b => b.Tags).Include(bb => bb.User).ToListAsync();
             return blogPosts.Select(b => _convertToBlogPostDTO(b)).ToList();
         }
 
@@ -48,6 +48,7 @@ namespace CricketCreationsRepository.Repositories
                                         .OrderByDescending(s => s.LastUpdated)
                                         .Skip((page - 1) * count).Take(count)
                                         .Include(b => b.Tags)
+                                        .Include(b => b.User)
                                         .ToListAsync();
 
             return blogPosts.Select(b => _convertToBlogPostDTO(b)).ToList();
@@ -56,6 +57,7 @@ namespace CricketCreationsRepository.Repositories
         public async Task<List<BlogPostDTO>> Read(int page, int count, int id)
         {
             List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost
+                                        .Include(b => b.User)
                                         .Where(b => !b.Deleted && b.Published && b.User.Id == id)
                                         .OrderByDescending(s => s.LastUpdated)
                                         .Skip((page - 1) * count)
@@ -68,6 +70,7 @@ namespace CricketCreationsRepository.Repositories
         public async Task<List<BlogPostDTO>> AdminRead(int page, int count, int id)
         {
             List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost
+                                        .Include(b => b.User)
                                         .Where(b => !b.Deleted && b.User.Id == id)
                                         .OrderByDescending(s => s.LastUpdated)
                                         .Skip((page - 1) * count)
@@ -253,6 +256,7 @@ namespace CricketCreationsRepository.Repositories
             }
 
             BlogPostDTO blogPostDTO = _mapper.Map<BlogPost, BlogPostDTO>(blogPost);
+            blogPostDTO.Author = string.Concat(blogPost.User.Name, " ", blogPost.User.Surname);
 
             return blogPostDTO;
         }
