@@ -111,6 +111,12 @@ namespace CricketCreations
                 endpoints.MapFallbackToFile("/index.html");
             });
 
+            // WebRootPath == null workaround. - from https://github.com/aspnet/Mvc/issues/6688
+            if (string.IsNullOrWhiteSpace(env.WebRootPath))
+            {
+                env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "clientapp", "dist");
+            }
+
             app.UseSpa(spa =>
             {
                 if (env.IsDevelopment())
