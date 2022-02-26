@@ -1,50 +1,97 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<RootNamespace>CricketCreations</RootNamespace>
+		<CodeAnalalysisRuleSet></CodeAnalalysisRuleSet>
+		<UserSecretsId>4d85dd6d-e117-46ee-8159-9f8632d302c5</UserSecretsId>
+		<Platforms>AnyCPU;x64</Platforms>
+	</PropertyGroup>
 
-    <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>CricketCreations</RootNamespace>
-        <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
-        <UserSecretsId>4d84dd6d-e117-46ee-8159-9f8632d302c5</UserSecretsId>
-        <Platforms>AnyCPU;x64</Platforms>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <None Include="..\.editorconfig" Link=".editorconfig" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="10.1.1" />
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-        <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
-        <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.7" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.11" />
-        <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.11" />
-        <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.14.1" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-        <PackageReference Include="NJsonSchema" Version="10.5.2" />
-        <PackageReference Include="RockLib.Logging" Version="3.0.8" />
-        <PackageReference Include="RockLib.Logging.DependencyInjection" Version="1.0.2" />
-        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.1" />
-        <PackageReference Include="VueCliMiddleware" Version="5.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\CricketCreationsRepository\CricketCreationsRepository.csproj" />
-    </ItemGroup>
+	<PropertyGroup>
+		<SpaRoot>clientapp\</SpaRoot>
+		<DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="clientapp\dist\" />
+		<PackageReference Include="AutoMapper" Version="10.1.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+		<PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+		<PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.7" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.14.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+		<PackageReference Include="NJsonSchema" Version="10.5.2" />
+		<PackageReference Include="RockLib.Logging" Version="3.0.8" />
+		<PackageReference Include="RockLib.Logging.DependencyInjection" Version="1.0.2" />
+		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.1" />
+		<PackageReference Include="VueCliMiddleware" Version="5.0.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Don't publish the SPA source files, but do show them in the project files list -->
+		<Content Remove="$(SpaRoot)**" />
+		<None Remove="$(SpaRoot)**" />
+		<None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\CricketCreationsDatabase\CricketCreationsDatabase.csproj" />
+		<ProjectReference Include="..\CricketCreationsRepository\CricketCreationsRepository.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+		<!-- Ensure Node.js is installed -->
+		<Exec Command="node --version" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+		</Exec>
+		<Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+		<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+	</Target>
+
+	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build --loglevel verbose" />
+
+		<!-- Include the newly-built files in the publish output -->
+
+		<ItemGroup>
+			<DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+			<DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+				<RelativePath>wwwroot\%(DistFiles.RecursiveDir)%(DistFiles.FileName)%(DistFiles.Extension)</RelativePath>
+				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+				<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			</ResolvedFileToPublish>
+		</ItemGroup>
+	</Target>
 
 	<PropertyGroup>
 		<TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
