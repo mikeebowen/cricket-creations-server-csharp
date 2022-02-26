@@ -56,6 +56,7 @@ namespace CricketCreationsRepository.Models
 
             set
             {
+                _htmlSanitizer.AllowedSchemes.Add("data");
                 _content = _htmlSanitizer.Sanitize(value);
             }
         }
