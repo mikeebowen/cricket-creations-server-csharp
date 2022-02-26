@@ -89,23 +89,23 @@ namespace CricketCreations.Controllers
         }
 
         // POST api/<UserController>
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] NewUser newUser)
-        {
-            try
-            {
-                User createdUser = await _userService.Create(newUser);
-                return new CreatedResult($"api/user/{createdUser.Id}", createdUser);
-            }
-            catch (DbUpdateException ex)
-            {
-                return _loggerService.Info(ex);
-            }
-            catch (Exception ex)
-            {
-                return _loggerService.Error(ex);
-            }
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Post([FromBody] NewUser newUser)
+        //{
+        //    try
+        //    {
+        //        User createdUser = await _userService.Create(newUser);
+        //        return new CreatedResult($"api/user/{createdUser.Id}", createdUser);
+        //    }
+        //    catch (DbUpdateException ex)
+        //    {
+        //        return _loggerService.Info(ex);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return _loggerService.Error(ex);
+        //    }
+        //}
 
         // PUT api/<UserController>/5
         [Authorize]
