@@ -82,21 +82,31 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<List<BlogPostDTO>> ReadByTagName(int page, int count, string tagName)
         {
-            List<Tag> tags = await _databaseManager.Instance.Tag.Where(t => t.Name.ToLower() == tagName.ToLower()).Include(x => x.BlogPosts).ToListAsync();
-            List<BlogPostDTO> blogPostDTOs = new List<BlogPostDTO>();
+            Tag tag = await _databaseManager.Instance.Tag.Where(t => t.Name.ToLower() == tagName.ToLower()).FirstOrDefaultAsync();
+            List<BlogPost> blogPosts = null;
 
-            foreach (Tag tag in tags)
+            if (tag != null)
             {
-                if (tag.BlogPosts != null)
-                {
-                    foreach (BlogPost blogPost in tag.BlogPosts)
-                    {
-                        blogPostDTOs.Add(_convertToBlogPostDTO(blogPost));
-                    }
-                }
+                blogPosts = await _databaseManager.Instance.BlogPost
+                                           .Include(b => b.Tags)
+                                           .Include(b => b.User)
+                                           .Where(b => b.Deleted == false && b.Published == true && b.Tags.Contains(tag))
+                                           .OrderByDescending(s => s.LastUpdated)
+                                           .Skip((page - 1) * count).Take(count)
+                                           .ToListAsync();
+            }
+            else
+            {
+                blogPosts = await _databaseManager.Instance.BlogPost
+                                           .Include(b => b.Tags)
+                                           .Include(b => b.User)
+                                           .Where(b => b.Deleted == false && b.Published)
+                                           .OrderByDescending(s => s.LastUpdated)
+                                           .Skip((page - 1) * count).Take(count)
+                                           .ToListAsync();
             }
 
-            return blogPostDTOs.Skip((page - 1) * count).Take(count).ToList();
+            return blogPosts.Select(b => _convertToBlogPostDTO(b)).ToList();
         }
 
         public async Task<BlogPostDTO> Read(int id)
