@@ -4,12 +4,16 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Net;
+using System.Net.Mail;
 using AutoMapper;
 using CricketCreationsDatabase.Models;
 using CricketCreationsRepository.Interfaces;
 using CricketCreationsRepository.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace CricketCreationsRepository.Repositories
 {
@@ -161,6 +165,61 @@ namespace CricketCreationsRepository.Repositories
 
             await _databaseManager.Instance.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<bool> SetResetPasswordCode(string toEmail)
+        {
+            if (toEmail == null || new EmailAddressAttribute().IsValid(toEmail) == false)
+            {
+                return false;
+            }
+
+            Random rnd = new Random();
+
+            string resetCode = string.Empty;
+
+            for (int i = 0; i < 6; i++)
+            {
+                resetCode = string.Concat(resetCode, rnd.Next(10).ToString());
+            }
+
+            string fromEmail = Environment.GetEnvironmentVariable("ADMIN_EMAIL");
+
+            MailMessage mailMessage = new MailMessage(fromEmail, toEmail);
+
+            mailMessage.Subject = "mikeebowen.com password reset";
+            mailMessage.Body = string.Concat("<h1>Use this code to reset your password for mikeebowen.com</h1><h2>This code will expire in 1 hour</h2><p><b>", resetCode, "</p><br><p>Follow this link to enter the code and reset your password</p><p>https://mikeebowen.com</p><br><p>If you did not request to reset your password, please ignore this email</p>");
+            mailMessage.BodyEncoding = Encoding.UTF8;
+            mailMessage.IsBodyHtml = true;
+            bool hasPort = int.TryParse(Environment.GetEnvironmentVariable("SMTP_PORT"), out int port);
+
+            if (!hasPort)
+            {
+                return false;
+            }
+
+            User user = _databaseManager.Instance.User.Where(u => u.Email == toEmail).FirstOrDefault();
+
+            if (user != null)
+            {
+                user.ResetCode = resetCode;
+                user.ResetCodeExpiration = DateTime.Now.AddHours(1);
+                await _databaseManager.Instance.SaveChangesAsync();
+
+                SmtpClient smtpClient = new SmtpClient(Environment.GetEnvironmentVariable("SMTP_SERVER"), port);
+                NetworkCredential networkCredential = new NetworkCredential(Environment.GetEnvironmentVariable("SMTP_USER"), Environment.GetEnvironmentVariable("SMTP_PW"));
+                smtpClient.EnableSsl = true;
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.Credentials = networkCredential;
+
+                smtpClient.Send(mailMessage);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private static User _convertToUser(UserDTO userDTO)

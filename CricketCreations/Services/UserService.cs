@@ -126,6 +126,11 @@ namespace CricketCreations.Services
             return (isInt, id);
         }
 
+        public async Task<bool> SetResetPasswordCode(string emailAddress)
+        {
+            return await _userRepository.SetResetPasswordCode(emailAddress);
+        }
+
         private static UserDTO _convertToUserDTO(NewUser newUser)
         {
             if (newUser == null)

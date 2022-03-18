@@ -20,5 +20,7 @@ namespace CricketCreationsRepository.Interfaces
         public abstract Task<bool> IsValidId(int id);
 
         public abstract Task<bool> Logout(int id);
+
+        public abstract Task<bool> SetResetPasswordCode(string emailAddress);
     }
 }

@@ -194,5 +194,13 @@ namespace CricketCreations.Controllers
                 return _loggerService.Error(ex);
             }
         }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] PasswordReset emailAddress)
+        {
+            await _userService.SetResetPasswordCode(emailAddress.EmailAddress);
+
+            return Ok();
+        }
     }
 }

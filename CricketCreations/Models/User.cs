@@ -38,5 +38,9 @@ namespace CricketCreations.Models
         public DateTime Created { get; set; }
 
         public DateTime LastUpdated { get; set; }
+
+        public string ResetCode { get; set; }
+
+        public DateTime ResetCodeExpiration { get; set; }
     }
 }

@@ -108,5 +108,9 @@ namespace CricketCreationsRepository.Models
         public List<BlogPostDTO> BlogPosts { get; set; }
 
         public List<TagDTO> Tags { get; set; }
+
+        public string ResetCode { get; set; }
+
+        public DateTime ResetCodeExpiration { get; set; }
     }
 }

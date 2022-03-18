@@ -52,5 +52,9 @@ namespace CricketCreationsDatabase.Models
         public List<Page> Pages { get; set; }
 
         public string Avatar { get; set; }
+
+        public string ResetCode { get; set; }
+
+        public DateTime ResetCodeExpiration { get; set; }
     }
 }
