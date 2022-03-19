@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "CricketCreationsDatabase": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DB_CONNECTION_STRING": "Server=.\\\\SQLExpress;Database=CricketCreations_Dev;Trusted_Connection=True;"
+      },
+      "sqlDebugging": true
+    }
+  }
+}
