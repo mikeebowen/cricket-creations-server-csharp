@@ -195,12 +195,44 @@ namespace CricketCreations.Controllers
             }
         }
 
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] PasswordReset emailAddress)
+        [HttpPost("set-reset-code")]
+        public async Task<IActionResult> SetResetCode([FromBody] PasswordReset emailAddress)
         {
-            await _userService.SetResetPasswordCode(emailAddress.EmailAddress);
+            try
+            {
+                bool codeSet = await _userService.SetResetPasswordCode(emailAddress.EmailAddress);
 
-            return Ok();
+                if (codeSet)
+                {
+                    return Ok();
+                }
+
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return _loggerService.Error(ex);
+            }
+        }
+
+        [HttpPost("validate-reset-code/{id}")]
+        public async Task<IActionResult> ValidateResetCode(int id, [FromBody] PasswordReset passwordReset)
+        {
+            try
+            {
+                User user = await _userService.ValidateResetCode(id, passwordReset.ResetCode);
+
+                if (user == null)
+                {
+                    return new UnauthorizedObjectResult("Login failed");
+                }
+
+                return new OkObjectResult(user);
+            }
+            catch (Exception ex)
+            {
+                return _loggerService.Error(ex);
+            }
         }
     }
 }

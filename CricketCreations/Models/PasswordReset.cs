@@ -8,5 +8,7 @@ namespace CricketCreations.Models
     public class PasswordReset
     {
         public string EmailAddress { get; set; }
+
+        public string ResetCode { get; set; }
     }
 }

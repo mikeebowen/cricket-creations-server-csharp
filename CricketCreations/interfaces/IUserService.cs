@@ -26,5 +26,7 @@ namespace CricketCreations.Interfaces
         public abstract (bool, int) GetId(ClaimsPrincipal user);
 
         public abstract Task<bool> SetResetPasswordCode(string emailAddress);
+
+        public abstract Task<User> ValidateResetCode(int id, string resetCode);
     }
 }

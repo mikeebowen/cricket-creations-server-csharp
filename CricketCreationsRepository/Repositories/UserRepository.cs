@@ -174,6 +174,8 @@ namespace CricketCreationsRepository.Repositories
                 return false;
             }
 
+            User user = await _databaseManager.Instance.User.Where(u => u.Email == toEmail).FirstOrDefaultAsync();
+
             Random rnd = new Random();
 
             string resetCode = string.Empty;
@@ -188,7 +190,7 @@ namespace CricketCreationsRepository.Repositories
             MailMessage mailMessage = new MailMessage(fromEmail, toEmail);
 
             mailMessage.Subject = "mikeebowen.com password reset";
-            mailMessage.Body = string.Concat("<h1>Use this code to reset your password for mikeebowen.com</h1><h2>This code will expire in 1 hour</h2><p><b>", resetCode, "</p><br><p>Follow this link to enter the code and reset your password</p><p>https://mikeebowen.com</p><br><p>If you did not request to reset your password, please ignore this email</p>");
+            mailMessage.Body = string.Concat("<h1>Use this code to reset your password for mikeebowen.com</h1><h2>This code will expire in 1 hour</h2><p><b>", resetCode, "</p><br><p>Follow this link to enter the code and reset your password</p><p>", Environment.GetEnvironmentVariable("SITE_BASE"), "/password-reset/", user.Id, "</p><br><p>If you did not request to reset your password, please ignore this email</p>");
             mailMessage.BodyEncoding = Encoding.UTF8;
             mailMessage.IsBodyHtml = true;
             bool hasPort = int.TryParse(Environment.GetEnvironmentVariable("SMTP_PORT"), out int port);
@@ -198,11 +200,9 @@ namespace CricketCreationsRepository.Repositories
                 return false;
             }
 
-            User user = _databaseManager.Instance.User.Where(u => u.Email == toEmail).FirstOrDefault();
-
             if (user != null)
             {
-                user.ResetCode = resetCode;
+                user.ResetCode = HashPassword(resetCode, user.Salt);
                 user.ResetCodeExpiration = DateTime.Now.AddHours(1);
                 await _databaseManager.Instance.SaveChangesAsync();
 
@@ -220,6 +220,27 @@ namespace CricketCreationsRepository.Repositories
             {
                 return false;
             }
+        }
+
+        public async Task<UserDTO> ValidateResetCode(int id, string resetCode)
+        {
+            User user = await _databaseManager.Instance.User.FindAsync(id);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            if (HashPassword(resetCode, user.Salt) == user.ResetCode)
+            {
+                user.ResetCodeExpiration = new DateTime(2000, 01, 01);
+                user.ResetCode = null;
+                await _databaseManager.Instance.SaveChangesAsync();
+
+                return _convertToUserDTO(user);
+            }
+
+            return null;
         }
 
         private static User _convertToUser(UserDTO userDTO)

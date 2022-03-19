@@ -54,12 +54,7 @@ namespace CricketCreations.Services
                 return null;
             }
 
-            AuthenticationResponse authenticationResponse = await _generateTokens(userDTO);
-            User user = _convertToUser(userDTO);
-            user.RefreshToken = authenticationResponse.RefreshToken;
-            user.RefreshTokenExpiration = userDTO.RefreshTokenExpiration;
-            user.Token = authenticationResponse.Token;
-            return user;
+            return await _setTokens(userDTO);
         }
 
         public async Task<AuthenticationResponse> CheckRefreshToken(int id, string refreshToken)
@@ -131,6 +126,13 @@ namespace CricketCreations.Services
             return await _userRepository.SetResetPasswordCode(emailAddress);
         }
 
+        public async Task<User> ValidateResetCode(int id, string resetCode)
+        {
+            UserDTO userDTO = await _userRepository.ValidateResetCode(id, resetCode);
+
+            return await _setTokens(userDTO);
+        }
+
         private static UserDTO _convertToUserDTO(NewUser newUser)
         {
             if (newUser == null)
@@ -166,6 +168,17 @@ namespace CricketCreations.Services
                 RefreshToken = refreshToken,
                 Avatar = userDTO.Avatar,
             };
+        }
+
+        private async Task<User> _setTokens(UserDTO userDTO)
+        {
+            AuthenticationResponse authenticationResponse = await _generateTokens(userDTO);
+            User user = _convertToUser(userDTO);
+            user.RefreshToken = authenticationResponse.RefreshToken;
+            user.RefreshTokenExpiration = userDTO.RefreshTokenExpiration;
+            user.Token = authenticationResponse.Token;
+
+            return user;
         }
     }
 }
