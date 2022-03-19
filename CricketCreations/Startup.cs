@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using CricketCreations.interfaces;
 using CricketCreations.Interfaces;
 using CricketCreations.Middleware;
 using CricketCreations.Services;
@@ -59,12 +60,14 @@ namespace CricketCreations
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IPageRepository, PageRepository>();
             services.AddTransient<IBlogPostService, BlogPostService>();
+            services.AddSingleton<ISitemapRepository, SitemapRepository>();
             services.AddTransient<ITagService, TagService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IJwtService, JwtService>();
             services.AddTransient<IPageService, PageService>();
             services.AddTransient<IDatabaseManager, DatabaseManager>();
             services.AddSingleton<IImageService, ImageService>();
+            services.AddSingleton<ISitemapService, SitemapService>();
 
             string dir = Path.Join(Directory.GetCurrentDirectory(), "logs");
             Directory.CreateDirectory(dir);
