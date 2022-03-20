@@ -88,6 +88,7 @@ namespace CricketCreations.Controllers
             }
         }
 
+        // Uncomment this if you want to enable new user registration
         // POST api/<UserController>
         //[HttpPost]
         //public async Task<IActionResult> Post([FromBody] NewUser newUser)

@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Mail;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using CricketCreationsDatabase.Models;
 using CricketCreationsRepository.Interfaces;
 using CricketCreationsRepository.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
-using System.ComponentModel.DataAnnotations;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace CricketCreationsRepository.Repositories
 {
@@ -187,32 +189,18 @@ namespace CricketCreationsRepository.Repositories
 
             string fromEmail = Environment.GetEnvironmentVariable("ADMIN_EMAIL");
 
-            MailMessage mailMessage = new MailMessage(fromEmail, toEmail);
-
-            mailMessage.Subject = "mikeebowen.com password reset";
-            mailMessage.Body = string.Concat("<h1>Use this code to reset your password for mikeebowen.com</h1><h2>This code will expire in 1 hour</h2><p><b>", resetCode, "</p><br><p>Follow this link to enter the code and reset your password</p><p>", Environment.GetEnvironmentVariable("SITE_BASE"), "/password-reset/", user.Id, "</p><br><p>If you did not request to reset your password, please ignore this email</p>");
-            mailMessage.BodyEncoding = Encoding.UTF8;
-            mailMessage.IsBodyHtml = true;
-            bool hasPort = int.TryParse(Environment.GetEnvironmentVariable("SMTP_PORT"), out int port);
-
-            if (!hasPort)
-            {
-                return false;
-            }
 
             if (user != null)
             {
-                user.ResetCode = HashPassword(resetCode, user.Salt);
-                user.ResetCodeExpiration = DateTime.Now.AddHours(1);
-                await _databaseManager.Instance.SaveChangesAsync();
-
-                SmtpClient smtpClient = new SmtpClient(Environment.GetEnvironmentVariable("SMTP_SERVER"), port);
-                NetworkCredential networkCredential = new NetworkCredential(Environment.GetEnvironmentVariable("SMTP_USER"), Environment.GetEnvironmentVariable("SMTP_PW"));
-                smtpClient.EnableSsl = true;
-                smtpClient.UseDefaultCredentials = false;
-                smtpClient.Credentials = networkCredential;
-
-                smtpClient.Send(mailMessage);
+                string apiKey = Environment.GetEnvironmentVariable("EMAIL_API_KEY");
+                SendGridClient client = new SendGridClient(apiKey);
+                EmailAddress from = new EmailAddress(Environment.GetEnvironmentVariable("ADMIN_EMAIL"), Environment.GetEnvironmentVariable("ADMIN_NAME"));
+                string subject = "mikeebowen.com password reset";
+                EmailAddress to = new EmailAddress(toEmail, string.Concat(user.Name, " ", user.Surname));
+                string plainTextContent = string.Empty;
+                string htmlContent = string.Concat("<h1>Use this code to reset your password for mikeebowen.com</h1><h2>This code will expire in 1 hour</h2><p><b>", resetCode, "</p><br><p>Follow this link to enter the code and reset your password</p><p>", Environment.GetEnvironmentVariable("SITE_BASE"), "/password-reset/", user.Id, "</p><br><p>If you did not request to reset your password, please ignore this email</p>");
+                SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                Response response = await client.SendEmailAsync(msg);
 
                 return true;
             }
