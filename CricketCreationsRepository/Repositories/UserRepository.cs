@@ -171,6 +171,12 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<bool> SetResetPasswordCode(string toEmail)
         {
+            Console.WriteLine(string.Concat("EMAIL_API_KEY: ", Environment.GetEnvironmentVariable("EMAIL_API_KEY")));
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine(string.Concat("ADMIN_EMAIL: ", Environment.GetEnvironmentVariable("ADMIN_EMAIL")));
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine(string.Concat("ADMIN_NAME: ", Environment.GetEnvironmentVariable("ADMIN_NAME")));
+
             if (toEmail == null || new EmailAddressAttribute().IsValid(toEmail) == false)
             {
                 return false;
