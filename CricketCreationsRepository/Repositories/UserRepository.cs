@@ -200,7 +200,10 @@ namespace CricketCreationsRepository.Repositories
                 string plainTextContent = string.Empty;
                 string htmlContent = string.Concat("<h1>Use this code to reset your password for mikeebowen.com</h1><h2>This code will expire in 1 hour</h2><p><b>", resetCode, "</p><br><p>Follow this link to enter the code and reset your password</p><p>", Environment.GetEnvironmentVariable("SITE_BASE"), "/password-reset/", user.Id, "</p><br><p>If you did not request to reset your password, please ignore this email</p>");
                 SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-                Response response = await client.SendEmailAsync(msg);
+                Response response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+
+                Console.WriteLine($"Response: {response.StatusCode}");
+                Console.WriteLine(response.Headers);
 
                 return true;
             }
