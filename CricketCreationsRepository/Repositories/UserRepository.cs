@@ -171,12 +171,6 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<bool> SetResetPasswordCode(string toEmail)
         {
-            Console.WriteLine(string.Concat("EMAIL_API_KEY: ", Environment.GetEnvironmentVariable("EMAIL_API_KEY")));
-            Console.WriteLine("----------------------------------");
-            Console.WriteLine(string.Concat("ADMIN_EMAIL: ", Environment.GetEnvironmentVariable("ADMIN_EMAIL")));
-            Console.WriteLine("----------------------------------");
-            Console.WriteLine(string.Concat("ADMIN_NAME: ", Environment.GetEnvironmentVariable("ADMIN_NAME")));
-
             if (toEmail == null || new EmailAddressAttribute().IsValid(toEmail) == false)
             {
                 return false;
@@ -198,6 +192,10 @@ namespace CricketCreationsRepository.Repositories
 
             if (user != null)
             {
+                user.ResetCode = HashPassword(resetCode, user.Salt);
+
+                await _databaseManager.Instance.SaveChangesAsync();
+
                 string apiKey = Environment.GetEnvironmentVariable("EMAIL_API_KEY");
                 SendGridClient client = new SendGridClient(apiKey);
                 EmailAddress from = new EmailAddress(Environment.GetEnvironmentVariable("ADMIN_EMAIL"), Environment.GetEnvironmentVariable("ADMIN_NAME"));
@@ -207,9 +205,6 @@ namespace CricketCreationsRepository.Repositories
                 string htmlContent = string.Concat("<h1>Use this code to reset your password for mikeebowen.com</h1><h2>This code will expire in 1 hour</h2><p><b>", resetCode, "</p><br><p>Follow this link to enter the code and reset your password</p><p>", Environment.GetEnvironmentVariable("SITE_BASE"), "/password-reset/", user.Id, "</p><br><p>If you did not request to reset your password, please ignore this email</p>");
                 SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
                 Response response = await client.SendEmailAsync(msg).ConfigureAwait(false);
-
-                Console.WriteLine($"Response: {response.StatusCode}");
-                Console.WriteLine(response.Headers);
 
                 return true;
             }
