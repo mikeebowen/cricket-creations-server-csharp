@@ -60,7 +60,7 @@ namespace CricketCreations.Controllers
                 sitemapUrls.ForEach(s =>
                 {
                     xml.WriteStartElement("url");
-                    xml.WriteElementString("loc", string.Concat(host, "/blog/", s.Location));
+                    xml.WriteElementString("loc", string.Concat(host, s.Location));
                     xml.WriteElementString("lastmod", s.LastModified);
                     xml.WriteEndElement();
                 });

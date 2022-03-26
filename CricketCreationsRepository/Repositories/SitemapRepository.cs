@@ -29,7 +29,7 @@ namespace CricketCreationsRepository.Repositories
 
             pageDTOs.ForEach(p =>
             {
-                sitemapUrlDTOs.Add(new SitemapUrlDTO() { LastModified = p.LastUpdated.Value.ToString("yyyy-MM-dd"), Location = p.Heading.Replace(" ", "-") });
+                sitemapUrlDTOs.Add(new SitemapUrlDTO() { LastModified = p.LastUpdated.Value.ToString("yyyy-MM-dd"), Location = string.Concat("/", p.Heading.Replace(" ", "-")) });
             });
 
             blogPostDTOs.ForEach(b =>
@@ -38,7 +38,7 @@ namespace CricketCreationsRepository.Repositories
                 string loc = string.Concat(b.Id.ToString(), '-', b.Title.Replace(" ", "-"));
                 loc = Regex.Replace(loc, "[^a-zA-Z0-9-_]", string.Empty);
                 byte[] tmpBytes = System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(loc);
-                string location = System.Text.Encoding.UTF8.GetString(tmpBytes).ToLower();
+                string location = string.Concat("/blog/", System.Text.Encoding.UTF8.GetString(tmpBytes).ToLower());
                 sitemapUrlDTOs.Add(new SitemapUrlDTO() { LastModified = b.LastUpdated.Value.ToString("yyyy-MM-dd"), Location = location });
             });
 
