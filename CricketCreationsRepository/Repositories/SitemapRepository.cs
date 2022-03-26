@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml;
 using CricketCreationsDatabase.Models;
 using CricketCreationsRepository.Interfaces;
@@ -29,7 +30,7 @@ namespace CricketCreationsRepository.Repositories
 
             pageDTOs.ForEach(p =>
             {
-                sitemapUrlDTOs.Add(new SitemapUrlDTO() { LastModified = p.LastUpdated.Value.ToString("yyyy-MM-dd"), Location = string.Concat("/", p.Heading.Replace(" ", "-")) });
+                sitemapUrlDTOs.Add(new SitemapUrlDTO() { LastModified = p.LastUpdated.Value.ToString("yyyy-MM-dd"), Location = string.Concat("/", HttpUtility.UrlPathEncode(p.Heading)) });
             });
 
             blogPostDTOs.ForEach(b =>
