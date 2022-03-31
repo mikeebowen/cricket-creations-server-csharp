@@ -19,7 +19,6 @@ namespace CricketCreations.Models
 
         public string Subtitle { get; set; }
 
-        [Required]
         public string Content { get; set; }
 
         public string Image { get; set; }
