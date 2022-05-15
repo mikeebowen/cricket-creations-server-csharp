@@ -112,7 +112,7 @@ namespace CricketCreations.Controllers
                 }
 
                 BlogPost createdBlogPost = await _blogPostService.Create(blogPost, id);
-                return new CreatedResult($"api/blogpost/{createdBlogPost.Id}", createdBlogPost);
+                return new CreatedResult($"api/blogpost/{createdBlogPost.Id}", new ResponseBody<BlogPost>(createdBlogPost, typeof(BlogPost).Name.ToString(), null));
             }
             catch (DbUpdateException ex)
             {
