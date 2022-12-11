@@ -45,7 +45,7 @@ namespace CricketCreationsRepository.Repositories
         {
             List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost
                                         .Where(b => b.Deleted == false && b.Published == true)
-                                        .OrderByDescending(s => s.LastUpdated)
+                                        .OrderByDescending(s => s.Created)
                                         .Skip((page - 1) * count).Take(count)
                                         .Include(b => b.Tags)
                                         .Include(b => b.User)
@@ -59,7 +59,7 @@ namespace CricketCreationsRepository.Repositories
             List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost
                                         .Include(b => b.User)
                                         .Where(b => !b.Deleted && b.Published && b.User.Id == id)
-                                        .OrderByDescending(s => s.LastUpdated)
+                                        .OrderByDescending(s => s.Created)
                                         .Skip((page - 1) * count)
                                         .Take(count)
                                         .ToListAsync();
@@ -72,7 +72,7 @@ namespace CricketCreationsRepository.Repositories
             List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost
                                         .Include(b => b.User)
                                         .Where(b => !b.Deleted && b.User.Id == id)
-                                        .OrderByDescending(s => s.LastUpdated)
+                                        .OrderByDescending(s => s.Created)
                                         .Skip((page - 1) * count)
                                         .Take(count)
                                         .ToListAsync();
@@ -91,7 +91,7 @@ namespace CricketCreationsRepository.Repositories
                                            .Include(b => b.Tags)
                                            .Include(b => b.User)
                                            .Where(b => b.Deleted == false && b.Published == true && b.Tags.Contains(tag))
-                                           .OrderByDescending(s => s.LastUpdated)
+                                           .OrderByDescending(s => s.Created)
                                            .Skip((page - 1) * count).Take(count)
                                            .ToListAsync();
             }
@@ -101,7 +101,7 @@ namespace CricketCreationsRepository.Repositories
                                            .Include(b => b.Tags)
                                            .Include(b => b.User)
                                            .Where(b => b.Deleted == false && b.Published)
-                                           .OrderByDescending(s => s.LastUpdated)
+                                           .OrderByDescending(s => s.Created)
                                            .Skip((page - 1) * count).Take(count)
                                            .ToListAsync();
             }
