@@ -180,12 +180,7 @@ namespace CricketCreationsRepository.Repositories
 
             Random rnd = new Random();
 
-            string resetCode = string.Empty;
-
-            for (int i = 0; i < 6; i++)
-            {
-                resetCode = string.Concat(resetCode, rnd.Next(10).ToString());
-            }
+            string resetCode = rnd.Next(10000000).ToString();
 
             string fromEmail = Environment.GetEnvironmentVariable("ADMIN_EMAIL");
 
@@ -206,7 +201,7 @@ namespace CricketCreationsRepository.Repositories
                 SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
                 Response response = await client.SendEmailAsync(msg).ConfigureAwait(false);
 
-                return true;
+                return response.IsSuccessStatusCode;
             }
             else
             {
