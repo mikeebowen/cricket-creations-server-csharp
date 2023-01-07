@@ -30,7 +30,7 @@ namespace CricketCreationsRepository.Repositories
 
             pageDTOs.ForEach(p =>
             {
-                sitemapUrlDTOs.Add(new SitemapUrlDTO() { LastModified = p.LastUpdated.Value.ToString("yyyy-MM-dd"), Location = string.Concat("/", HttpUtility.UrlPathEncode(p.Heading)) });
+                sitemapUrlDTOs.Add(new SitemapUrlDTO() { LastModified = p.Created.Value.ToString("yyyy-MM-dd"), Location = string.Concat("/", HttpUtility.UrlPathEncode(p.Heading)) });
             });
 
             blogPostDTOs.ForEach(b =>
