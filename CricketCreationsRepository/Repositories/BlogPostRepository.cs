@@ -46,7 +46,8 @@ namespace CricketCreationsRepository.Repositories
             List<BlogPost> blogPosts = await _databaseManager.Instance.BlogPost
                                         .Where(b => b.Deleted == false && b.Published == true)
                                         .OrderByDescending(s => s.Created)
-                                        .Skip((page - 1) * count).Take(count)
+                                        .Skip((page - 1) * count)
+                                        .Take(count)
                                         .Include(b => b.Tags)
                                         .Include(b => b.User)
                                         .ToListAsync();
@@ -62,6 +63,8 @@ namespace CricketCreationsRepository.Repositories
                                         .OrderByDescending(s => s.Created)
                                         .Skip((page - 1) * count)
                                         .Take(count)
+                                        .Include(b => b.Tags)
+                                        .Include(b => b.User)
                                         .ToListAsync();
 
             return blogPosts.Select(b => _convertToBlogPostDTO(b)).ToList();
@@ -75,6 +78,8 @@ namespace CricketCreationsRepository.Repositories
                                         .OrderByDescending(s => s.Created)
                                         .Skip((page - 1) * count)
                                         .Take(count)
+                                        .Include(b => b.Tags)
+                                        .Include(b => b.User)
                                         .ToListAsync();
 
             return blogPosts.Select(b => _convertToBlogPostDTO(b)).ToList();
