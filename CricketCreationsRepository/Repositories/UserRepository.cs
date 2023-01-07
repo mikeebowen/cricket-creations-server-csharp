@@ -188,6 +188,7 @@ namespace CricketCreationsRepository.Repositories
             if (user != null)
             {
                 user.ResetCode = HashPassword(resetCode, user.Salt);
+                user.ResetCodeExpiration = DateTime.Now.AddHours(1);
 
                 await _databaseManager.Instance.SaveChangesAsync();
 
@@ -197,7 +198,16 @@ namespace CricketCreationsRepository.Repositories
                 string subject = "mikeebowen.com password reset";
                 EmailAddress to = new EmailAddress(toEmail, string.Concat(user.Name, " ", user.Surname));
                 string plainTextContent = string.Empty;
-                string htmlContent = string.Concat("<h1>Use this code to reset your password for mikeebowen.com</h1><h2>This code will expire in 1 hour</h2><p><b>", resetCode, "</p><br><p>Follow this link to enter the code and reset your password</p><p>", Environment.GetEnvironmentVariable("SITE_BASE"), "/password-reset/", user.Id, "</p><br><p>If you did not request to reset your password, please ignore this email</p>");
+                string htmlContent = string.Concat(
+                    "<h1>Use this code to reset your password for mikeebowen.com</h1><h2>This code will expire in 1 hour</h2><br><p>",
+                    resetCode,
+                    "</p><br><p>Follow this link to enter the code and reset your password</p><p><a href=\"",
+                    Environment.GetEnvironmentVariable("SITE_BASE"),
+                    "\">",
+                    Environment.GetEnvironmentVariable("SITE_BASE"),
+                    "/password-reset/",
+                    user.Id,
+                    "</a></p><br><p>If you did not request to reset your password, please ignore this email</p>");
                 SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
                 Response response = await client.SendEmailAsync(msg).ConfigureAwait(false);
 
@@ -218,7 +228,7 @@ namespace CricketCreationsRepository.Repositories
                 return null;
             }
 
-            if (HashPassword(resetCode, user.Salt) == user.ResetCode)
+            if (HashPassword(resetCode, user.Salt) == user.ResetCode && DateTime.Compare(DateTime.Now, user.ResetCodeExpiration) > 0)
             {
                 user.ResetCodeExpiration = new DateTime(2000, 01, 01);
                 user.ResetCode = null;
