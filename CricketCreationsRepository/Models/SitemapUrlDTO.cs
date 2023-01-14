@@ -10,6 +10,6 @@ namespace CricketCreationsRepository.Models
     {
         public string Location { get; set; }
 
-        public string LastModified { get; set; }
+        public string Created { get; set; }
     }
 }

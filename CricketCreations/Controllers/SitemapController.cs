@@ -61,7 +61,7 @@ namespace CricketCreations.Controllers
                 {
                     xml.WriteStartElement("url");
                     xml.WriteElementString("loc", string.Concat(host, s.Location));
-                    xml.WriteElementString("lastmod", s.LastModified);
+                    xml.WriteElementString("lastmod", s.Created);
                     xml.WriteEndElement();
                 });
 

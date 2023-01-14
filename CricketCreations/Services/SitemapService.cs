@@ -25,7 +25,7 @@ namespace CricketCreations.Services
         public List<SitemapUrl> GetSiteMap()
         {
             return _sitemapRepository.GetSitemapUrls().Select(s => {
-                return new SitemapUrl() { Location = s.Location, LastModified = s.LastModified };
+                return new SitemapUrl() { Location = s.Location, Created = s.Created };
             }).ToList();
         }
     }
