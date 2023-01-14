@@ -255,7 +255,7 @@ namespace CricketCreationsRepository.Repositories
 
         public async Task<int> GetCount()
         {
-            return await _databaseManager.Instance.BlogPost.Where(b => b.Deleted == false).CountAsync();
+            return await _databaseManager.Instance.BlogPost.Where(b => b.Deleted == false && b.Published == true).CountAsync();
         }
 
         public async Task<int> GetCount(int id)
