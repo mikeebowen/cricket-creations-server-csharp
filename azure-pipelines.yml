@@ -27,7 +27,7 @@ steps:
     targetType: 'inline'
     script: |
       cd ./webapps
-      git submodule update --init --recursive
+      git submodule update --init --recursive --remote
 
 - task: NuGetCommand@2
   inputs:
