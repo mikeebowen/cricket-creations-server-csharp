@@ -22,6 +22,15 @@ steps:
     versionSource: 'spec'
     versionSpec: '18.x'
 
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Write your commands here
+      
+      cd ./webapps
+      git submodule update --init --recursive
+
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
