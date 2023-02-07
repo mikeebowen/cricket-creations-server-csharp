@@ -16,15 +16,20 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
+
 - task: NodeTool@0
   inputs:
     versionSource: 'spec'
     versionSpec: '18.x'
+
 - task: Bash@3
   inputs:
     targetType: 'inline'
     script: |
+      cd clientapp
       git submodule update --init --recursive
+      npm install --legacy-peer-deps
+      npm run build --loglevel verbose
 
 - task: NuGetCommand@2
   inputs:
