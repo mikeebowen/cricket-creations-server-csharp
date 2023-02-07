@@ -21,7 +21,11 @@ steps:
   inputs:
     versionSource: 'spec'
     versionSpec: '18.x'
-
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '2.x'
+    addToPath: true
+    architecture: 'x64'
 - task: Bash@3
   inputs:
     targetType: 'inline'
