@@ -26,11 +26,17 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      cd clientapp
       git submodule update --init --recursive
-      npm install --legacy-peer-deps
-      npm run build --loglevel verbose
-
+- task: Npm@1
+  inputs:
+    command: 'install --legacy-peer-deps'
+    workingDir: '/clientapp'
+    verbose: true
+- task: Npm@1
+  inputs:
+    command: 'run build --loglevel verbose'
+    workingDir: '/clientapp'
+    verbose: true
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
