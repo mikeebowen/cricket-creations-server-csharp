@@ -29,12 +29,14 @@ steps:
       git submodule update --init --recursive
 - task: Npm@1
   inputs:
-    command: 'install --legacy-peer-deps'
+    command: 'custom'
+    customCommand: 'install --legacy-peer-deps'
     workingDir: '/clientapp'
     verbose: true
 - task: Npm@1
   inputs:
-    command: 'run build --loglevel verbose'
+    command: 'custom'
+    customCommand: 'run build --loglevel verbose'
     workingDir: '/clientapp'
     verbose: true
 - task: NuGetCommand@2
