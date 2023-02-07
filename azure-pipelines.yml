@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 variables:
   solution: '**/*.sln'
@@ -16,7 +16,10 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
-
+- task: NodeTool@0
+  inputs:
+    versionSource: 'spec'
+    versionSpec: '18.x'
 - task: Bash@3
   inputs:
     targetType: 'inline'
