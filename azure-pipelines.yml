@@ -27,6 +27,7 @@ steps:
     targetType: 'inline'
     script: |
       git submodule update --init --recursive
+      npm install --g --production windows-build-tools
 
 - task: NuGetCommand@2
   inputs:
