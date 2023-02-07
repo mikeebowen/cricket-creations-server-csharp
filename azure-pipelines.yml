@@ -31,13 +31,13 @@ steps:
   inputs:
     command: 'custom'
     customCommand: 'install --legacy-peer-deps'
-    workingDir: '/clientapp'
+    workingDir: '$(Build.SourcesDirectory)/clientapp'
     verbose: true
 - task: Npm@1
   inputs:
     command: 'custom'
     customCommand: 'run build --loglevel verbose'
-    workingDir: '/clientapp'
+    workingDir: '$(Build.SourcesDirectory)/clientapp'
     verbose: true
 - task: NuGetCommand@2
   inputs:
