@@ -13,6 +13,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  clientAppFolder: '/clientapp'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -31,13 +32,13 @@ steps:
   inputs:
     command: 'custom'
     customCommand: 'install --legacy-peer-deps'
-    workingDir: '$(Build.SourcesDirectory)/clientapp'
+    workingDir: '$(clientAppFolder)/clientapp'
     verbose: true
 - task: Npm@1
   inputs:
     command: 'custom'
     customCommand: 'run build --loglevel verbose'
-    workingDir: '$(Build.SourcesDirectory)/clientapp'
+    workingDir: '$(clientAppFolder)/clientapp'
     verbose: true
 - task: NuGetCommand@2
   inputs:
