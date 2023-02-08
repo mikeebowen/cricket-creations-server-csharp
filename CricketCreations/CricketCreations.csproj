@@ -80,6 +80,9 @@
 	</Target>
 
 	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install --legacy-peer-deps" />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build --loglevel verbose" />
 
 		<!-- Include the newly-built files in the publish output -->
 
