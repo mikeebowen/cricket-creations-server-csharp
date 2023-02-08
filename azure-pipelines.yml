@@ -20,17 +20,14 @@ steps:
 - task: NodeTool@0
   inputs:
     versionSource: 'spec'
-    versionSpec: '18.x'
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '2.x'
-    addToPath: true
-    architecture: 'x64'
-- task: Bash@3
+    versionSpec: '14.x'
+
+- task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: |
-      git submodule update --init --recursive
+      git submodule update --init --recursive"
+
 - task: Npm@1
   inputs:
     command: 'custom'
