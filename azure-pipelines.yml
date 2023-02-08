@@ -28,18 +28,6 @@ steps:
     script: |
       git submodule update --init --recursive
 
-- task: Npm@1
-  inputs:
-    command: 'custom'
-    customCommand: 'install --legacy-peer-deps'
-    workingDir: '$(Build.SourcesDirectory)/CricketCreations/clientapp'
-    verbose: true
-- task: Npm@1
-  inputs:
-    command: 'custom'
-    customCommand: 'run build --loglevel verbose'
-    workingDir: '$(Build.SourcesDirectory)/CricketCreations/clientapp'
-    verbose: true
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
