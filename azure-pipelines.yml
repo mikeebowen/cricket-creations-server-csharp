@@ -65,4 +65,4 @@ stages:
           deployToSlotOrASE: true
           resourceGroupName: 'cricket-creations'
           slotName: 'staging'
-          package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          package: '$(System.ArtifactStagingDirectory)/**/*.zip'
