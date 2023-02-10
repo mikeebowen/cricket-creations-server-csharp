@@ -69,7 +69,7 @@ stages:
           inputs:
             ConnectionType: 'AzureRM'
             azureSubscription: 'CricketCreationsSubscription'
-            appType: 'webAppLinux'
+            appType: 'webApp'
             WebAppName: '$(WEB_APP_NAME)'
             deployToSlotOrASE: true
             ResourceGroupName: '$(RESOURCE_GROUP_NAME)'
