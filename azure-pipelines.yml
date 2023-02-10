@@ -65,6 +65,7 @@ stages:
             downloadType: 'single'
             artifactName: 'drop'
             downloadPath: '$(System.DefaultWorkingDirectory)'
+            buildId: '50'
         - task: AzureRmWebAppDeployment@4
           inputs:
             ConnectionType: 'AzureRM'
