@@ -59,6 +59,24 @@ stages:
       pool:
         vmImage: 'windows-latest'
       steps: 
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            echo "Structure of work folder of this pipeline:"
+            tree $(Agent.WorkFolder)\1 /f
+            
+            echo "Build.ArtifactStagingDirectory:" 
+            
+            echo "$(Build.ArtifactStagingDirectory)"
+            
+            echo "Build.BinariesDirectory:" 
+            
+            echo "$(Build.BinariesDirectory)"
+            
+            echo "Build.SourcesDirectory:"
+            
+            echo "$(Build.SourcesDirectory)"
       - task: AzureWebApp@1
         inputs:
           azureSubscription: 'CricketCreationsSubscription'
