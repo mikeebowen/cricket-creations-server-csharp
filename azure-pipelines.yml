@@ -51,39 +51,13 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
-    - task: PowerShell@2
+    - task: AzureWebApp@1
       inputs:
-        targetType: 'inline'
-        script: |
-          echo "Structure of work folder of this pipeline:"
-          tree $(Agent.WorkFolder)\1 /f
-          
-          echo "Build.ArtifactStagingDirectory:" 
-          
-          echo "$(Build.ArtifactStagingDirectory)"
-          
-          echo "Build.BinariesDirectory:" 
-          
-          echo "$(Build.BinariesDirectory)"
-          
-          echo "Build.SourcesDirectory:"
-          
-          echo "$(Build.SourcesDirectory)"
-
-- stage: DeployCricketCreations
-  displayName: 'Deploy Cricket Creations Web App'
-  jobs:
-    - job: DeployCricketCreations
-      pool:
-        vmImage: 'windows-latest'
-      steps: 
-      - task: AzureWebApp@1
-        inputs:
-          azureSubscription: 'CricketCreationsSubscription'
-          appType: 'webAppLinux'
-          appName: 'cricket-creations'
-          deployToSlotOrASE: true
-          resourceGroupName: 'cricket-creations'
-          slotName: 'staging'
-          package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-          deploymentMethod: 'zipDeploy'
+        azureSubscription: 'CricketCreationsSubscription'
+        appType: 'webAppLinux'
+        appName: 'cricket-creations'
+        deployToSlotOrASE: true
+        resourceGroupName: 'cricket-creations'
+        slotName: 'staging'
+        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        deploymentMethod: 'zipDeploy'
