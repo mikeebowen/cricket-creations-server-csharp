@@ -10,8 +10,9 @@ trigger:
 
 stages:
 - stage: Build
+  displayName: 'Build Cricket Creations Server and Client'
   jobs: 
-  - job: Build
+  - job: Build 
 
     pool:
       vmImage: 'windows-latest'
@@ -52,6 +53,7 @@ stages:
         publishLocation: 'Container'
 
 - stage: DeployCricketCreations
+  displayName: 'Deploy Cricket Creations Web App'
   jobs:
     - job: DeployCricketCreations
       pool:
@@ -65,4 +67,5 @@ stages:
           deployToSlotOrASE: true
           resourceGroupName: 'cricket-creations'
           slotName: 'staging'
-          package: '$(Build.ArtifactStagingDirectory)/drop/*.zip'
+          package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          deploymentMethod: 'zipDeploy'
