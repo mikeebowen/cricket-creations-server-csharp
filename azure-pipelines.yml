@@ -59,19 +59,6 @@ stages:
       pool:
         vmImage: 'windows-latest'
       steps: 
-        - task: AzureCLI@2
-          inputs:
-            azureSubscription: 'CricketCreationsSubscription'
-            scriptType: 'bash'
-            scriptLocation: 'inlineScript'
-            inlineScript: |
-              echo groups
-              az group list
-              echo -----------------
-              echo resources in centralus
-              az resource list --location centralus
-              echo -----------------
-              az account list-locations
         - task: DownloadBuildArtifacts@1
           inputs:
             buildType: 'current'
@@ -81,25 +68,34 @@ stages:
         - task: AzureRmWebAppDeployment@4
           inputs:
             ConnectionType: 'AzureRM'
-            azureSubscription: 'CricketCreationsSubscription'
-            appType: 'webApp'
-            WebAppName: '$(WEB_APP_NAME)'
+            appType: 'webAppLinux'
+            WebAppName: 'cricket-creations'
             deployToSlotOrASE: true
-            ResourceGroupName: '$(RESOURCE_GROUP_NAME)'
+            ResourceGroupName: 'cricket-creations'
             SlotName: 'staging'
             packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-        - task: AzureAppServiceSettings@1
-          inputs:
-            azureSubscription: 'CricketCreationsSubscription'
-            appName: '$(WEB_APP_NAME)'
-            resourceGroupName: '$(RESOURCE_GROUP_NAME)'
-            connectionStrings: |
-              [
-                {
-                  "name": "DbConnection",
-                  "value": "Server=tcp:$(SQL_SERVER_NAME).database.windows.net,1433;Initial Catalog=cricket-creations-test-db;Persist Security Info=False;User ID=$(USER_NAME);Password=$(PASSWORD);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
-                  "type": "SqlAzure",
-                  "slotSetting": true
-                }
-              ]
+        # - task: AzureRmWebAppDeployment@4
+        #   inputs:
+        #     ConnectionType: 'AzureRM'
+        #     azureSubscription: 'CricketCreationsSubscription'
+        #     appType: 'webApp'
+        #     WebAppName: '$(WEB_APP_NAME)'
+        #     deployToSlotOrASE: true
+        #     ResourceGroupName: '$(RESOURCE_GROUP_NAME)'
+        #     SlotName: 'staging'
+        #     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        # - task: AzureAppServiceSettings@1
+        #   inputs:
+        #     azureSubscription: 'CricketCreationsSubscription'
+        #     appName: '$(WEB_APP_NAME)'
+        #     resourceGroupName: '$(RESOURCE_GROUP_NAME)'
+        #     connectionStrings: |
+        #       [
+        #         {
+        #           "name": "DbConnection",
+        #           "value": "Server=tcp:$(SQL_SERVER_NAME).database.windows.net,1433;Initial Catalog=cricket-creations-test-db;Persist Security Info=False;User ID=$(USER_NAME);Password=$(PASSWORD);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+        #           "type": "SqlAzure",
+        #           "slotSetting": true
+        #         }
+        #       ]
         
