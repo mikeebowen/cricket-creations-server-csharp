@@ -71,7 +71,7 @@ stages:
               echo resources in centralus
               az resource list --location centralus
               echo -----------------
-              az group list
+              az account list-locations
         - task: DownloadBuildArtifacts@1
           inputs:
             buildType: 'current'
