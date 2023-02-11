@@ -69,7 +69,9 @@ stages:
               az group list
               echo -----------------
               echo resources in centralus
-              echo az resource list --location centralus
+              az resource list --location centralus
+              echo -----------------
+              az appservice ase list --resource-group cricket-creations
         - task: DownloadBuildArtifacts@1
           inputs:
             buildType: 'current'
