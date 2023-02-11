@@ -59,6 +59,17 @@ stages:
       pool:
         vmImage: 'windows-latest'
       steps: 
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: 'CricketCreationsSubscription'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              echo groups
+              az group list
+              echo -----------------
+              echo resources in centralus
+              echo az resource list --location centralus
         - task: DownloadBuildArtifacts@1
           inputs:
             buildType: 'current'
