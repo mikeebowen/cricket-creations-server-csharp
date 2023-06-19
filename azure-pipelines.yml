@@ -76,13 +76,6 @@ stages:
             SlotName: 'staging'
             packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
             RuntimeStack: 'DOTNETCORE|6.0'
-        # - task: AzureWebApp@1
-        #   inputs:
-        #     azureSubscription: 'CricketCreationsSubscription'
-        #     appType: 'webApp'
-        #     appName: '$(WEB_APP_NAME)'
-        #     resourceGroupName: '$(RESOURCE_GROUP_NAME)'
-        #     package: '$(System.DefaultWorkingDirectory)/**/*.zip'
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
@@ -91,28 +84,4 @@ stages:
               
               Write-Host "Hello World"
               ls $(System.DefaultWorkingDirectory)/**/
-        # - task: AzureRmWebAppDeployment@4
-        #   inputs:
-        #     ConnectionType: 'AzureRM'
-        #     azureSubscription: 'CricketCreationsSubscription'
-        #     appType: 'webApp'
-        #     WebAppName: '$(WEB_APP_NAME)'
-        #     deployToSlotOrASE: true
-        #     ResourceGroupName: '$(RESOURCE_GROUP_NAME)'
-        #     SlotName: 'staging'
-        #     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-        # - task: AzureAppServiceSettings@1
-        #   inputs:
-        #     azureSubscription: 'CricketCreationsSubscription'
-        #     appName: '$(WEB_APP_NAME)'
-        #     resourceGroupName: '$(RESOURCE_GROUP_NAME)'
-        #     connectionStrings: |
-        #       [
-        #         {
-        #           "name": "DbConnection",
-        #           "value": "Server=tcp:$(SQL_SERVER_NAME).database.windows.net,1433;Initial Catalog=cricket-creations-test-db;Persist Security Info=False;User ID=$(USER_NAME);Password=$(PASSWORD);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
-        #           "type": "SqlAzure",
-        #           "slotSetting": true
-        #         }
-        #       ]
         
