@@ -83,5 +83,5 @@ stages:
               # Write your PowerShell commands here.
               
               Write-Host "Hello World"
-              Write-Host $(SUBSCRIPTION_NUMBER)
+              Write-Host $(AZURE_SUBSCRIPTION)
         
