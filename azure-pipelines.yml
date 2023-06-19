@@ -59,23 +59,23 @@ stages:
       pool:
         vmImage: 'windows-latest'
       steps: 
-        - task: DownloadBuildArtifacts@1
-          inputs:
-            buildType: 'current'
-            downloadType: 'single'
-            artifactName: 'drop'
-            downloadPath: '$(System.DefaultWorkingDirectory)'
-        - task: AzureRmWebAppDeployment@4
-          inputs:
-            ConnectionType: 'AzureRM'
-            azureSubscription: $(SUBSCRIPTION_NUMBER)
-            appType: 'webAppLinux'
-            WebAppName: 'cricket-creations'
-            deployToSlotOrASE: true
-            ResourceGroupName: 'cricket-creations'
-            SlotName: 'staging'
-            packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-            RuntimeStack: 'DOTNETCORE|6.0'
+        # - task: DownloadBuildArtifacts@1
+        #   inputs:
+        #     buildType: 'current'
+        #     downloadType: 'single'
+        #     artifactName: 'drop'
+        #     downloadPath: '$(System.DefaultWorkingDirectory)'
+        # - task: AzureRmWebAppDeployment@4
+        #   inputs:
+        #     ConnectionType: 'AzureRM'
+        #     azureSubscription: $(SUBSCRIPTION_NUMBER)
+        #     appType: 'webAppLinux'
+        #     WebAppName: 'cricket-creations'
+        #     deployToSlotOrASE: true
+        #     ResourceGroupName: 'cricket-creations'
+        #     SlotName: 'staging'
+        #     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        #     RuntimeStack: 'DOTNETCORE|6.0'
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
@@ -83,5 +83,5 @@ stages:
               # Write your PowerShell commands here.
               
               Write-Host "Hello World"
-              ls $(System.DefaultWorkingDirectory)/**/
+              Write-Host $(SUBSCRIPTION_NUMBER)
         
