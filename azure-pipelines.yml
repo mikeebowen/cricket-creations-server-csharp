@@ -68,7 +68,7 @@ stages:
         - task: AzureRmWebAppDeployment@4
           inputs:
             ConnectionType: 'AzureRM'
-            azureSubscription: 'Visual Studio Enterprise Subscription(1)($(SUBSCRIPTION_NUMBER))'
+            azureSubscription: $(SUBSCRIPTION_NUMBER)
             appType: 'webAppLinux'
             WebAppName: 'cricket-creations'
             deployToSlotOrASE: true
