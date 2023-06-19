@@ -72,6 +72,14 @@ stages:
             appName: '$(WEB_APP_NAME)'
             resourceGroupName: '$(RESOURCE_GROUP_NAME)'
             package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              # Write your PowerShell commands here.
+              
+              Write-Host "Hello World"
+              ls $(System.DefaultWorkingDirectory)/**/
         # - task: AzureRmWebAppDeployment@4
         #   inputs:
         #     ConnectionType: 'AzureRM'
