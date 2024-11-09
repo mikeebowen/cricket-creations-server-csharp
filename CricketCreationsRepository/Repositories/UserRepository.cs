@@ -184,7 +184,6 @@ namespace CricketCreationsRepository.Repositories
 
             string fromEmail = Environment.GetEnvironmentVariable("ADMIN_EMAIL");
 
-
             if (user != null)
             {
                 user.ResetCode = HashPassword(resetCode, user.Salt);

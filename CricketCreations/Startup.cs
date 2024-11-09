@@ -15,7 +15,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RockLib.Logging;
-//using VueCliMiddleware;
 using RockLib.Logging.DependencyInjection;
 
 namespace CricketCreations
@@ -129,10 +128,10 @@ namespace CricketCreations
                     spa.Options.SourcePath = "clientapp/dist";
                 }
 
-                //if (env.IsDevelopment())
-                //{
+                // if (env.IsDevelopment())
+                // {
                 //    spa.UseVueCli(npmScript: "serve");
-                //}
+                // }
             });
         }
     }

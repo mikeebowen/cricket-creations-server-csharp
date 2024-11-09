@@ -24,7 +24,7 @@ namespace CricketCreationsDatabase.Migrations
                 columns: table => new
                 {
                     TagsId = table.Column<int>(type: "int", nullable: false),
-                    UsersId = table.Column<int>(type: "int", nullable: false)
+                    UsersId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {

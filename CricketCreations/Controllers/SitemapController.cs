@@ -54,7 +54,6 @@ namespace CricketCreations.Controllers
                 xml.WriteElementString("loc", string.Concat(host, "/blog"));
                 xml.WriteEndElement();
 
-
                 List<SitemapUrl> sitemapUrls = _sitemapService.GetSiteMap();
 
                 sitemapUrls.ForEach(s =>

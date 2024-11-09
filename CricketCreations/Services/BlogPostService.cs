@@ -51,7 +51,6 @@ namespace CricketCreations.Services
             return blogPostDTOs.Select(b => _convertToBlogPost(b)).ToList();
         }
 
-
         public async Task<BlogPost> Create(BlogPost blogPost, int userId)
         {
             BlogPostDTO blogPostDTO = _convertToBlogPostDTO(blogPost);

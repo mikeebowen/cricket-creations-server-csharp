@@ -8,6 +8,5 @@ namespace CricketCreations.Interfaces
         public abstract Task<Tag> Create(Tag tag, int blogPostId, int userId);
 
         public abstract Task<int> GetCountOfBlogPosts(string tagName);
-
     }
 }

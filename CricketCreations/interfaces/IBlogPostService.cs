@@ -9,6 +9,5 @@ namespace CricketCreations.Interfaces
         public abstract Task<List<BlogPost>> AdminRead(int page, int count, int userId);
 
         public abstract Task<List<BlogPost>> ReadByTagName(int page, int count, string tagName);
-
     }
 }
