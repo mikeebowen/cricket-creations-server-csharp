@@ -23,12 +23,11 @@ env:
   AZURE_WEBAPP_NAME: cricket-creations    # set this to the name of your Azure Web App
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: 8.0.x                 # set this to the .NET Core version to use
-  NODE_VERSION: 18.x
 
 on:
-  release:
-    types:
-      - published
+  push:
+    branches: [ "main", "fix-action2" ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -61,11 +60,15 @@ jobs:
 
       - name: Load Vue App
         working-directory: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/CricketCreations/clientapp
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
         run: |
           git submodule update --init --recursive
+          npm ci --legacy-peer-deps
 
       - name: dotnet publish
-        run: dotnet publish -c Release --property:PublishDir=${{env.DOTNET_ROOT}}/CricketCreations
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/CricketCreations
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
