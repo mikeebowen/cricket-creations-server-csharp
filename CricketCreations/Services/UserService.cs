@@ -112,7 +112,7 @@ namespace CricketCreations.Services
             return await _userRepository.Logout(id);
         }
 
-        public (bool, int) GetId(ClaimsPrincipal user)
+        public (bool IdBool, int IdInt) GetId(ClaimsPrincipal user)
         {
             List<Claim> claims = user.Claims.ToList();
             string idStr = claims?.FirstOrDefault(c => c.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;

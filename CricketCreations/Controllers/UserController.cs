@@ -90,9 +90,9 @@ namespace CricketCreations.Controllers
 
         // Uncomment this if you want to enable new user registration
         // POST api/<UserController>
-        //[HttpPost]
-        //public async Task<IActionResult> Post([FromBody] NewUser newUser)
-        //{
+        // [HttpPost]
+        // public async Task<IActionResult> Post([FromBody] NewUser newUser)
+        // {
         //    try
         //    {
         //        User createdUser = await _userService.Create(newUser);
@@ -106,7 +106,7 @@ namespace CricketCreations.Controllers
         //    {
         //        return _loggerService.Error(ex);
         //    }
-        //}
+        // }
 
         // PUT api/<UserController>/5
         [Authorize]

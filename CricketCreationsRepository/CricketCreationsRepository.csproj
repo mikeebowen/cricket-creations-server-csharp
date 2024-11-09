@@ -13,10 +13,6 @@
     <PackageReference Include="RockLib.Logging" Version="5.1.2" />
     <PackageReference Include="RockLib.Logging.DependencyInjection" Version="1.0.2" />
     <PackageReference Include="SendGrid" Version="9.29.3" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
   </ItemGroup>
