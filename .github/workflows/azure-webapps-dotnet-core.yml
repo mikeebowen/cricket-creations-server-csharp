@@ -37,10 +37,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: webfactory/ssh-agent@v0.8.0
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use SSH
+        uses: webfactory/ssh-agent@v0.8.0
         with:
             ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
@@ -60,9 +67,6 @@ jobs:
 
       - name: Load Vue App
         working-directory: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/CricketCreations/clientapp
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
         run: |
           git submodule update --init --recursive
           npm ci --legacy-peer-deps
