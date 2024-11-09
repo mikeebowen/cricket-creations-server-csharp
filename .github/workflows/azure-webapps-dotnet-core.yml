@@ -53,13 +53,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Load Vue App
-        working-directory: ${{env.DOTNET_ROOT}}/CricketCreations/clientapp
-        run: |
-          git submodule update --init --recursive
-
       - name: Build with dotnet
         run: dotnet build --configuration Release
+
+      - name: Load Vue App
+        working-directory: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/CricketCreations/clientapp
+        run: |
+          git submodule update --init --recursive
 
       - name: dotnet publish
         run: dotnet publish -c Release --property:PublishDir=${{env.DOTNET_ROOT}}/CricketCreations
