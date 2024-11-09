@@ -23,6 +23,7 @@ env:
   AZURE_WEBAPP_NAME: cricket-creations    # set this to the name of your Azure Web App
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: 8.0.x                 # set this to the .NET Core version to use
+  NODE_VERSION: 18.x
 
 on:
   push:
@@ -54,6 +55,17 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
+
+      - name: Build with git
+        run: git submodule update --init --recursive
+
+      - name: Build with npm
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+        - npm ci
+        - npm run build
 
       - name: dotnet publish
         run: dotnet publish -c Release --property:PublishDir=${{env.DOTNET_ROOT}}/CricketCreations
