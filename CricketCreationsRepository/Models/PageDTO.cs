@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Ganss.XSS;
+using Ganss.Xss;
 
 namespace CricketCreationsRepository.Models
 {

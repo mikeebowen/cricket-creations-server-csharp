@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using CricketCreationsRepository.Repositories;
-using Ganss.XSS;
+using Ganss.Xss;
 
 namespace CricketCreationsRepository.Models
 {

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace>CricketCreations</RootNamespace>
 		<CodeAnalalysisRuleSet></CodeAnalalysisRuleSet>
 		<UserSecretsId>4d85dd6d-e117-46ee-8159-9f8632d302c5</UserSecretsId>
@@ -13,28 +13,27 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="11.0.1" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-		<PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
-		<PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.7" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.3" />
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
+		<PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.10" />
 		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.16.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
-		<PackageReference Include="NJsonSchema" Version="10.6.10" />
-		<PackageReference Include="RockLib.Logging" Version="3.0.8" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.2.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
+		<PackageReference Include="NJsonSchema" Version="11.0.2" />
+		<PackageReference Include="RockLib.Logging" Version="5.1.2" />
 		<PackageReference Include="RockLib.Logging.DependencyInjection" Version="1.0.2" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.16.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
 		<PackageReference Include="VueCliMiddleware" Version="6.0.0" />
 	</ItemGroup>
 
