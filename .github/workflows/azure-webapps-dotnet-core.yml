@@ -59,12 +59,18 @@ jobs:
       - name: Build with git
         run: git submodule update --init --recursive
 
-      - name: Build with npm
+      - name: Install npm packages
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
         run: npm ci
+
+        - name: Build with npm
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
         run: npm run build
 
       - name: dotnet publish
