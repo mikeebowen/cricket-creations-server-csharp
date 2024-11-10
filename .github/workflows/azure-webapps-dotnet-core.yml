@@ -62,8 +62,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Build with dotnet
-        run: 'dotnet build --configuration Release /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+      # - name: Build with dotnet
+      #   run: 'dotnet build --configuration Release /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
 
       - name: Load Vue App
         working-directory: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/CricketCreations/clientapp
@@ -71,8 +71,11 @@ jobs:
           git submodule update --init --recursive
           npm ci --legacy-peer-deps
 
-      - name: dotnet publish
-        run: dotnet publish -c Release --property:PublishDir=${{env.DOTNET_ROOT}}/CricketCreations
+      - name: dotnet build and publish
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/CricketCreations' 
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
