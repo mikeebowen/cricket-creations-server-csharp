@@ -43,6 +43,11 @@ jobs:
       - uses: webfactory/ssh-agent@v0.8.0
         with:
             ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: SSH Known Hosts
+        id: ssh-known-hosts
+        uses: truemark/ssh-known-hosts-action@v1
+        with:
+          scan-hosts: ${{ steps.ec2-describe-arm64.outputs.public-dns-name }},${{ steps.ec2-describe-amd64.outputs.public-dns-name }}
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
