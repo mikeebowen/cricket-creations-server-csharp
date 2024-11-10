@@ -24,6 +24,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: 8.0.x                 # set this to the .NET Core version to use
   NODE_VERSION: 18.x
+  SOLUTION: '**/*.sln'
 
 on:
   push:
@@ -48,6 +49,11 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+
       - name: Set up dependency caching for faster builds
         uses: actions/cache@v3
         with:
@@ -63,6 +69,9 @@ jobs:
         working-directory: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/CricketCreations/clientapp
         run: |
           git submodule update --init --recursive
+
+      - name: Build app for release
+        run: msbuild ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/CricketCreations/CricketCreations.csproj -t:rebuild -verbosity:diag -property:Configuration=Releas
 
       - name: dotnet publish
         run: dotnet publish -c Release --property:PublishDir=${{env.DOTNET_ROOT}}/CricketCreations
