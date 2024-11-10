@@ -71,7 +71,7 @@ jobs:
           git submodule update --init --recursive
 
       - name: Build app for release
-        run: msbuild ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/CricketCreations/CricketCreations.csproj -t:rebuild -verbosity:diag -property:Configuration=Releas
+        run: msbuild ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/CricketCreations.sln -t:rebuild -verbosity:diag -property:Configuration=Releas
 
       - name: dotnet publish
         run: dotnet publish -c Release --property:PublishDir=${{env.DOTNET_ROOT}}/CricketCreations
