@@ -36,28 +36,18 @@ permissions:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
       - uses: webfactory/ssh-agent@v0.8.0
         with:
             ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: SSH Known Hosts
-        id: ssh-known-hosts
-        uses: truemark/ssh-known-hosts-action@v1
-        with:
-          scan-hosts: ${{ steps.ec2-describe-arm64.outputs.public-dns-name }},${{ steps.ec2-describe-amd64.outputs.public-dns-name }}
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v2
-        with:
-          msbuild-architecture: x64
 
       - name: Set up dependency caching for faster builds
         uses: actions/cache@v3
@@ -74,9 +64,6 @@ jobs:
         working-directory: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/CricketCreations/clientapp
         run: |
           git submodule update --init --recursive
-
-      - name: Build app for release
-        run: msbuild ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/CricketCreations.sln -t:rebuild -verbosity:diag -property:Configuration=Releas
 
       - name: dotnet publish
         run: dotnet publish -c Release --property:PublishDir=${{env.DOTNET_ROOT}}/CricketCreations
@@ -104,7 +91,7 @@ jobs:
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
