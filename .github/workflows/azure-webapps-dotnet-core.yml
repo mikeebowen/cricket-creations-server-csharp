@@ -26,9 +26,9 @@ env:
   NODE_VERSION: 18.x
 
 on:
-  release:
-    types:
-      - published
+  push:
+    branches: [ "main", "fix-action2" ]
+  workflow_dispatch:
 
 permissions:
   contents: read
