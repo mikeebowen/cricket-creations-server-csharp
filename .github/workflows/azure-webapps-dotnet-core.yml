@@ -63,7 +63,7 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: 'dotnet build --configuration Release /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
 
       - name: Load Vue App
         working-directory: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/CricketCreations/clientapp
