@@ -31,8 +31,8 @@ on:
     branches: [ "main", "gh-actions" ]
   workflow_dispatch:
 
-permissions:
-  contents: read
+# permissions:
+#   contents: read
 
 jobs:
   build:
